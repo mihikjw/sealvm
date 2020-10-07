@@ -1,0 +1,43 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Generate Debug",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "-G",
+                "Unix Makefiles",
+                "-DCMAKE_BUILD_TYPE=Debug"
+            ]
+        },
+        {
+            "label": "Generate Release",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "-G",
+                "Unix Makefiles",
+                "-DCMAKE_BUILD_TYPE=Release"
+            ]
+        },
+        {
+            "label": "Build",
+            "type": "shell",
+            "command": "make",
+            "dependsOn": "Generate Debug",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Clean",
+            "type": "shell",
+            "command": "sh",
+            "args": [
+                "scripts/clean.sh"
+            ]
+        }
+    ]
+}

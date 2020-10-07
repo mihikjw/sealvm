@@ -57,6 +57,7 @@ void CPU::Execute(const uint16_t instruction) {
             auto r1Value = GetRegister(r1);
             auto r2Value = GetRegister(r2);
             SetRegister(Registers::acc, r1Value + r2Value);
+            break;
         }
     }
 }

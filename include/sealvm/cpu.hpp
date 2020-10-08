@@ -2,7 +2,7 @@
 #define SEALVM_SEALVM_CPU_HPP
 
 #include <array>
-#include <iostream>
+#include <cstdio>
 #include <map>
 #include <stdexcept>
 #include <string>
@@ -50,8 +50,7 @@ class CPU {
     // registers links the register name to an actual register
     std::map<Registers, uint16_t> registers{
       {Registers::acc, ZERO_MEMORY}, {Registers::pc, ZERO_MEMORY}, {Registers::r1, ZERO_MEMORY}, {Registers::r2, ZERO_MEMORY}, {Registers::r3, ZERO_MEMORY},
-      {Registers::r4, ZERO_MEMORY},  {Registers::r5, ZERO_MEMORY}, {Registers::r6, ZERO_MEMORY}, {Registers::r7, ZERO_MEMORY},
-    };
+      {Registers::r4, ZERO_MEMORY},  {Registers::r5, ZERO_MEMORY}, {Registers::r6, ZERO_MEMORY}, {Registers::r7, ZERO_MEMORY}, {Registers::r8, ZERO_MEMORY}};
 };
 
 } // namespace SealVM

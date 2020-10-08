@@ -24,39 +24,63 @@ void CPU::SetRegister(const Registers name, uint16_t value) {
 
 const uint8_t CPU::Fetch() {
     auto nextInstructionAddress = GetRegister(Registers::pc);
-    auto instruction = memory->buffer[nextInstructionAddress];
+    auto instruction = memory->GetValue(nextInstructionAddress);
     SetRegister(Registers::pc, (nextInstructionAddress + 1));
     return instruction;
 }
 
 const uint16_t CPU::Fetch16() {
-    const uint16_t nextInstructionAddress = GetRegister(Registers::pc);
-    uint8_t instruction1 = memory->buffer[nextInstructionAddress];
-    uint8_t instruction2 = memory->buffer[nextInstructionAddress + 1];
+    auto nextInstructionAddress = GetRegister(Registers::pc);
+    auto instruction1 = memory->GetValue(nextInstructionAddress);
+    auto instruction2 = memory->GetValue(nextInstructionAddress + 1);
     SetRegister(Registers::pc, (nextInstructionAddress + 2));
     return instruction1 << 8 | instruction2;
 }
 
 void CPU::Execute(const uint16_t instruction) {
     switch (instruction) {
-        case Instructions::MOV_LIT_R1: {
+        // move literal value into register e.g.: MOV 0x1234, r1
+        case Instructions::MOV_LIT_REG: {
             auto value = Fetch16();
-            SetRegister(Registers::r1, value);
+            auto reg = static_cast<Registers>((Fetch() % registers.size()));
+            SetRegister(reg, value);
             break;
         }
 
-        case Instructions::MOV_LIT_R2: {
-            auto value = Fetch16();
-            SetRegister(Registers::r2, value);
+        // move register value into another register e.g.: MOV r1, r2
+        case Instructions::MOV_REG_REG: {
+            auto registerFrom = static_cast<Registers>((Fetch() % registers.size()));
+            auto registerTo = static_cast<Registers>((Fetch() % registers.size()));
+            auto value = GetRegister(registerFrom);
+            SetRegister(registerTo, value);
             break;
         }
 
+        // move register value into memory address e.g.: MOV r1, 0xABCD
+        case Instructions::MOV_REG_MEM: {
+            auto reg = static_cast<Registers>((Fetch() % registers.size()));
+            auto address = Fetch16();
+            auto value = GetRegister(reg);
+            memory->SetValue16(address, value);
+            break;
+        }
+
+        // move value at a memory address into a register e.g.: MOV 0xABCD, r1
+        case Instructions::MOV_MEM_REG: {
+            auto address = Fetch16();
+            auto reg = static_cast<Registers>((Fetch() % registers.size()));
+            auto value = memory->GetValue16(address);
+            SetRegister(reg, value);
+            break;
+        }
+
+        // add register values together, put into Registers::acc e.g.: ADD r1, r2
         case Instructions::ADD_REG_REG: {
-            auto r1 = static_cast<Registers>(Fetch());
-            auto r2 = static_cast<Registers>(Fetch());
-            auto r1Value = GetRegister(r1);
-            auto r2Value = GetRegister(r2);
-            SetRegister(Registers::acc, r1Value + r2Value);
+            auto register1 = static_cast<Registers>(Fetch());
+            auto register2 = static_cast<Registers>(Fetch());
+            auto register1Value = GetRegister(register1);
+            auto register2Value = GetRegister(register2);
+            SetRegister(Registers::acc, register1Value + register2Value);
             break;
         }
     }
@@ -68,7 +92,9 @@ void CPU::Step() {
 }
 
 void CPU::Debug() {
+    printf("----------\nDEBUG CPU\n");
     for (auto const& [key, val] : registers) {
-        std::cout << std::hex << "0x" << key << ": " << val << std::endl;
+        printf("0x%x: 0x%x\n", key, val);
     }
+    printf("----------\n");
 }

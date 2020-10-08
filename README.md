@@ -1,7 +1,30 @@
 # SealVM
-SealVM is a 16-bit virtual machine, primary as a hobby project and a learning experience. My primary goals at the moment are to develop a CPU, an assembly language, then a higher-level c-style language compiler. This project is a work in-progress.
+SealVM is a 16-bit virtual machine, primary as a hobby project, written in C++. My primary goals at the moment are to develop a CPU, an assembly language, then a higher-level c-style language compiler. This project is a work in-progress.
 
-## Registers `sealvm/registers.hpp`
+## Developing
+I use Visual Studio Code to develop this project, under `.vscode/` are the launch config/tasks/settings etc. You're welcome to use whatever environment you like.
+### Requirements
+- Visual Studio Code
+    - C/C++ extension
+    - Native Debug
+    - Clang-Format
+    - Clang-Tidy
+    - CMake
+- CMake
+- Make
+- Git
+- Clang-Format
+- Clang-Tidy
+
+### Install
+1. `git clone https://github.com/MichaelWittgreffe/sealvm`
+2. `cd sealvm`
+3. build:
+    - vscode: `ctrl + rshift + b` (default build task) 
+    - cmake: `cmake -G Unix Makefiles -DCMAKE_BUILD_TYPE=Debug`
+
+## Specifications
+### Registers `sealvm/registers.hpp`
 Each register is 16-bits in size, currently the only way of interacting with them is in 16-bit chunks.
 - 0x00: pc (Program Counter)
 - 0x01: r1 (General Purpose)
@@ -14,10 +37,10 @@ Each register is 16-bits in size, currently the only way of interacting with the
 - 0x08: r8 (General Purpose)
 - 0x09: acc (Accumulator)
 
-## Memory `sealvm/memory.hpp`
+### Memory `sealvm/memory.hpp`
 Memory size is currently arbitary and is defined on construction as an argument. Memory is then injected to the CPU.
 - `std::array` buffer containing `uint8_t` of the size passed to the constructor
 - can be interacted with in `uint8_t` chunks or `uint16_t` chunks as this is the current supported minimum register size
 
-## Supported Instructions 
-16-bit instruction enums are defined under `sealvm/instructions.hpp`, with a comment for a corresponding assembly example. I'll likley improve this once I put together an actual assembler.
+### Supported Instructions 
+16-bit instruction enums are defined under `sealvm/instructions.hpp`, with a comment for a corresponding assembly example. They're decoded in the CPU `sealvm/cpu.hpp` which also includes a comment for a corresponding assembly example. I'll improve this documentation once I put together a real assembler.

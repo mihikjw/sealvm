@@ -27,7 +27,10 @@ class Memory {
     void SetValue16(const uint16_t address, const uint16_t value);
 
     // Debug prints the given memory address and the following 7 addresses to the console
-    void Debug(const uint16_t address);
+    void Debug(const uint16_t address, uint8_t n = 8);
+
+    // Size returns the number of bytes used for memory (this->buffer.size())
+    uint8_t Size();
 
     private:
     std::vector<uint8_t> buffer;

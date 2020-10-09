@@ -21,9 +21,9 @@ void Memory::SetValue16(const uint16_t address, const uint16_t value) {
     buffer[address + 1] = part2;
 }
 
-void Memory::Debug(const uint16_t address) {
+void Memory::Debug(const uint16_t address, uint8_t n) {
     uint16_t i = 0;
-    auto max = (buffer.begin() + address) + 8;
+    auto max = (buffer.begin() + address) + n;
 
     printf("----------\nDEBUG MEMORY\n");
     for (auto it = buffer.begin() + address; it != max; it++) {
@@ -32,3 +32,5 @@ void Memory::Debug(const uint16_t address) {
     }
     printf("----------\n");
 }
+
+uint8_t Memory::Size() { return buffer.size(); }

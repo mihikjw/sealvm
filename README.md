@@ -20,8 +20,12 @@ I use Visual Studio Code to develop this project, under `.vscode/` are the launc
 1. `git clone https://github.com/MichaelWittgreffe/sealvm`
 2. `cd sealvm`
 3. build:
-    - vscode: `ctrl + rshift + b` (default build task) 
+    - vscode: `ctrl + lshift + b` (default build task) 
     - cmake: `cmake -G Unix Makefiles -DCMAKE_BUILD_TYPE=Debug`
+
+### Code Guidelines
+- Lint with the provided clang-format configuration, clang-tidy is configured for VSCode
+- public functions should start with uppercase, private and protected with lowercase. Should all be camelCase
 
 ## Specifications
 ### Registers `sealvm/registers.hpp`

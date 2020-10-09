@@ -40,6 +40,8 @@ Each register is 16-bits in size, currently the only way of interacting with the
 - 0x07: r7 (General Purpose)
 - 0x08: r8 (General Purpose)
 - 0x09: acc (Accumulator)
+- 0x10: sp (Stack Pointer)
+- 0x11: fp (Frame Pointer)
 
 ### Memory `sealvm/memory.hpp`
 Memory size is currently arbitary and is defined on construction as an argument. Memory is then injected to the CPU.

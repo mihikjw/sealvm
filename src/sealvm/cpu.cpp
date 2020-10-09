@@ -137,6 +137,7 @@ void CPU::execute(const uint16_t instruction) {
             break;
         }
 
+        // return to the location the immediate prior CAL command was called e.g.: RET
         case Instructions::RET: {
             popState();
             break;

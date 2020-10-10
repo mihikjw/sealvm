@@ -40,7 +40,7 @@ const uint16_t CPU::fetch16() {
 
 const Registers CPU::fetchRegisterIndex() { return static_cast<Registers>((fetch() % registers.size())); }
 
-void CPU::execute(const uint16_t instruction) {
+bool CPU::execute(const uint16_t instruction) {
     switch (instruction) {
         // move literal value into register e.g.: MOV 0x1234, r1
         case Instructions::MOV_LIT_REG: {
@@ -142,12 +142,19 @@ void CPU::execute(const uint16_t instruction) {
             popState();
             break;
         }
+
+        // exit the CPU e.g.: HLT
+        case Instructions::HLT: {
+            return true;
+        }
     }
+
+    return false;
 }
 
-void CPU::Cycle() {
+bool CPU::Cycle() {
     auto instruction = fetch();
-    execute(instruction);
+    return execute(instruction);
 }
 
 void CPU::Debug() {
@@ -156,6 +163,14 @@ void CPU::Debug() {
         printf("0x%x: 0x%x\n", key, val);
     }
     printf("----------\n");
+}
+
+void CPU::Run() {
+    while (true) {
+        if (!Cycle()) {
+            break;
+        }
+    }
 }
 
 void CPU::push(const uint16_t value) {

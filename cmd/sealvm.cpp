@@ -45,6 +45,8 @@ int main() {
     memory.SetValue(i++, 0x44);
     memory.SetValue(i++, 0x44);
 
+    memory.SetValue(i++, SealVM::Instructions::HLT);    // HLT
+
     // next instructions are part of 'my_subroutine:'
     i = 0x3000;
 

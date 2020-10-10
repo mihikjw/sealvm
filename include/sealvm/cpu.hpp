@@ -6,6 +6,7 @@
 #include <map>
 #include <stdexcept>
 #include <string>
+#include <stdint.h>
 
 #include "defines.hpp"
 #include "instructions.hpp"
@@ -25,11 +26,13 @@ class CPU {
     // SetRegister sets the given value to the register 'name'
     void SetRegister(const Registers name, uint16_t value);
 
-    // Cycle gets the next instruction & executes it
-    void Cycle();
+    // Cycle gets the next instruction & executes it, returns whether its the last instruction or not
+    bool Cycle();
 
     // debug loops through the registers and outputs them to the console in a hex format
     void Debug();
+
+    void Run();
 
     private:
     // fetch returns the next instruction in the pc register, increments program counter
@@ -41,8 +44,8 @@ class CPU {
     // fetchRegisterIndex reads the next instruction in the pc register, returns it as a SealVM::Register, calls this->fetch()
     const Registers fetchRegisterIndex();
 
-    // execute executes the given instruction
-    void execute(const uint16_t instruction);
+    // execute executes the given instruction, returns false if program is EOF
+    bool execute(const uint16_t instruction);
 
     // push pushes a value onto the stack
     void push(const uint16_t value);

@@ -5,5 +5,6 @@
 #include "defines.hpp"
 #include "instructions.hpp"
 #include "memory.hpp"
+#include "memoryMapper.hpp"
 
 #endif // SEALVM_SEALVM_HPP

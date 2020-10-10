@@ -17,6 +17,7 @@ enum Instructions {
     CAL_LIT = 0x19,     // CAL 0xABCD
     CAL_REG = 0x1A,     // CAL r1
     RET = 0x1B,         // RET
+    HLT = 0x1C,         // HLT
 };
 
 } // namespace SealVM

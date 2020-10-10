@@ -4,6 +4,7 @@
 #include <cstdio>
 #include <memory>
 #include <vector>
+#include <stdint.h>
 
 #include "defines.hpp"
 

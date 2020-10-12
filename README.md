@@ -25,7 +25,7 @@ I use Visual Studio Code to develop this project, under `.vscode/` are the launc
 
 ### Code Guidelines
 - Lint with the provided clang-format configuration, clang-tidy is configured for VSCode
-- public functions should start with uppercase, private and protected with lowercase. Should all be camelCase
+- public functions should start with uppercase, private and protected with lowercase. Should all be camelCase.
 
 ## Specifications
 ### Registers `sealvm/registers.hpp`
@@ -44,9 +44,7 @@ Each register is 16-bits in size, currently the only way of interacting with the
 - 0x11: fp (Frame Pointer)
 
 ### Memory `sealvm/memory.hpp`
-Memory size is currently arbitary and is defined on construction as an argument. Memory is then injected to the CPU.
-- `std::array` buffer containing `uint8_t` of the size passed to the constructor
-- can be interacted with in `uint8_t` chunks or `uint16_t` chunks as this is the current supported minimum register size
+Memory size is currently arbitary and is defined on construction as an argument. A pointer is then injected to any required classes.
 
 ### Supported Instructions 
 16-bit instruction enums are defined under `sealvm/instructions.hpp`, with a comment for a corresponding assembly example. They're decoded in the CPU `sealvm/cpu.hpp` which also includes a comment for a corresponding assembly example. I'll improve this documentation once I put together a real assembler.

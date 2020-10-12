@@ -81,9 +81,13 @@ int main() {
 
     while (std::cin) {
         std::getline(std::cin, input);
-        cpu.Cycle();
+        auto exit = cpu.Cycle();
         cpu.Debug();
         memory.Debug(cpu.GetRegister(SealVM::Registers::pc));
         memory.Debug(0xffff - 43, 44);
+
+        if (exit) {
+            break;
+        }
     }
 }

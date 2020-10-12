@@ -2,12 +2,12 @@
 
 using namespace SealVM;
 
-MemoryMapper::MemoryMapper() = default; 
+MemoryMapper::MemoryMapper(std::vector<uint8_t>* buffer) : MemoryDevice(buffer) {}  
 
-void MemoryMapper::Map(std::vector<uint8_t> device, const uint16_t startAddr, const uint16_t endAddr, bool remap){
+void MemoryMapper::Map(MemoryDevice* device, const uint16_t startAddr, const uint16_t endAddr, bool remap){
     auto region = std::make_unique<MemoryRegion>(device, startAddr, endAddr, remap);
     regions.emplace(regions.begin(), std::move(region));
-    // return a function to unmap the region 
+    // return a function to unmap the region ?
 }
 
 MemoryRegion* MemoryMapper::findRegion(const uint16_t addr) { 
@@ -37,21 +37,18 @@ const uint16_t MemoryMapper::GetValue16(const uint16_t addr) {
 
 const uint8_t MemoryMapper::GetValue(const uint16_t addr) { 
     auto region = findRegion(addr);
-    // see MemoryMapper::GetValue16 for comments on this logic
     auto finalAddr = region->Remap ? addr - region->StartAddr : addr;
     return region->GetValue(finalAddr);
 } 
 
 void MemoryMapper::SetValue16(const uint16_t addr, const uint16_t value) {
     auto region = findRegion(addr);
-    // see MemoryMapper::GetValue16 for comments on this logic
     auto finalAddr = region->Remap ? addr - region->StartAddr : addr;
     region->SetValue16(finalAddr, value);
 }
 
 void MemoryMapper::SetValue(const uint16_t addr, const uint8_t value) {
     auto region = findRegion(addr);
-    // see MemoryMapper::GetValue16 for comments on this logic
     auto finalAddr = region->Remap ? addr - region->StartAddr : addr;
     region->SetValue(finalAddr, value);
 }

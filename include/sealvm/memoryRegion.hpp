@@ -4,14 +4,16 @@
 #include <stdint.h>
 #include <vector>
 
+#include "sealvm/memoryDevice.hpp"
+
 namespace SealVM {
 
-class MemoryRegion {
+class MemoryRegion : public MemoryDevice {
     public:
-    MemoryRegion(std::vector<uint8_t> device, const uint16_t startAddr, const uint16_t endAddr, bool remap);
+    MemoryRegion(MemoryDevice* device, const uint16_t startAddr, const uint16_t endAddr, bool remap);
     ~MemoryRegion() = default;
 
-    std::vector<uint8_t> Device;
+    MemoryDevice* Device;
     uint16_t StartAddr;
     uint16_t EndAddr;
     bool Remap;

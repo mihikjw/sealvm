@@ -6,13 +6,14 @@
 #include <vector>
 #include <stdint.h>
 
-#include "defines.hpp"
+#include "sealvm/defines.hpp"
+#include "sealvm/memoryDevice.hpp"
 
 namespace SealVM {
 
-class Memory {
+class Memory : public MemoryDevice{
     public:
-    Memory(const unsigned int sizeBytes);
+    Memory(std::vector<uint8_t>* buffer);
     ~Memory() = default;
 
     // GetValue returns the value at the given memory address
@@ -29,12 +30,6 @@ class Memory {
 
     // Debug prints the given memory address and the following 7 addresses to the console
     void Debug(const uint16_t address, uint8_t n = 8);
-
-    // Size returns the number of bytes used for memory (this->buffer.size())
-    uint8_t Size();
-
-    private:
-    std::vector<uint8_t> buffer;
 };
 
 } // namespace SealVM

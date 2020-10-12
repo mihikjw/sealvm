@@ -2,7 +2,7 @@
 
 using namespace SealVM;
 
-CPU::CPU(Memory* memory) noexcept {
+CPU::CPU(MemoryDevice* memory) noexcept {
     this->memory = memory;
     stackFrameSize = 0;
 }
@@ -85,8 +85,8 @@ bool CPU::execute(const uint16_t instruction) {
             auto r2Val = GetRegister(r2);
             SetRegister(Registers::acc, r1Val + r2Val);
             break;
-        }
-
+        } 
+        
         // jump to the given address if the given literal is not equal to Registers::acc, e.g.: JNE {literal} {address} | JNE 0xABCD #0x1234
         case Instructions::JMP_NOT_EQ: {
             auto compareValue = fetch16();
@@ -100,7 +100,7 @@ bool CPU::execute(const uint16_t instruction) {
         // push a literal value onto the stack e.g.: PSH 0x1234
         case Instructions::PSH_LIT: {
             auto val = fetch16();
-            push(val);
+            pushStack(val);
             break;
         }
 
@@ -108,14 +108,14 @@ bool CPU::execute(const uint16_t instruction) {
         case Instructions::PSH_REG: {
             auto reg = fetchRegisterIndex();
             auto val = GetRegister(reg);
-            push(val);
+            pushStack(val);
             break;
         }
 
         // pop takes the value from the stack pointer and places it in the given register e.g.: POP r1
         case Instructions::POP: {
             auto reg = fetchRegisterIndex();
-            auto val = pop();
+            auto val = popStack();
             SetRegister(reg, val);
             break;
         }
@@ -123,7 +123,7 @@ bool CPU::execute(const uint16_t instruction) {
         // cal to a literal address e.g.: CAL 0xABCD
         case Instructions::CAL_LIT: {
             auto addr = fetch16();
-            pushState();
+            pushStateStack();
             SetRegister(Registers::pc, addr);
             break;
         }
@@ -132,24 +132,24 @@ bool CPU::execute(const uint16_t instruction) {
         case Instructions::CAL_REG: {
             auto reg = fetchRegisterIndex();
             auto addr = GetRegister(reg);
-            pushState();
+            pushStateStack();
             SetRegister(Registers::sp, addr); // should be pc ?
             break;
         }
 
         // return to the location the immediate prior CAL command was called e.g.: RET
         case Instructions::RET: {
-            popState();
+            popStateStack();
             break;
         }
 
         // exit the CPU e.g.: HLT
         case Instructions::HLT: {
-            return true;
+            return false;
         }
     }
 
-    return false;
+    return true;
 }
 
 bool CPU::Cycle() {
@@ -173,14 +173,14 @@ void CPU::Run() {
     }
 }
 
-void CPU::push(const uint16_t value) {
+void CPU::pushStack(const uint16_t value) {
     auto sp = GetRegister(Registers::sp);
     memory->SetValue16(sp, value);
     SetRegister(Registers::sp, sp - 2);
     stackFrameSize += 2;
 }
 
-const uint16_t CPU::pop() {
+const uint16_t CPU::popStack() {
     auto sp = GetRegister(Registers::sp) + 2;
     auto val = memory->GetValue16(sp);
     SetRegister(Registers::sp, sp);
@@ -188,21 +188,21 @@ const uint16_t CPU::pop() {
     return val;
 }
 
-void CPU::pushState() {
-    push(GetRegister(Registers::r1));
-    push(GetRegister(Registers::r2));
-    push(GetRegister(Registers::r3));
-    push(GetRegister(Registers::r4));
-    push(GetRegister(Registers::r5));
-    push(GetRegister(Registers::r6));
-    push(GetRegister(Registers::r7));
-    push(GetRegister(Registers::r8));
+void CPU::pushStateStack() {
+    pushStack(GetRegister(Registers::r1));
+    pushStack(GetRegister(Registers::r2));
+    pushStack(GetRegister(Registers::r3));
+    pushStack(GetRegister(Registers::r4));
+    pushStack(GetRegister(Registers::r5));
+    pushStack(GetRegister(Registers::r6));
+    pushStack(GetRegister(Registers::r7));
+    pushStack(GetRegister(Registers::r8));
 
     // return address
-    push(GetRegister(Registers::pc));
+    pushStack(GetRegister(Registers::pc));
 
     // size of the stack frame, + 2 to include this value
-    push(stackFrameSize + 2);
+    pushStack(stackFrameSize + 2);
 
     // set fp to the current stack location
     SetRegister(Registers::fp, GetRegister(Registers::sp));
@@ -211,31 +211,31 @@ void CPU::pushState() {
     stackFrameSize = 0;
 }
 
-void CPU::popState() {
+void CPU::popStateStack() {
     auto fp = GetRegister(Registers::fp);
     SetRegister(Registers::sp, fp);
 
     // head of the stack will be the frame size
-    stackFrameSize = pop();
+    stackFrameSize = popStack();
     auto tmpFrameSize = stackFrameSize;
 
     // next is program counter
-    SetRegister(Registers::pc, pop());
+    SetRegister(Registers::pc, popStack());
 
     // then general purpose registers in reverse to how we set them
-    SetRegister(Registers::r8, pop());
-    SetRegister(Registers::r7, pop());
-    SetRegister(Registers::r6, pop());
-    SetRegister(Registers::r5, pop());
-    SetRegister(Registers::r4, pop());
-    SetRegister(Registers::r3, pop());
-    SetRegister(Registers::r2, pop());
-    SetRegister(Registers::r1, pop());
+    SetRegister(Registers::r8, popStack());
+    SetRegister(Registers::r7, popStack());
+    SetRegister(Registers::r6, popStack());
+    SetRegister(Registers::r5, popStack());
+    SetRegister(Registers::r4, popStack());
+    SetRegister(Registers::r3, popStack());
+    SetRegister(Registers::r2, popStack());
+    SetRegister(Registers::r1, popStack());
 
     // return sp to just before we pushed anything at all
-    auto nArgs = pop();
+    auto nArgs = popStack();
     for (unsigned int i = 0; i < nArgs; i++) {
-        pop();
+        popStack();
     }
 
     // return frame pointer to the beginning of this frame

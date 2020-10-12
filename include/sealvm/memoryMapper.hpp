@@ -8,16 +8,17 @@
 #include <string>
 
 #include "sealvm/memoryRegion.hpp"
+#include "sealvm/memoryDevice.hpp"
 
 namespace SealVM {
 
-class MemoryMapper {
+class MemoryMapper: public MemoryDevice {
     public:
-    MemoryMapper();
+    MemoryMapper(std::vector<uint8_t>* buffer);
     ~MemoryMapper() = default;
 
     // Map maps the given device to memory with the given start & end addresses
-    void Map(std::vector<uint8_t> device, const uint16_t startAddr, const uint16_t endAddr, bool remap = true);
+    void Map(MemoryDevice* device, const uint16_t startAddr, const uint16_t endAddr, bool remap = true);
 
     // GetValue16 returns the 16-bit value value held at the given address
     const uint16_t GetValue16(const uint16_t addr);

@@ -8,16 +8,16 @@
 #include <string>
 #include <stdint.h>
 
-#include "defines.hpp"
-#include "instructions.hpp"
-#include "memory.hpp"
-#include "registers.hpp"
+#include "sealvm/defines.hpp"
+#include "sealvm/instructions.hpp"
+#include "sealvm/memoryDevice.hpp"
+#include "sealvm/registers.hpp"
 
 namespace SealVM {
 
 class CPU {
     public:
-    CPU(Memory* memory) noexcept;
+    CPU(MemoryDevice* memory) noexcept;
     ~CPU() = default;
 
     // GetRegister returns the value currently held in the register 'name'
@@ -47,20 +47,20 @@ class CPU {
     // execute executes the given instruction, returns false if program is EOF
     bool execute(const uint16_t instruction);
 
-    // push pushes a value onto the stack
-    void push(const uint16_t value);
+    // pushStack pushes a value onto the stack
+    void pushStack(const uint16_t value);
 
-    // pushState push's the current CPU state into the stack as a stack frame
-    void pushState();
+    // pushStateStack push's the current CPU state into the stack as a stack frame
+    void pushStateStack();
 
-    // pop removes & returns the head of the stack
-    const uint16_t pop();
+    // popStack removes & returns the head of the stack
+    const uint16_t popStack();
 
-    // popState returns the CPU state to that indicated by the fp register
-    void popState();
+    // popStateStack returns the CPU state to that indicated by the fp register
+    void popStateStack();
 
-    // memory is a pointer to the vm memory
-    Memory* memory;
+    // memory is a pointer to the given memory device
+    MemoryDevice* memory;
 
     // stackFrameSize tracks the size of the stack - could be used in a register but I don't want this to be user accessable
     uint8_t stackFrameSize;

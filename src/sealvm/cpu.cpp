@@ -147,6 +147,328 @@ bool CPU::execute(const uint16_t instruction) {
         case Instructions::HLT: {
             return false;
         }
+
+        // move literal value to memory e.g: MOV 0x1234 #0xABCD
+        case Instructions::MOV_LIT_MEM: {
+            auto val = fetch16();
+            auto addr = fetch16();
+            memory->SetValue16(addr, val);
+            break;
+        }
+
+        // move register pointer to register e.g.: MOV r1, r2
+        case Instructions::MOV_REG_PTR_REG: {
+            auto r1 = fetchRegisterIndex();
+            auto r2 = fetchRegisterIndex();
+            auto ptr = GetRegister(r1);
+            auto val = memory->GetValue16(ptr);
+            SetRegister(r2, val);
+            break;
+        }
+
+        // move literal at (literal + register) to register e.g.: MOV #0xABCD, r1, r2
+        case Instructions::MOV_LIT_OFF_REG: {
+            auto baseAddr = fetch16();
+            auto r1 = fetchRegisterIndex();
+            auto r2 = fetchRegisterIndex();
+            auto offset = GetRegister(r1);
+            auto value = memory->GetValue16(baseAddr + offset);
+            SetRegister(r2, value);
+            break;
+        }
+
+        // add literal to register e.g.: ADD 0x1234, r1
+        case Instructions::ADD_LIT_REG: {
+            auto lit = fetch16();
+            auto reg = fetchRegisterIndex();
+            auto val = GetRegister(reg);
+            SetRegister(Registers::acc, lit + val);
+            break;
+        }
+
+        // substract literal from register e.g.: SUB 0x1234, r1
+        case Instructions::SUB_LIT_REG: {
+            auto lit = fetch16();
+            auto reg = fetchRegisterIndex();
+            auto val = GetRegister(reg);
+            SetRegister(Registers::acc, lit - val);
+            break;
+        }
+
+        // subtract register from literal e.g.: SUB r1, 0x1234
+        case Instructions::SUB_REG_LIT: {
+            auto reg = fetchRegisterIndex();
+            auto lit = fetch16();
+            auto val = GetRegister(reg);
+            SetRegister(Registers::acc, val - lit);
+            break;
+        }
+
+        // subtract register from registers e.g.: SUB r1, r2
+        case Instructions::SUB_REG_REG: {
+            auto r1 = fetchRegisterIndex();
+            auto r2 = fetchRegisterIndex();
+            auto val1 = GetRegister(r1);
+            auto val2 = GetRegister(r2);
+            SetRegister(Registers::acc, val1 - val2);
+            break;
+        }
+
+        // multiply a literal by a registers e.g.: MUL 0x1234, r1
+        case Instructions::MUL_LIT_REG: {
+            auto lit = fetch16();
+            auto reg = fetchRegisterIndex();
+            auto val = GetRegister(reg);
+            SetRegister(Registers::acc, lit * val);
+            break;
+        }
+
+        // multiple a register by a register e.g.: MUL r1, r2
+        case Instructions::MUL_REG_REG: {
+            auto r1 = fetchRegisterIndex();
+            auto r2 = fetchRegisterIndex();
+            auto val1 = GetRegister(r1);
+            auto val2 = GetRegister(r2);
+            SetRegister(Registers::acc, val1 * val2);
+            break;
+        }
+
+        // increment a register by 1 e.g.: INC r1
+        case Instructions::INC_REG: {
+            auto reg = fetchRegisterIndex();
+            auto val = GetRegister(reg);
+            SetRegister(reg, val + 1);
+            break;
+        }
+
+        // decrement a register by 1 e.g.: DEC r1
+        case Instructions::DEC_REG: {
+            auto reg = fetchRegisterIndex();
+            auto val = GetRegister(reg);
+            SetRegister(reg, val - 1);
+            break;
+        }
+
+        // left shift register by literal (in place) e.g.: LSF r1, 0x1234
+        case Instructions::LSF_REG_LIT: {
+            auto reg = fetchRegisterIndex();
+            auto lit = fetch16();
+            auto val = GetRegister(reg);
+            SetRegister(r1, val << lit);
+            break;
+        }
+
+        // left shift register by register (in place) e.g.: LSF r1, r2
+        case Instructions::LSF_REG_REG: {
+            auto r1 = fetchRegisterIndex();
+            auto r2 = fetchRegisterIndex();
+            auto val1 = GetRegister(r1);
+            auto val2 = GetRegister(r2);
+            SetRegister(r1, val1 << val2);
+            break;
+        }
+
+        // right shift register by literal (in place) e.g.: RSF r1, 0x1234
+        case Instructions::RSF_REG_LIT: {
+            auto reg = fetchRegisterIndex();
+            auto lit = fetch16();
+            auto val = GetRegister(reg);
+            SetRegister(r1, val >> lit);
+            break;
+        }
+
+        // right shift register by register (in place) e.g.: RSF r1, r2
+        case Instructions::RSF_REG_REG: {
+            auto r1 = fetchRegisterIndex();
+            auto r2 = fetchRegisterIndex();
+            auto val1 = GetRegister(r1);
+            auto val2 = GetRegister(r2);
+            SetRegister(r1, val1 >> val2);
+            break;
+        }
+
+        // and register with literal e.g.: AND r1, 0x1234
+        case Instructions::AND_REG_LIT: {
+            auto reg = fetchRegisterIndex();
+            auto lit = fetch16();
+            auto val = GetRegister(reg);
+            SetRegister(Registers::acc, val & lit);
+            break;
+        }
+
+        // and register with register e.g.: AND r1, r2
+        case Instructions::AND_REG_REG: {
+            auto r1 = fetchRegisterIndex();
+            auto r2 = fetchRegisterIndex();
+            auto val1 = GetRegister(r1);
+            auto val2 = GetRegister(r2);
+            SetRegister(Registers::acc, r1 & r2);
+            break;
+        }
+
+        // or register with literal e.g.: OR r1, 0x1234
+        case Instructions::OR_REG_LIT: {
+            auto reg = fetchRegisterIndex();
+            auto lit = fetch16();
+            auto val = GetRegister(reg);
+            SetRegister(Registers::acc, val | lit);
+            break;
+        }
+
+        // or register with register e.g.: OR r1, r2
+        case Instructions::OR_REG_REG: {
+            auto r1 = fetchRegisterIndex();
+            auto r2 = fetchRegisterIndex();
+            auto val1 = GetRegister(r1);
+            auto val2 = GetRegister(r2);
+            SetRegister(Registers::acc, r1 | r2);
+            break;
+        }
+
+        // xor register with literal e.g.: XOR r1, 0x1234
+        case Instructions::XOR_REG_LIT: {
+            auto reg = fetchRegisterIndex();
+            auto lit = fetch16();
+            auto val = GetRegister(reg);
+            SetRegister(Registers::acc, val ^ lit);
+            break;
+        }
+
+        // xor register with register e.g.: XOR r1, r2
+        case Instructions::XOR_REG_REG: {
+            auto r1 = fetchRegisterIndex();
+            auto r2 = fetchRegisterIndex();
+            auto val1 = GetRegister(r1);
+            auto val2 = GetRegister(r2);
+            SetRegister(Registers::acc, r1 ^ r2);
+            break;
+        }
+
+        // not (invert) register e.g.: NOT r1
+        case Instructions::NOT: {
+            auto reg = fetchRegisterIndex();
+            auto val = GetRegister(reg);
+            uint16_t res = (~val) & 0xffff; // only want bottom 16 bits incase any funky conversion happens
+            SetRegister(Registers::acc, res);
+            break;
+        }
+
+        // jmp if register not equal to acc e.g.: JNE r1, #0x1234
+        case Instructions::JNE_REG: {
+            auto reg = fetchRegisterIndex();
+            auto val = GetRegister(reg);
+            auto jmpAddr = fetch16();
+            if (val != GetRegister(Registers::acc)) {
+                SetRegister(Registers::pc, jmpAddr);
+            }
+            break;
+        }
+
+        // jmp if register equal to acc e.g.: JEQ r1, #0x1234
+        case Instructions::JEQ_REG: {
+            auto reg = fetchRegisterIndex();
+            auto val = GetRegister(reg);
+            auto jmpAddr = fetch16();
+            if (val == GetRegister(Registers::acc)) {
+                SetRegister(Registers::pc, jmpAddr);
+            }
+            break;
+        }
+
+        // jmp if literal equal to acc e.g.: JEQ 0xABCD, #0x1234
+        case Instructions::JEQ_LIT: {
+            auto lit = fetch16();
+            auto jmpAddr = fetch16();
+            if (lit == GetRegister(Registers::acc)) {
+                SetRegister(Registers::pc, jmpAddr);
+            }
+            break;
+        }
+
+        // jmp if register less than acc e.g.: JLT r1, #0x1234
+        case Instructions::JLT_REG: {
+            auto reg = fetchRegisterIndex();
+            auto val = GetRegister(reg);
+            auto jmpAddr = fetch16();
+            if (val < GetRegister(Registers::acc)) {
+                SetRegister(Registers::pc, jmpAddr);
+            }
+            break;
+        }
+
+        // jmp if literal less than acc e.g.: JLT 0xABCD, #0x1234
+        case Instructions::JLT_LIT: {
+            auto lit = fetch16();
+            auto jmpAddr = fetch16();
+            if (lit < GetRegister(Registers::acc)) {
+                SetRegister(Registers::pc, jmpAddr);
+            }
+            break;
+        }
+
+        // jmp if register greater than acc e.g.: JGT r1, #0x1234
+        case Instructions::JGT_REG: {
+            auto reg = fetchRegisterIndex();
+            auto val = GetRegister(reg);
+            auto jmpAddr = fetch16();
+            if (val > GetRegister(Registers::acc)) {
+                SetRegister(Registers::pc, jmpAddr);
+            }
+            break;
+        }
+
+        // jmp if literal greater than acc e.g.: JGT 0xABCD, #0x1234
+        case Instructions::JGT_LIT: {
+            auto lit = fetch16();
+            auto jmpAddr = fetch16();
+            if (lit > GetRegister(Registers::acc)) {
+                SetRegister(Registers::pc, jmpAddr);
+            }
+            break;
+        }
+
+        // jmp if register less than or equal to acc e.g.: JLE r1, #0x1234
+        case Instructions::JLE_REG: {
+            auto reg = fetchRegisterIndex();
+            auto val = GetRegister(reg);
+            auto jmpAddr = fetch16();
+            if (val <= GetRegister(Registers::acc)) {
+                SetRegister(Registers::pc, jmpAddr);
+            }
+            break;
+        }
+
+        // jmp if literal less than or equal to acc e.g.: JLE 0xABCD, #0x1234
+        case Instructions::JLE_LIT: {
+            auto lit = fetch16();
+            auto jmpAddr = fetch16();
+            if (lit <= GetRegister(Registers::acc)) {
+                SetRegister(Registers::pc, jmpAddr);
+            }
+            break;
+        }
+
+        // jmp if register greater than or equal to acc e.g.: JGE r1, #0x1234
+        case Instructions::JGE_REG: {
+            auto reg = fetchRegisterIndex();
+            auto val = GetRegister(reg);
+            auto jmpAddr = fetch16();
+            if (val >= GetRegister(Registers::acc)) {
+                SetRegister(Registers::pc, jmpAddr);
+            }
+            break;
+        }
+
+        // jmp if literal greater than or equal to acc e.g.: JGE 0xABCD, #0x1234
+        case Instructions::JGE_LIT: {
+            auto lit = fetch16();
+            auto jmpAddr = fetch16();
+            if (lit >= GetRegister(Registers::acc)) {
+                SetRegister(Registers::pc, jmpAddr);
+            }
+            break;
+        }
+
     }
 
     return true;

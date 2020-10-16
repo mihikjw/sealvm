@@ -1,7 +1,14 @@
 {
-    "editor.formatOnSave": true,
-    "editor.formatOnPaste": true,
-    "C_Cpp.clang_format_style": "file",
+    "triggerTaskOnSave.selectedTask": "ClangFormat",
+    "triggerTaskOnSave.showNotifications": true,
+    "triggerTaskOnSave.showStatusBarToggle": true,
+    "triggerTaskOnSave.tasks": {
+        "format": [
+            "include/*.hpp",
+            "src/*.cpp",
+            "cmd/*.cpp"
+        ]
+    },
     "clang-tidy.compilerArgs": [
         "-std=c++17",
         "-p ."

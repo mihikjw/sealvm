@@ -17,13 +17,13 @@ class BaseParser {
 
     protected:
     // setErrorState sets up the error fields on the given state, with the given error message
-    State* setErrorState(State* state, const std::string &err) {
+    State* setErrorState(State* state, const std::string& err) {
         state->Error = err;
         state->IsError = true;
         return state;
     }
 };
 
-}
+} // namespace Parser
 
-#endif  // SEALVM_PARSER_BASEPARSER_HPP
+#endif // SEALVM_PARSER_BASEPARSER_HPP

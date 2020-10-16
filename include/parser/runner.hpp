@@ -1,14 +1,14 @@
 #ifndef SEALVM_PARSER_RUNNER_HPP
 #define SEALVM_PARSER_RUNNER_HPP
 
-#include <string>
-#include <stdexcept>
-#include <vector>
 #include <list>
 #include <memory>
+#include <stdexcept>
+#include <string>
+#include <vector>
 
-#include "state.hpp"
 #include "baseParser.hpp"
+#include "state.hpp"
 
 namespace Parser {
 
@@ -18,12 +18,12 @@ class Runner {
     ~Runner() = default;
 
     // Run executes a single parser on a single input
-    State* Run(BaseParser* parser, const std::string &in);
+    State* Run(BaseParser* parser, const std::string& in);
 
     // SequenceOf executes a sequence of parsers against a given input
-    State* SequenceOf(std::vector<std::unique_ptr<BaseParser>>* parsers, const std::string &in);
+    State* SequenceOf(std::vector<std::unique_ptr<BaseParser>>* parsers, const std::string& in);
 };
 
-}
+} // namespace Parser
 
-#endif  // SEALVM_PARSER_RUNNER_HPP
+#endif // SEALVM_PARSER_RUNNER_HPP

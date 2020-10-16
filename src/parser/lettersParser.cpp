@@ -3,8 +3,8 @@
 using namespace Parser;
 
 State* LettersParser::Run(State* state) {
-    if (state->IsError) { 
-        return state; 
+    if (state->IsError) {
+        return state;
     }
 
     if (state->Input.empty() || (unsigned int)state->Input.size() < (unsigned int)state->Index + 1) {

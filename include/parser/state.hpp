@@ -1,9 +1,9 @@
 #ifndef SEALVM_PARSER_STATE_HPP
 #define SEALVM_PARSER_STATE_HPP
 
-#include <string>
 #include <list>
 #include <memory>
+#include <string>
 
 namespace Parser {
 
@@ -12,8 +12,8 @@ class State {
 
     public:
     // State default constructor
-    State(const std::string &input = "", const std::string &result = "", std::shared_ptr<std::list<std::shared_ptr<State>>> results = nullptr, 
-                                                                unsigned short index = 0, const std::string &error = "", bool isError = false){
+    State(const std::string& input = "", const std::string& result = "", std::shared_ptr<std::list<std::shared_ptr<State>>> results = nullptr,
+          unsigned short index = 0, const std::string& error = "", bool isError = false) {
         this->Input = input;
         this->Result = result;
         this->Results = results;
@@ -23,7 +23,7 @@ class State {
     }
 
     // State copy constructor
-    State(State* in){
+    State(State* in) {
         this->Input = in->Input;
         this->Result = in->Result;
         this->Results = in->Results;
@@ -33,7 +33,7 @@ class State {
     }
 
     // Map applies the given transformation function to the State and returns it if no error exists on the state
-    State* Map(State*(transformer)(State*)){
+    State* Map(State*(transformer)(State*)) {
         if (!IsError) {
             return transformer(this);
         }
@@ -41,7 +41,7 @@ class State {
     }
 
     // ErrorMap applies the given transformation function to the State if an error exists on the state
-    State* ErrorMap(State*(transformer)(State*)){
+    State* ErrorMap(State*(transformer)(State*)) {
         if (IsError) {
             return transformer(this);
         }
@@ -67,6 +67,6 @@ class State {
     bool IsError;
 };
 
-}
+} // namespace Parser
 
-#endif  // SEALVM_PARSER_STATE_HPP
+#endif // SEALVM_PARSER_STATE_HPP

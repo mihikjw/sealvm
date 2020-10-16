@@ -15,7 +15,7 @@ int main() {
     SealVM::ScreenDevice screenDevice(nullptr);
     mapper.Map(&screenDevice, 0x3000, 0x30ff, true);
 
-    auto cpu = SealVM::CPU(&mapper); 
+    auto cpu = SealVM::CPU(&mapper);
 
     // ---------------------------
     // Program machine code

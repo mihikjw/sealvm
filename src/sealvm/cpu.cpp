@@ -85,8 +85,8 @@ bool CPU::execute(const uint16_t instruction) {
             auto r2Val = GetRegister(r2);
             SetRegister(Registers::acc, r1Val + r2Val);
             break;
-        } 
-        
+        }
+
         // jump to the given address if the given literal is not equal to Registers::acc, e.g.: JNE {literal} {address} | JNE 0xABCD #0x1234
         case Instructions::JMP_NOT_EQ: {
             auto compareValue = fetch16();
@@ -468,7 +468,6 @@ bool CPU::execute(const uint16_t instruction) {
             }
             break;
         }
-
     }
 
     return true;

@@ -20,6 +20,6 @@ class LettersParser : public BaseParser {
     const char* regex = "^[A-Za-z]+";
 };
 
-}
+} // namespace Parser
 
-#endif  // SEALVM_PARSER_LETTERSPARSER_HPP
+#endif // SEALVM_PARSER_LETTERSPARSER_HPP

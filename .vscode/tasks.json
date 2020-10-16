@@ -38,6 +38,15 @@
             "args": [
                 "scripts/clean.sh"
             ]
+        },
+        {
+            "label": "ClangFormat",
+            "type": "shell",
+            "command": "clang-format",
+            "args": [
+                "-i",
+                "${file}"
+            ]
         }
     ]
 }

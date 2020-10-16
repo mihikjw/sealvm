@@ -1,10 +1,10 @@
 #ifndef SEALVM_PARSER_PARSER_HPP
 #define SEALVM_PARSER_PARSER_HPP
 
+#include "baseParser.hpp"
+#include "lettersParser.hpp"
 #include "runner.hpp"
 #include "state.hpp"
-#include "baseParser.hpp"
 #include "stringParser.hpp"
-#include "lettersParser.hpp"
 
-#endif  // SEALVM_PARSER_PARSER_HPP
+#endif // SEALVM_PARSER_PARSER_HPP

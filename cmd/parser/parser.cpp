@@ -14,4 +14,3 @@ int main() {
         std::cerr << outState->Error << std::endl;
     }
 }
-

@@ -2,7 +2,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Debug Launch",
+            "name": "SealVM",
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/bin/sealvm",
@@ -12,7 +12,27 @@
             "preLaunchTask": "Build",
             "args": [],
             "environment": [],
-            
+            "linux": {
+                "MIMode": "gdb",
+                "setupCommands": [
+                    {
+                        "description": "Enable pretty-printing for gdb",
+                        "text": "-enable-pretty-printing"
+                    }
+                ]
+            }
+        },
+        {
+            "name": "Parser",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/bin/parser",
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "externalConsole": false,
+            "preLaunchTask": "Build",
+            "args": [],
+            "environment": [],
             "linux": {
                 "MIMode": "gdb",
                 "setupCommands": [

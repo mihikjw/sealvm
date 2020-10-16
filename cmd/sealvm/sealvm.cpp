@@ -7,12 +7,12 @@ int main() {
 
     auto memory = SealVM::Memory(&mainMemory);
     auto mapper = SealVM::MemoryMapper(&mainMemory);
-    mapper.Map(&memory, SealVM::ZERO_MEMORY, SealVM::FULL_MEMORY);  
+    mapper.Map(&memory, SealVM::ZERO_MEMORY, SealVM::FULL_MEMORY);
 
     // as a test, map part of the address space to a 'screen device', mapped from the start/end
     //  this device doesn't take memory, instead writes from 0x3000 - 0x30ff, first 8-bits are any commands, the last 8 are the character to print
     // see `sealvm/screenDevice.hpp` for details
-    SealVM::ScreenDevice screenDevice(nullptr); 
+    SealVM::ScreenDevice screenDevice(nullptr);
     mapper.Map(&screenDevice, 0x3000, 0x30ff, true);
 
     auto cpu = SealVM::CPU(&mapper); 

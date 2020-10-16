@@ -13,19 +13,13 @@ int main() {
     auto runner = Parser::Runner();
     auto parser = Parser::LettersParser();
     auto parsers = std::vector<std::unique_ptr<Parser::BaseParser>>();
-
-    parsers.push_back(std::make_unique<Parser::StringParser>("blob"));
-    parsers.push_back(std::make_unique<Parser::LettersParser>());
     parsers.push_back(std::make_unique<Parser::DigitsParser>());
     parsers.push_back(std::make_unique<Parser::LettersParser>());
 
-    auto outState = runner.SequenceOf(&parsers, "blobhello1234goodbye");
+    auto outState = runner.Choice(&parsers, "1234");
 
     if (!outState->IsError) {
-        auto results = *outState->Results;
-        for (const auto &r : results) {
-            std::cout << r->Result << std::endl;
-        }
+        std::cout << outState->Result << std::endl;
     } else {
         std::cerr << outState->Error << std::endl;
     }

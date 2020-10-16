@@ -22,6 +22,13 @@ class Runner {
 
     // SequenceOf executes a sequence of parsers against a given input
     State* SequenceOf(std::vector<std::unique_ptr<BaseParser>>* parsers, const std::string& in);
+
+    /* Choice attempts all given parsers in order, until one passes, then result is returned, errors do not stop the loop
+    if no parsers succeed, then this is considered an error */
+    State* Choice(std::vector<std::unique_ptr<BaseParser>>* parsers, const std::string& in);
+
+    // Many will try to match the given parser as many times as it can. many1 arg tells to mark error if no matches, default is false
+    State* Many(BaseParser* parser, const std::string& in, bool many1 = false);
 };
 
 } // namespace Parser

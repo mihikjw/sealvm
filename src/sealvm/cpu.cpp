@@ -302,7 +302,7 @@ bool CPU::execute(const uint16_t instruction) {
             auto r2 = fetchRegisterIndex();
             auto val1 = GetRegister(r1);
             auto val2 = GetRegister(r2);
-            SetRegister(Registers::acc, r1 & r2);
+            SetRegister(Registers::acc, val1 & val2);
             break;
         }
 
@@ -321,7 +321,7 @@ bool CPU::execute(const uint16_t instruction) {
             auto r2 = fetchRegisterIndex();
             auto val1 = GetRegister(r1);
             auto val2 = GetRegister(r2);
-            SetRegister(Registers::acc, r1 | r2);
+            SetRegister(Registers::acc, val1 | val2);
             break;
         }
 
@@ -340,7 +340,7 @@ bool CPU::execute(const uint16_t instruction) {
             auto r2 = fetchRegisterIndex();
             auto val1 = GetRegister(r1);
             auto val2 = GetRegister(r2);
-            SetRegister(Registers::acc, r1 ^ r2);
+            SetRegister(Registers::acc, val1 ^ val2);
             break;
         }
 

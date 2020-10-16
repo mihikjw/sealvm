@@ -21,8 +21,8 @@ enum Instructions {
     SUB_LIT_REG = 0x21,     // SUB 0x1234, r1
     SUB_REG_LIT = 0x22,     // SUB r1, 0x1234
     SUB_REG_REG = 0x23,     // SUB r1, r2
-    INC_REG = 0x24,         // 
-    DEC_REG = 0x25,
+    INC_REG = 0x24,         // INC r1
+    DEC_REG = 0x25,         // DEC r1
     MUL_LIT_REG = 0x26,     // MUL 0x1234, r1               TODO: add support for signed value multiplication
     MUL_REG_REG = 0x27,     // MUL r1, r2                   TODO: add support for signed value multiplication
 

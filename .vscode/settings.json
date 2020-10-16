@@ -1,7 +1,5 @@
 {
     "triggerTaskOnSave.selectedTask": "ClangFormat",
-    "triggerTaskOnSave.showNotifications": true,
-    "triggerTaskOnSave.showStatusBarToggle": true,
     "triggerTaskOnSave.tasks": {
         "format": [
             "include/*.hpp",

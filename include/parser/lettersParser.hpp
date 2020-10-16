@@ -8,16 +8,16 @@
 
 namespace Parser {
 
-// LettersParser is used to parse a string into an array of individual characters
+// LettersParser is used to check a given string only contains letters
 class LettersParser : public BaseParser {
     public:
-    LettersParser() = default;
+    LettersParser();
     ~LettersParser() = default;
 
     State* Run(State* state);
 
     private:
-    const char* regex = "^[A-Za-z]+";
+    std::regex regex;
 };
 
 } // namespace Parser

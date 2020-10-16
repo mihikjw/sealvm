@@ -2,8 +2,18 @@
 
 #include "sealvm/sealvm.hpp"
 
+/*
+this is the executable for SealVM, however it's currently WIP, instruction codes etc are likley to change before v1.0 release.
+currently you need to manually add machine-code into memory starting from position 0, I'm working on an assembly parser and
+    compiler before coming back to working on the VM itself (/cmd/parser/parser.cpp), where a core focus from there will be
+    making all the VM code more resiliant and efficient
+*/
+
+// MEMORY_SIZE defines the total size of memory avalible
+constexpr int MEMORY_SIZE = 256 * 256;
+
 int main() {
-    std::vector<uint8_t> mainMemory(256 * 256, SealVM::ZERO_MEMORY);
+    std::vector<uint8_t> mainMemory(MEMORY_SIZE, SealVM::ZERO_MEMORY);
 
     auto memory = SealVM::Memory(&mainMemory);
     auto mapper = SealVM::MemoryMapper(&mainMemory);

@@ -1,16 +1,16 @@
-#include "parser/lettersParser.hpp"
+#include "parser/digitsParser.hpp"
 
 using namespace Parser;
 
-LettersParser::LettersParser() { regex = std::regex("^[A-Za-z]+"); }
+DigitsParser::DigitsParser() { regex = std::regex("^[0-9]+"); }
 
-State* LettersParser::Run(State* state) {
+State* DigitsParser::Run(State* state) {
     if (state->IsError) {
         return state;
     }
 
     if (state->Input.empty() || (unsigned int)state->Input.size() < (unsigned int)state->Index + 1) {
-        return setErrorState(state, "LettersParser: got unexpected end of input");
+        return setErrorState(state, "DigitsParser: got unexpected end of input");
     }
 
     auto toCheck = state->Input.substr(state->Index);
@@ -18,7 +18,7 @@ State* LettersParser::Run(State* state) {
     std::sregex_token_iterator end;
 
     if (it == end) {
-        return setErrorState(state, "LettersParser: couldn't match letters at index '" + std::to_string(state->Index) + "'");
+        return setErrorState(state, "DigitsParser: couldn't match digits at index '" + std::to_string(state->Index) + "'");
     }
 
     state->Result = *it;

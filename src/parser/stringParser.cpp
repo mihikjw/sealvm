@@ -18,10 +18,12 @@ State* StringParser::Run(State* state) {
     std::size_t startPos = state->Input.find(locate, state->Index);
 
     if (startPos != std::string::npos) {
-        std::size_t endPos = state->Input.find(locate[locate.size() - 1], startPos);
+        auto finalChar = locate[locate.size() - 1];
+        auto endPos = state->Input.find(finalChar, startPos + 1);
+        endPos++;
 
         if (endPos != std::string::npos) {
-            state->Result = state->Input.substr(startPos, endPos + 1);
+            state->Result = state->Input.substr(startPos, endPos);
             state->Index = endPos;
             state->Error = "";
             state->IsError = false;

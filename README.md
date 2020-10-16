@@ -24,7 +24,7 @@ Memory size is currently arbitary and is defined on construction as an argument 
 16-bit instruction enums are defined under `sealvm/instructions.hpp`, with a comment for a corresponding assembly example. They're decoded in the CPU `sealvm/cpu.hpp` which also includes a comment for a corresponding assembly example. I'll improve this documentation once I put together a real assembler.
 
 ## Parser
-The parser is used to parse SealVM Assembler, includes a custom parser combinator for building a tree. Example use of the api as it stands:
+The parser is used to parse SealVM Assembler, includes a custom parser combinator. Example use of the ai as it stands:
 
 ``` cpp
 #include <iostream>
@@ -65,7 +65,7 @@ I use Visual Studio Code to develop this project, under `.vscode/` are the launc
 - Visual Studio Code
     - C/C++ extension
     - Native Debug
-    - Clang-Format
+    - Trigger Task on Save
     - Clang-Tidy
     - CMake
 - CMake

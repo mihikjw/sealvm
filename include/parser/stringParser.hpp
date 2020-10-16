@@ -3,18 +3,19 @@
 
 #include <string> 
 #include <stdexcept>
-#include <stdint.h>
 
 #include "parser/state.hpp"
+#include "parser/baseParser.hpp"
 
 namespace Parser {
 
-class StringParser {
+// StringParser is used to locate the given constructor string and set as the result on the state
+class StringParser: public BaseParser {
     public:
     StringParser(const std::string &locate);
     ~StringParser() = default;
 
-    State* String(State* state);
+    State* Run(State* state);
 
     private:
     std::string locate;

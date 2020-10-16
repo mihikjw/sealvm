@@ -10,7 +10,7 @@ StringParser::StringParser(const std::string &locate) {
     this->locate = locate; 
 } 
 
-State* StringParser::String(State* state) {
+State* StringParser::Run(State* state) {
     if (state->IsError) { 
         return state; 
     }
@@ -29,7 +29,5 @@ State* StringParser::String(State* state) {
         }
     }
 
-    state->Error = "StringParser: tried to match '" + locate + "', but got '" + state->Input + "'";
-    state->IsError = true;
-    return state;
+    return setErrorState(state, "StringParser: tried to match '" + locate + "', but got '" + state->Input + "'");
 }

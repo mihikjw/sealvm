@@ -1,13 +1,13 @@
-#include "parser/coreParser.hpp"
+#include "parser/runner.hpp"
 
 using namespace Parser;
 
-State* CoreParser::Run(StringParser* parser, const std::string &in) {
+State* Runner::Run(BaseParser* parser, const std::string &in) {
     auto state = State{in};
-    return parser->String(&state);
+    return parser->Run(&state);
 }
 
-State* CoreParser::SequenceOf(std::vector<std::unique_ptr<StringParser>>* parsers, const std::string &in) {
+State* Runner::SequenceOf(std::vector<std::unique_ptr<BaseParser>>* parsers, const std::string &in) {
     auto results = std::make_shared<std::list<std::shared_ptr<State>>>(); 
     auto nextState = new State(in);
 
@@ -15,7 +15,7 @@ State* CoreParser::SequenceOf(std::vector<std::unique_ptr<StringParser>>* parser
         if (nextState->IsError) { 
             return nextState; 
         }
-        nextState = parser->String(nextState);
+        nextState = parser->Run(nextState);
         results->push_back(std::make_shared<State>(nextState));
     }
  

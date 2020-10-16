@@ -104,6 +104,7 @@
         "cinttypes": "cpp",
         "typeindex": "cpp",
         "stack": "cpp",
-        "list": "cpp"
+        "list": "cpp",
+        "regex": "cpp"
     }
 }

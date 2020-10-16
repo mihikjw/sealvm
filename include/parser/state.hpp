@@ -9,7 +9,9 @@ namespace Parser {
 
 // State represents the state of the parser
 class State {
+
     public:
+    // State default constructor
     State(const std::string &input = "", const std::string &result = "", std::shared_ptr<std::list<std::shared_ptr<State>>> results = nullptr, 
                                                                 unsigned short index = 0, const std::string &error = "", bool isError = false){
         this->Input = input;
@@ -19,6 +21,8 @@ class State {
         this->Error = error;
         this->IsError = isError;
     }
+
+    // State copy constructor
     State(State* in){
         this->Input = in->Input;
         this->Result = in->Result;
@@ -26,6 +30,22 @@ class State {
         this->Index = in->Index;
         this->Error = in->Error;
         this->IsError = in->IsError;
+    }
+
+    // Map applies the given transformation function to the State and returns it if no error exists on the state
+    State* Map(State*(transformer)(State*)){
+        if (!IsError) {
+            return transformer(this);
+        }
+        return this;
+    }
+
+    // ErrorMap applies the given transformation function to the State if an error exists on the state
+    State* ErrorMap(State*(transformer)(State*)){
+        if (IsError) {
+            return transformer(this);
+        }
+        return this;
     }
 
     // Input contains the input for the function

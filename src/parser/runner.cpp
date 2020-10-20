@@ -7,12 +7,12 @@ State* Runner::Run(BaseParser* parser, const std::string& in) {
     return parser->Run(&state);
 }
 
-State* Runner::SequenceOf(std::vector<std::unique_ptr<BaseParser>>* parsers, const std::string& in) {
+State* Runner::SequenceOf(std::vector<BaseParser*>* parsers, const std::string& in) {
     auto results = std::make_shared<std::list<std::shared_ptr<State>>>();
     auto nextState = new State(in);
 
     for (auto const& parser : *parsers) {
-        if (!nextState->IsError) {
+        if (nextState->IsError) {
             return nextState;
         }
         nextState = parser->Run(nextState);
@@ -23,7 +23,7 @@ State* Runner::SequenceOf(std::vector<std::unique_ptr<BaseParser>>* parsers, con
     return nextState;
 }
 
-State* Runner::Choice(std::vector<std::unique_ptr<BaseParser>>* parsers, const std::string& in) {
+State* Runner::Choice(std::vector<BaseParser*>* parsers, const std::string& in) {
     auto state = new State(in);
 
     for (auto const& parser : *parsers) {

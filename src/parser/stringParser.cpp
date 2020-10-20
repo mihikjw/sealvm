@@ -20,9 +20,9 @@ State* StringParser::Run(State* state) {
     if (startPos != std::string::npos) {
         auto finalChar = locate[locate.size() - 1];
         auto endPos = state->Input.find(finalChar, startPos + 1);
-        endPos++;
 
         if (endPos != std::string::npos) {
+            endPos++;
             state->Result = state->Input.substr(startPos, endPos);
             state->Index = endPos;
             state->Error = "";

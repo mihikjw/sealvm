@@ -5,6 +5,8 @@
 #include <memory>
 #include <string>
 
+#include "parser/baseParser.hpp"
+
 namespace Parser {
 
 // State represents the state of the parser
@@ -13,40 +15,16 @@ class State {
     public:
     // State default constructor
     State(const std::string& input = "", const std::string& result = "", std::shared_ptr<std::list<std::shared_ptr<State>>> results = nullptr,
-          unsigned short index = 0, const std::string& error = "", bool isError = false) {
-        this->Input = input;
-        this->Result = result;
-        this->Results = results;
-        this->Index = index;
-        this->Error = error;
-        this->IsError = isError;
-    }
+          unsigned short index = 0, const std::string& error = "", bool isError = false);
 
     // State copy constructor
-    State(State* in) {
-        this->Input = in->Input;
-        this->Result = in->Result;
-        this->Results = in->Results;
-        this->Index = in->Index;
-        this->Error = in->Error;
-        this->IsError = in->IsError;
-    }
+    State(State* in);
 
-    // Map applies the given transformation function to the State and returns it if no error exists on the state
-    State* Map(State*(transformer)(State*)) {
-        if (!IsError) {
-            return transformer(this);
-        }
-        return this;
-    }
+    // Transform applies the given transformation function to the State and returns it if no error exists on the state
+    State* Transform(State*(transformer)(State*));
 
-    // ErrorMap applies the given transformation function to the State if an error exists on the state
-    State* ErrorMap(State*(transformer)(State*)) {
-        if (IsError) {
-            return transformer(this);
-        }
-        return this;
-    }
+    // ErrorTransform applies the given transformation function to the State if an error exists on the state
+    State* ErrorTransform(State*(transformer)(State*));
 
     // Input contains the input for the function
     std::string Input;

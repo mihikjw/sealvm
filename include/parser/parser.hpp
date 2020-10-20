@@ -2,6 +2,7 @@
 #define SEALVM_PARSER_PARSER_HPP
 
 #include "baseParser.hpp"
+#include "betweenParser.hpp"
 #include "digitsParser.hpp"
 #include "lettersParser.hpp"
 #include "runner.hpp"

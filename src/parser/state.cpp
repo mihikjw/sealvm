@@ -2,8 +2,8 @@
 
 using namespace Parser;
 
-State::State(const std::string& input = "", const std::string& result = "", std::shared_ptr<std::list<std::shared_ptr<State>>> results = nullptr,
-             unsigned short index = 0, const std::string& error = "", bool isError = false) {
+State::State(const std::string& input, const std::string& result, std::shared_ptr<std::list<std::shared_ptr<State>>> results, unsigned short index,
+             const std::string& error, bool isError) {
     this->Input = input;
     this->Result = result;
     this->Results = results;

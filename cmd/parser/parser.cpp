@@ -48,7 +48,7 @@ Parser::State* getHexLiteral(Parser::Runner* r, const std::string& src, Parser::
     }
 
     auto hexParser = Parser::HexParser();
-    return r->Many(&hexParser, src, true, state);
+    return r->Run(&hexParser, src, state);
 }
 
 Parser::State* movLitToReg(Parser::Runner* r, const std::string& src) {

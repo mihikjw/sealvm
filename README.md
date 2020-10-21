@@ -24,40 +24,7 @@ Memory size is currently arbitary and is defined on construction as an argument 
 16-bit instruction enums are defined under `sealvm/instructions.hpp`, with a comment for a corresponding assembly example. They're decoded in the CPU `sealvm/cpu.hpp` which also includes a comment for a corresponding assembly example. I'll improve this documentation once I put together a real assembler.
 
 ## Parser
-The parser is used to parse SealVM Assembler, includes a custom parser combinator. Example use of the ai as it stands:
-
-``` cpp
-#include <iostream>
-#include <memory>
-
-#include "parser/parser.hpp"
-
-Parser::State* resetToTemp(Parser::State* in) {
-    in->Result = "TEMP";
-    return in;
-}
-
-int main() {
-    auto runner = Parser::Runner();
-
-    auto parsers = std::make_unique<std::vector<std::unique_ptr<Parser::BaseParser>>>();
-    parsers->push_back(std::make_unique<Parser::StringParser>("hello there!"));
-    parsers->push_back(std::make_unique<Parser::StringParser>("goodbye there!"));
-
-    auto outState = std::make_unique<Parser::State>(runner.SequenceOf(parsers.get(), "hello there!goodbye there!"))->Map(&resetToTemp);
-
-    if (!outState->IsError) {
-        std::cout << outState->Result << std::endl;
-        
-        auto results = *outState->Results;
-        for (const auto &r: results) {
-            std::cout << r->Result << std::endl;
-        }
-    } else {
-        std::cerr << outState->Error << std::endl;
-    }
-}
-```
+The parser is used to parse SealVM Assembler, this is my current focus and is a work in progress. Docs will be improved as the interface becomes more stable. Current state of the development/testing can be seen in `/cmd/parser/parser.cpp`.
 
 ## Developing
 I use Visual Studio Code to develop this project, under `.vscode/` are the launch config/tasks/settings etc. You're welcome to use whatever environment you like. I'm using GCC-10 as a compiler.

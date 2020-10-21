@@ -2,7 +2,7 @@
 
 using namespace Parser;
 
-State::State(const std::string& input, const std::string& result, std::shared_ptr<std::list<std::shared_ptr<State>>> results, unsigned short index,
+State::State(const std::string& input, const std::string& result, std::shared_ptr<std::vector<std::shared_ptr<State>>> results, unsigned short index,
              const std::string& error, bool isError) {
     this->Input = input;
     this->Result = result;

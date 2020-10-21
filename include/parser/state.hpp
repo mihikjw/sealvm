@@ -1,9 +1,9 @@
 #ifndef SEALVM_PARSER_STATE_HPP
 #define SEALVM_PARSER_STATE_HPP
 
-#include <list>
 #include <memory>
 #include <string>
+#include <vector>
 
 namespace Parser {
 
@@ -12,7 +12,7 @@ class State {
 
     public:
     // State default constructor
-    State(const std::string& input = "", const std::string& result = "", std::shared_ptr<std::list<std::shared_ptr<State>>> results = nullptr,
+    State(const std::string& input = "", const std::string& result = "", std::shared_ptr<std::vector<std::shared_ptr<State>>> results = nullptr,
           unsigned short index = 0, const std::string& error = "", bool isError = false);
 
     // State copy constructor
@@ -31,7 +31,7 @@ class State {
     std::string Result;
 
     // Results contains the output for multiple functions chained together (i.e. CoreParser::SequenceOf result)
-    std::shared_ptr<std::list<std::shared_ptr<State>>> Results;
+    std::shared_ptr<std::vector<std::shared_ptr<State>>> Results;
 
     // Index contains the current index in the input of the parser function
     unsigned short Index;

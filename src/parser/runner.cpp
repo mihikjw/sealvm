@@ -2,29 +2,45 @@
 
 using namespace Parser;
 
-State* Runner::Run(BaseParser* parser, const std::string& in) {
-    auto state = State{in};
-    return parser->Run(&state);
+State* Runner::Run(BaseParser* parser, const std::string& in, State* state) {
+    if (!state) {
+        state = new State{in};
+    }
+    return parser->Run(state);
 }
 
-State* Runner::SequenceOf(std::vector<BaseParser*>* parsers, const std::string& in) {
-    auto results = std::make_shared<std::list<std::shared_ptr<State>>>();
-    auto nextState = new State(in);
-
-    for (auto const& parser : *parsers) {
-        if (nextState->IsError) {
-            return nextState;
-        }
-        nextState = parser->Run(nextState);
-        results->push_back(std::make_shared<State>(nextState));
+State* Runner::SequenceOf(std::vector<BaseParser*>* parsers, const std::string& in, State* state) {
+    if (!state) {
+        state = new State{in};
     }
 
-    nextState->Results = results;
-    return nextState;
+    auto results = std::make_shared<std::vector<std::shared_ptr<State>>>();
+
+    for (auto const& parser : *parsers) {
+        if (state->IsError) {
+            return state;
+        }
+        state = parser->Run(state);
+        results->push_back(std::make_shared<State>(state));
+    }
+
+    if (state->Results.get() && state->Results->empty()) {
+        for (auto& res : *(results.get())) {
+            state->Results->push_back(std::move(res));
+        }
+    } else {
+        state->Results = results;
+    }
+
+    return state;
 }
 
-State* Runner::Choice(std::vector<BaseParser*>* parsers, const std::string& in) {
-    auto state = new State(in);
+State* Runner::Choice(std::vector<BaseParser*>* parsers, const std::string& in, State* state) {
+    if (!state) {
+        state = new State{in};
+    }
+
+    auto startIndex = state->Index;
 
     for (auto const& parser : *parsers) {
         state = parser->Run(state);
@@ -32,6 +48,10 @@ State* Runner::Choice(std::vector<BaseParser*>* parsers, const std::string& in) 
         if (!state->IsError) {
             return state;
         }
+
+        state->Index = startIndex;
+        state->IsError = false;
+        state->Error = "";
     }
 
     state->Error = "Choice: unable to match with any parser at index '" + std::to_string(state->Index) + "'";
@@ -39,9 +59,12 @@ State* Runner::Choice(std::vector<BaseParser*>* parsers, const std::string& in) 
     return state;
 }
 
-State* Runner::Many(BaseParser* parser, const std::string& in, bool many1) {
-    auto results = std::make_shared<std::list<std::shared_ptr<State>>>();
-    auto state = new State(in);
+State* Runner::Many(BaseParser* parser, const std::string& in, bool many1, State* state) {
+    if (!state) {
+        state = new State(in);
+    }
+
+    auto results = std::make_shared<std::vector<std::shared_ptr<State>>>();
     unsigned int count = 0;
     bool done = false;
 
@@ -62,6 +85,8 @@ State* Runner::Many(BaseParser* parser, const std::string& in, bool many1) {
         state->IsError = true;
     } else {
         state->Results = results;
+        state->Error = "";
+        state->IsError = false;
     }
 
     return state;

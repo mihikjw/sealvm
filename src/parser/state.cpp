@@ -34,3 +34,8 @@ State* State::ErrorTransform(State*(transformer)(State*)) {
     }
     return this;
 }
+
+State* State::Map(void*(mapper)(State*)) {
+    MappedResult = mapper(this);
+    return this;
+}

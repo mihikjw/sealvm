@@ -1,5 +1,5 @@
 # SealVM
-SealVM is a 16-bit virtual machine, primary as a hobby project, written in C++. My primary goals at the moment are to develop a CPU, an assembly language, then a higher-level c-style language compiler. This project is a work in-progress.
+SealVM is a 16-bit virtual machine, written in C++. My primary goals at the moment are to develop a CPU, an assembly language, then a higher-level c-style language compiler. This project is a work in-progress.
 
 ## SealVM Specifications
 ### Registers `sealvm/registers.hpp`
@@ -24,10 +24,11 @@ Memory size is currently arbitary and is defined on construction as an argument 
 16-bit instruction enums are defined under `sealvm/instructions.hpp`, with a comment for a corresponding assembly example. They're decoded in the CPU `sealvm/cpu.hpp` which also includes a comment for a corresponding assembly example. I'll improve this documentation once I put together a real assembler.
 
 ## Parser
-The parser is used to parse SealVM Assembler, this is my current focus and is a work in progress. Docs will be improved as the interface becomes more stable. Current state of the development/testing can be seen in `/cmd/parser/parser.cpp`.
+The 'parser' is used to parse SealVM Assembler into an AST, this is my current focus and is a work in progress. Docs will be improved as the interface becomes more stable. Current state of the development/testing can be seen in `/cmd/parser/parser.cpp`. Includes a generic parser combinator library.
 
 ## Developing
 I use Visual Studio Code to develop this project, under `.vscode/` are the launch config/tasks/settings etc. You're welcome to use whatever environment you like. I'm using GCC-10 as a compiler.
+
 ### Requirements
 - Visual Studio Code
     - C/C++ extension

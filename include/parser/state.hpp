@@ -18,6 +18,9 @@ class State {
     // State copy constructor
     State(State* in);
 
+    // Map takes a function pointer to map the held data into any other custom type, sets MappedResult to given function result
+    State* Map(void*(mapper)(State*));
+
     // Transform applies the given transformation function to the State and returns it if no error exists on the state
     State* Transform(State*(transformer)(State*));
 
@@ -41,6 +44,9 @@ class State {
 
     // IsError is a flag for the error message
     bool IsError;
+
+    // MappedResult is a custom user-defined object, configured with the Map() function
+    void* MappedResult;
 };
 
 } // namespace Parser

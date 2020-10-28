@@ -1,5 +1,7 @@
 import parser
 
+# MOV [$42 + (!loc - ($05 * $31))], r1
+
 
 def main():
     source = "MOV $42, r1"

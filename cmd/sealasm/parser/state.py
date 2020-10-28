@@ -1,4 +1,4 @@
-from typing import Any, Optional
+from typing import Any, Optional, Callable
 import json
 
 
@@ -18,6 +18,15 @@ class State():
             self.index: int = index
             self.error: str = error
             self.is_error: bool = is_error
+
+    def map(self, func: Callable):
+        """
+        run the given method with access to the state fields, allows manipulation of the result before returning
+        ARGS: given method must take a State object as the first argument
+        """
+        if func is not None:
+            func(self)
+        return self
 
     def __str__(self):
         return json.dumps(vars(self))

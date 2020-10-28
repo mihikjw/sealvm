@@ -1,15 +1,14 @@
 # SealVM
 SealVM is a 16-bit virtual machine, written in C++. My primary goals at the moment are to develop a CPU, an assembly language, then a higher-level c-style language compiler. This project is a work in-progress.
 
-## Components
+## Applications `/cmd`
 ### SealVM
-The `sealvm` library contains the code for the virtual machine, including the CPU and memory devices. 
-
-### Parser
-The `parser` library is a generic parser-combinator library, which can be used to parse any strings. This library only includes generic parsers, nothing specific to any language. It will be re-used throughout the project for various string parsing requirements.
+`sealvm` contains the code for the virtual machine, including the CPU and memory devices. 
 
 ### SealASM
-The `sealasm` library makes use of the generic `parser` library to parse the SealVM Assembly Language specifically. 
+`sealasm` contains multiple components, that when considered together constitute the compiler for the Seal Assembly Language. 
+- `parser` is a Python3 application, responsible for building and outputting an AST for the Assembly. This was previously a Cpp application so at the moment there is some old Cpp code related to this hanging around, which will be cleaned-up when all functionality is transposed to Python3.
+- wip ...
 
 ## SealVM Specifications
 ### Registers `sealvm/registers.hpp`

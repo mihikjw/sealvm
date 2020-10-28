@@ -2,6 +2,7 @@
 #define SEALVM_PROCESSOR_HPP
 
 #include <iostream>
+#include <memory>
 #include <string>
 
 #include "parser/parser.hpp"
@@ -32,6 +33,11 @@ class Processor {
     // movLitToReg currently works for simple instructions, however we need to support expressions such as MOV [$42 + (!loc - ($05 * $31))], r1 and
     //  not just read a hex value. Need to change this function into a finite state machine which allows this to be processed
     Parser::State* movLitToReg(const std::string& src);
+
+    // squareBracketExpression parses an expression defined in square brackets []
+    Parser::State* squareBracketExpression(const std::string& src, Parser::State* state);
+
+    Parser::State* getOperator(const std::string& src, Parser::State* state);
 };
 
 } // namespace SealASM

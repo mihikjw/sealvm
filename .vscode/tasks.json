@@ -47,6 +47,14 @@
                 "-i",
                 "${file}"
             ]
+        },
+        {
+            "label": "Parser Type Check",
+            "type": "shell",
+            "command": "mypy",
+            "args": [
+                "${workspaceFolder}/cmd/sealasm/parser.py"
+            ]
         }
     ]
 }

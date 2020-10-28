@@ -59,17 +59,106 @@ Parser::State* Processor::movLitToReg(const std::string& src) {
 
     auto hexParser = Parser::HexParser();
     state = runner->Run(&hexParser, src, state);
-    result.Ins.Args["HEX_LITERAL"] = state->Result;
+
+    if (state->IsError) {
+        state->IsError = false;
+        state->Error = "";
+        state = squareBracketExpression(src, state);
+        InstructionArg arg(state->Results.get());
+        result.Ins.Args["SQUARE_BRACKET_EXPRESSION"] = arg;
+    } else {
+        InstructionArg arg(state->Result);
+        result.Ins.Args["HEX_LITERAL"] = arg;
+    }
 
     state = runner->Run(&comma, src, state);
     state = runner->Run(&whitespaceParserOpt, src, state);
 
     state = getRegister(src, state);
-    result.Ins.Args["REGISTER"] = state->Result;
+    InstructionArg arg(state->Result);
+    result.Ins.Args["REGISTER"] = arg;
 
     auto output = runner->Run(&whitespaceParserOpt, src, state); // skip any trailing whitespace
     result.Ins.Type = SealVM::Instructions::MOV_LIT_REG;
     output->MappedResult = static_cast<void*>(&result);
 
     return output;
+}
+
+// SquareBracketState is represents the state's used in the squareBracketExpression state machine, only used in this function
+enum SquareBracketState {
+    ExpectElement,
+    ExpectOperator,
+};
+
+Parser::State* Processor::squareBracketExpression(const std::string& src, Parser::State* state) {
+    auto openSquareParser = Parser::StringParser("[");
+    auto closeSquareParser = Parser::StringParser("]");
+    auto optionWhitespace = Parser::WhitespaceParser(true);
+
+    state = runner->Run(&openSquareParser, src, state);
+    state = runner->Run(&optionWhitespace, src, state);
+
+    auto expr = std::make_shared<std::vector<std::unique_ptr<Parser::State>>>();
+    SquareBracketState s = ExpectElement;
+
+    while (true) {
+        switch (s) {
+            case ExpectElement: {
+                // choice between bracketedExpr, hexLiteral, variable
+                // push into expr vector
+                s = SquareBracketState::ExpectOperator;
+                state = optionWhitespace.Run(state);
+                break;
+            }
+            case ExpectOperator: {
+                // get closing square bracket if this is the end
+                state = runner->Peek(&closeSquareParser, src, 1, state);
+                if (state->Result == "]") {
+                    state = runner->Run(&closeSquareParser, src, state);
+                    state = runner->Run(&optionWhitespace, src, state);
+                    break;
+                }
+
+                // get the operator and add to the expression
+                state = getOperator(src, state);
+                if (state->IsError) {
+                    return state;
+                }
+                expr->push_back(std::make_unique<Parser::State>(state->Result));
+                s = SquareBracketState::ExpectElement;
+                runner->Run(&optionWhitespace, src, state);
+                break;
+            }
+        }
+    }
+
+    state->Results = expr;
+    return state;
+}
+
+Parser::State* Processor::getOperator(const std::string& src, Parser::State* state) {
+    auto parser = Parser::CharParser();
+    state = runner->Run(&parser, src, state);
+
+    if (state->IsError) {
+        return state;
+    }
+
+    Operators op;
+
+    if (state->Result == "+") {
+        op = OP_PLUS;
+    } else if (state->Result == "-") {
+        op = OP_MINUS;
+    } else if (state->Result == "*") {
+        op = OP_MULTIPLY;
+    } else {
+        state->Error = "getOperator: Operator Not Found At Index '" + std::to_string(state->Index - 1) + "'";
+        state->IsError = true;
+        return state;
+    }
+
+    state->MappedResult = static_cast<void*>(&op);
+    return state;
 }

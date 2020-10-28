@@ -29,6 +29,9 @@ class Runner {
 
     // Many will try to match the given parser as many times as it can. many1 arg tells to mark error if no matches, default is false
     State* Many(BaseParser* parser, const std::string& in, bool many1 = false, State* state = nullptr);
+
+    // Peek looks ahead using the given parser, without incrementing the index
+    State* Peek(BaseParser* parser, const std::string& in, int distance = 0, State* state = nullptr);
 };
 
 } // namespace Parser

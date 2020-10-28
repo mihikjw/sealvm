@@ -14,14 +14,14 @@ State* Runner::SequenceOf(std::vector<BaseParser*>* parsers, const std::string& 
         state = new State{in};
     }
 
-    auto results = std::make_shared<std::vector<std::shared_ptr<State>>>();
+    auto results = std::make_shared<std::vector<std::unique_ptr<State>>>();
 
     for (auto const& parser : *parsers) {
         if (state->IsError) {
             return state;
         }
         state = parser->Run(state);
-        results->push_back(std::make_shared<State>(state));
+        results->push_back(std::make_unique<State>(state));
     }
 
     if (state->Results.get() && state->Results->empty()) {
@@ -64,7 +64,7 @@ State* Runner::Many(BaseParser* parser, const std::string& in, bool many1, State
         state = new State(in);
     }
 
-    auto results = std::make_shared<std::vector<std::shared_ptr<State>>>();
+    auto results = std::make_shared<std::vector<std::unique_ptr<State>>>();
     unsigned int count = 0;
     bool done = false;
 
@@ -72,7 +72,7 @@ State* Runner::Many(BaseParser* parser, const std::string& in, bool many1, State
         auto tmpState = parser->Run(state);
 
         if (!tmpState->IsError) {
-            results->push_back(std::make_shared<State>(tmpState));
+            results->push_back(std::make_unique<State>(tmpState));
             state = tmpState;
             count++;
         } else {
@@ -89,5 +89,24 @@ State* Runner::Many(BaseParser* parser, const std::string& in, bool many1, State
         state->IsError = false;
     }
 
+    return state;
+}
+
+State* Runner::Peek(BaseParser* parser, const std::string& in, int distance, State* state) {
+    if (!state) {
+        state = new State(in);
+    }
+
+    auto startInput = in;
+    auto startIndex = state->Index;
+
+    if (distance != 0) {
+        state->Input = state->Input.substr(state->Index, distance);
+    }
+
+    state = parser->Run(state);
+
+    state->Index = startIndex;
+    state->Input = startInput;
     return state;
 }

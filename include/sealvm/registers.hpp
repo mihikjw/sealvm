@@ -1,6 +1,9 @@
 #ifndef SEALVM_SEALVM_REGISTERS_HPP
 #define SEALVM_SEALVM_REGISTERS_HPP
 
+#include <string>
+#include <vector>
+
 namespace SealVM {
 
 // Registers contains the hex values for all the register names in the CPU
@@ -18,6 +21,9 @@ enum Registers {
     sp = 0x10,  // stack pointer
     fp = 0x11,  // frame pointer
 };
+
+// RegisterStrings contains the registers as strings
+std::vector<std::string> RegisterStrings{"pc", "r1", "r2", "r3", "r4", "r5", "r6", "r7", "r8", "acc", "sp", "fp"};
 
 } // namespace SealVM
 

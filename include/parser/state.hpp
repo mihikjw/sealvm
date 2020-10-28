@@ -12,8 +12,9 @@ class State {
 
     public:
     // State default constructor
-    State(const std::string& input = "", const std::string& result = "", std::shared_ptr<std::vector<std::shared_ptr<State>>> results = nullptr,
-          unsigned short index = 0, const std::string& error = "", bool isError = false);
+    State(const std::string& input = "", const std::string& result = "", const std::shared_ptr<std::vector<std::unique_ptr<State>>>& results = nullptr,
+          const std::vector<std::string>& resultMultiple = std::vector<std::string>{}, unsigned short index = 0, const std::string& error = "",
+          bool isError = false);
 
     // State copy constructor
     State(State* in);
@@ -33,8 +34,11 @@ class State {
     // Result contains the output for the single function
     std::string Result;
 
+    // ResultMultiple contains the output for a single parser, which has multiple outputs
+    std::vector<std::string> ResultMultiple;
+
     // Results contains the output for multiple functions chained together (i.e. CoreParser::SequenceOf result)
-    std::shared_ptr<std::vector<std::shared_ptr<State>>> Results;
+    std::shared_ptr<std::vector<std::unique_ptr<State>>> Results;
 
     // Index contains the current index in the input of the parser function
     unsigned short Index;

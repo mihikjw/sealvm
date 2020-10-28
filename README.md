@@ -1,6 +1,16 @@
 # SealVM
 SealVM is a 16-bit virtual machine, written in C++. My primary goals at the moment are to develop a CPU, an assembly language, then a higher-level c-style language compiler. This project is a work in-progress.
 
+## Components
+### SealVM
+The `sealvm` library contains the code for the virtual machine, including the CPU and memory devices. 
+
+### Parser
+The `parser` library is a generic parser-combinator library, which can be used to parse any strings. This library only includes generic parsers, nothing specific to any language. It will be re-used throughout the project for various string parsing requirements.
+
+### SealASM
+The `sealasm` library makes use of the generic `parser` library to parse the SealVM Assembly Language specifically. 
+
 ## SealVM Specifications
 ### Registers `sealvm/registers.hpp`
 Each register is 16-bits in size, currently the only way of interacting with them is in 16-bit chunks.
@@ -21,10 +31,7 @@ Each register is 16-bits in size, currently the only way of interacting with the
 Memory size is currently arbitary and is defined on construction as an argument - any instance of base class `MemoryDevice` can be used as memory, which takes an `std::vector<uint8_t>` to be used as the internal memory buffer. The process of memory construction is a continuing development.
 
 ### Supported Instructions 
-16-bit instruction enums are defined under `sealvm/instructions.hpp`, with a comment for a corresponding assembly example. They're decoded in the CPU `sealvm/cpu.hpp` which also includes a comment for a corresponding assembly example. I'll improve this documentation once I put together a real assembler.
-
-## Parser
-The 'parser' is used to parse SealVM Assembler into an AST, this is my current focus and is a work in progress. Docs will be improved as the interface becomes more stable. Current state of the development/testing can be seen in `/cmd/parser/parser.cpp`. Includes a generic parser combinator library.
+16-bit instruction enums are defined under `sealvm/instructions.hpp`, with a comment for a corresponding assembly example. They're decoded in the CPU `sealvm/cpu.hpp` which also includes a comment for a corresponding assembly example. I'll improve this documentation once the SealASM library is complete, and the interface is stable.
 
 ## Developing
 I use Visual Studio Code to develop this project, under `.vscode/` are the launch config/tasks/settings etc. You're welcome to use whatever environment you like. I'm using GCC-10 as a compiler.

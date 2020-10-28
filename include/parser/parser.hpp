@@ -6,6 +6,7 @@
 #include "digitsParser.hpp"
 #include "hexParser.hpp"
 #include "lettersParser.hpp"
+#include "regexParser.hpp"
 #include "runner.hpp"
 #include "state.hpp"
 #include "stringParser.hpp"

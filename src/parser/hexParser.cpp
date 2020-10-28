@@ -14,7 +14,14 @@ State* HexParser::Run(State* state) {
     }
 
     auto toCheck = state->Input.substr(state->Index);
-    std::sregex_token_iterator it(toCheck.begin(), toCheck.end(), regex, 0);
+    auto toCheckStart = toCheck.begin();
+
+    // bypass definition that this is hex, if present
+    if (toCheck.at(0) == *"$") {
+        toCheckStart++;
+    }
+
+    std::sregex_token_iterator it(toCheckStart, toCheck.end(), regex, 0);
     std::sregex_token_iterator end;
 
     if (it == end) {

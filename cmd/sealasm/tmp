@@ -1,0 +1,68 @@
+{
+    'type': 'INSTRUCTION', 
+    'value': {
+        'instruction': 'MOV_LIT_REG', 
+        'args': [
+            {
+                'type': 'SQUARE_BRACKET_EXPRESSION', 
+                'value': [
+                    {
+                        'type': 'HEX_LITERAL', 
+                        'value': '42'
+                    }, 
+                    {
+                        'type': 'OPERATOR', 
+                        'value': '+'
+                    }, 
+                    {
+                        'type': 'VARIABLE', 
+                        'value': 'loc'
+                    }, 
+                    {
+                        'type': 'OPERATOR', 
+                        'value': '-'
+                    }, 
+                    [
+                        {
+                            'type': 'HEX_LITERAL', 
+                            'value': '05'
+                        }, 
+                        {
+                            'type': 'OPERATOR', 
+                            'value': '*'
+                        }, 
+                        {
+                            'type': 'PARENTHESIS_EXPRESSION', 
+                            'value': [
+                                {
+                                    'type': 'HEX_LITERAL', 
+                                    'value': '31'
+                                }, 
+                                {
+                                    'type': 'OPERATOR', 
+                                    'value': '+'
+                                }, 
+                                {
+                                    'type': 'VARIABLE', 
+                                    'value': 'var'
+                                }
+                            ]
+                        }, 
+                        {
+                            'type': 'OPERATOR', 
+                            'value': '-'
+                        }, 
+                        {
+                            'type': 'HEX_LITERAL', 
+                            'value': '07'
+                        }
+                    ]
+                ]
+            }, 
+            {
+                'type': 'REGISTER', 
+                'value': 'r1'
+            }
+        ]
+    }
+}

@@ -1,10 +1,11 @@
-from typing import Callable, Optional, List, Tuple
+from typing import Callable, Optional, List, Tuple, Dict
 
 import parser
 
 from asm.variable_parser import VariableParser
 from asm.operator_parser import OperatorParser
-from asm.map_methods import _sqr_expr_as_type, _hex_value_as_type, _operator_value_as_type, _var_value_as_type
+from asm.parenthesis_expression_parser import ParenthesisExpressionParser
+from asm.map_methods import _sqr_expr_as_type, _hex_value_as_type, _operator_value_as_type, _var_value_as_type, _parenthesis_expr_as_type
 
 
 class SqrBracketState():
@@ -23,12 +24,12 @@ class SqrBracketExpressionParser(parser.BaseParser):
         super().__init__(map_method)
 
     def run(self, state: parser.State) -> parser.State:
-        "state machine for processing square-expressions"
+        "state machine for processing square-bracket expressions"
         if state.is_error:
             return state
 
         # get opening and optional whitespace
-        state = self._runner.run(parser.StringParser("["), state.source, state=state)
+        state = self._runner.run(parser.CharParser(locate="["), state.source, state=state)
         if state.is_error:
             return state
 
@@ -37,7 +38,7 @@ class SqrBracketExpressionParser(parser.BaseParser):
             return state
 
         # process expression
-        expr: List[str] = []
+        expr: list = []
         sm_state = SqrBracketState.EXPECT_ELEMENT
 
         while sm_state != SqrBracketState.END:
@@ -57,6 +58,7 @@ class SqrBracketExpressionParser(parser.BaseParser):
         state = self._runner.choice(
             (
                 SqrBracketExpressionParser(self._runner, map_method=_sqr_expr_as_type),
+                ParenthesisExpressionParser(self._runner, map_method=_parenthesis_expr_as_type),
                 parser.HexParser(map_method=_hex_value_as_type),
                 VariableParser(self._runner, map_method=_var_value_as_type),
             ),

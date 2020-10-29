@@ -3,10 +3,8 @@ import parser
 
 
 def main():
-    # source = "MOV $42, r1"
-    source = "MOV [$42 + !loc ], r1"    # - ($05 * ($31 + !var) - $07)
+    source = "MOV [$42 + !loc - ($05 * ($31 + !var) - $07)], r1"
     processor = asm.SealASMProcessor(parser.Runner(), asm.Registers)
-
     state = processor.process(source)
 
     if not state.is_error:

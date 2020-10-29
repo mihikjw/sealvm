@@ -47,7 +47,7 @@ class SealASMProcessor():
         ), src, state=state)
         if state.is_error:
             return state
-        instruction_args.append(state.result)
+        instruction_args.append(self._state_to_ast(state))
 
         # get comma and optional whitespace
         state = self._runner.run(parser.StringParser(","), src, state=state)
@@ -91,3 +91,12 @@ class SealASMProcessor():
 
         state.error = "Processor._register: unable to match register"
         return state
+
+    def _state_to_ast(self, state: parser.State) -> dict:
+        "transforms an tree comprised of State objects to an AST"
+        if isinstance(state.result["value"], list):
+            output = []
+            for i, elem in enumerate(state.result["value"]):
+                output.append(self._state_to_ast(elem))
+            state.result["value"] = output
+        return state.result

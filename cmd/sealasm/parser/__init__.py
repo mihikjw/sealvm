@@ -7,3 +7,6 @@ from parser.between_parser import BetweenParser
 from parser.char_parser import CharParser
 from parser.digits_parser import DigitsParser
 from parser.hex_parser import HexParser
+from parser.letters_parser import LettersParser
+from parser.regex_parser import RegexParser
+from parser.whitespace_parser import WhitespaceParser

@@ -1,3 +1,5 @@
+from typing import Callable, Optional
+
 from parser.base_parser import BaseParser
 from parser.state import State
 
@@ -5,9 +7,9 @@ from parser.state import State
 class StringParser(BaseParser):
     "parser for locating strings"
 
-    def __init__(self, locate: str):
+    def __init__(self, locate: str, map_method: Optional[Callable] = None):
         self.locate: str = locate
-        super().__init__()
+        super().__init__(map_method)
 
     def run(self, state: State) -> State:
         if state.is_error:
@@ -31,4 +33,4 @@ class StringParser(BaseParser):
         state.index = end_index
         state.error = ""
         state.is_error = False
-        return State(state=state)
+        return State(state=state).map(self._map_method)

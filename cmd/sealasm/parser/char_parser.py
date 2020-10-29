@@ -1,9 +1,14 @@
+from typing import Callable, Optional
+
 from parser.base_parser import BaseParser
 from parser.state import State
 
 
 class CharParser(BaseParser):
     "used to return the next character in the input"
+
+    def __init__(self, map_method: Optional[Callable] = None):
+        super().__init__(map_method)
 
     def run(self, state: State) -> State:
         if state.is_error:
@@ -16,4 +21,4 @@ class CharParser(BaseParser):
         state.index += 1
         state.is_error = False
         state.error = ""
-        return State(state=state)
+        return State(state=state).map(self._map_method)

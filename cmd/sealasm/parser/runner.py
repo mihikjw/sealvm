@@ -95,3 +95,17 @@ class Runner():
         state.index = start_index
         state.source = start_input
         return state
+
+    def possibly(self, parser: BaseParser, src: str, state: Optional[State] = None) -> State:
+        "allows a failure to be returned as None instead of an error"
+        if state is None:
+            state = State(source=src)
+
+        state = self.run(parser, state.source, state=state)
+        if not state.is_error:
+            return state
+
+        state.is_error = False
+        state.error = ""
+        state.result = None
+        return state

@@ -1,13 +1,14 @@
+import asm
 import parser
-
-# MOV [$42 + (!loc - ($05 * $31))], r1
 
 
 def main():
-    source = "MOV $42, r1"
-    runner = parser.Runner()
+    # source = "MOV $42, r1"
+    # source = "MOV [$42 + (!loc - ($05 * $31))], r1"
+    source = "MOV [$42 + !loc], r1"  # currently having an issue parsing the variables using regex
+    processor = asm.SealASMProcessor(parser.Runner(), asm.Registers)
 
-    state = runner.run(parser.HexParser(), source)
+    state = processor.process(source)
 
     if not state.is_error:
         print(state.result)

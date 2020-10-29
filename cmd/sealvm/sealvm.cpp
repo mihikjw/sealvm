@@ -5,7 +5,7 @@
 /*
 this is the executable for SealVM, however it's currently WIP, instruction codes etc are likley to change before v1.0 release.
 currently you need to manually add machine-code into memory starting from position 0, I'm working on an assembly parser and
-    compiler before coming back to working on the VM itself (/cmd/parser/parser.cpp), where a core focus from there will be
+    compiler before coming back to working on the VM itself, where a core focus from there will be
     making all the VM code more resiliant and efficient
 */
 

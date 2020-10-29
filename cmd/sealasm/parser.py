@@ -4,8 +4,7 @@ import parser
 
 def main():
     # source = "MOV $42, r1"
-    # source = "MOV [$42 + (!loc - ($05 * $31))], r1"
-    source = "MOV [$42 + !loc], r1"  # currently having an issue parsing the variables using regex
+    source = "MOV [$42 + !loc ], r1"    # - ($05 * ($31 + !var) - $07)
     processor = asm.SealASMProcessor(parser.Runner(), asm.Registers)
 
     state = processor.process(source)

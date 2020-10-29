@@ -31,4 +31,4 @@ class OperatorParser(parser.BaseParser):
             return state
 
         state.result = self._supported_operators[state.result]
-        return state
+        return state.map(self._map_method)

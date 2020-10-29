@@ -6,7 +6,7 @@ import parser
 class VariableParser(parser.BaseParser):
     """
     parses variables for the SealASM grammer
-    variables must consist of an exclamation mark, an upper orlowercase letter or an underscore, 
+    variables must consist of an exclamation mark, an upper or lowercase letter or an underscore,
         then upper or lowercase letters, digits, or an underscore (i.e. !_Var9) (invalid: !9_Var)
     """
 
@@ -22,15 +22,13 @@ class VariableParser(parser.BaseParser):
         state = self._runner.run(parser.CharParser(), state.source, state=state)
         if state.is_error:
             return state
-        if state.result != "!":
+        elif state.result != "!":
             state.is_error = True
             state.error = f"VariableParser: no variable found at index '{state.index}'"
             return state
 
-        # CURRENTLY THESE BELOW REGEX'S ARE NOT WORKING, investigate
-
         # get first character of variable identifier, should only be uppercase/lowercase/underscore
-        state = self._runner.run(parser.RegexParser("/^[a-zA-z_]/"), state.source, state=state)
+        state = self._runner.run(parser.RegexParser("^[a-zA-z_]"), state.source, state=state)
         if state.is_error:
             state.error = f"VariableParser: invalid variable definition at index '{state.index}'"
             return state
@@ -38,11 +36,11 @@ class VariableParser(parser.BaseParser):
         result = state.result
 
         # get optional remainder of variable identifier, can be uppercase/lowercase/underscore/number
-        state = self._runner.possibly(parser.RegexParser("/^[a-zA-z0-9_]+/"), state.source, state=state)
+        state = self._runner.possibly(parser.RegexParser("^[a-zA-z0-9_]+"), state.source, state=state)
         if state.result is not None:
             result += str(state.result)
 
-        return parser.State(source=state.source, index=state.index, result=result)
+        return parser.State(source=state.source, index=state.index, result=result).map(self._map_method)
 
     @staticmethod
     def _map_variable_as_type(state: parser.State) -> parser.State:

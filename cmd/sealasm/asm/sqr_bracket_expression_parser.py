@@ -4,6 +4,7 @@ import parser
 
 from asm.variable_parser import VariableParser
 from asm.operator_parser import OperatorParser
+from asm.map_methods import _sqr_expr_as_type, _hex_value_as_type, _operator_value_as_type, _var_value_as_type
 
 
 class SqrBracketState():
@@ -39,34 +40,25 @@ class SqrBracketExpressionParser(parser.BaseParser):
         expr: List[str] = []
         sm_state = SqrBracketState.EXPECT_ELEMENT
 
-        while True:
+        while sm_state != SqrBracketState.END:
             # all added states to 'expr' list are copies to avoid overwrites
             if sm_state == SqrBracketState.EXPECT_ELEMENT:
                 state, sm_state = self._expect_element(expr, state)
             elif sm_state == SqrBracketState.EXPECT_OPERATOR:
                 state, sm_state = self._expect_operator(expr, state)
-            elif sm_state == SqrBracketState.END:
-                break
 
         if state.is_error:
             return state
 
-        return parser.State(
-            source=state.source,
-            result={
-                "type": "SQUARE_BRACKET_EXPRESSION",
-                "value": expr
-            },
-            index=state.index
-        )
+        return parser.State(source=state.source, result=expr, index=state.index).map(self._map_method)
 
     def _expect_element(self, expr: List[str], state: parser.State) -> Tuple[parser.State, int]:
         "processes the next element from a choice of parsers, skips any whitespace"
         state = self._runner.choice(
             (
-                SqrBracketExpressionParser(self._runner),
-                parser.HexParser(),
-                VariableParser(self._runner),
+                SqrBracketExpressionParser(self._runner, map_method=_sqr_expr_as_type),
+                parser.HexParser(map_method=_hex_value_as_type),
+                VariableParser(self._runner, map_method=_var_value_as_type),
             ),
             state.source,
             state=state
@@ -93,7 +85,7 @@ class SqrBracketExpressionParser(parser.BaseParser):
             sm_state = SqrBracketState.END
         else:
             # get operator, keep expect element flag for state machine
-            state = self._runner.run(OperatorParser(self._runner), state.source, state=state)
+            state = self._runner.run(OperatorParser(self._runner), state.source, state=state).map(_operator_value_as_type)
             if state.is_error:
                 return state, SqrBracketState.END
             expr.append(parser.State(state=state))

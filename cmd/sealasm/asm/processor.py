@@ -3,6 +3,7 @@ from typing import Dict
 import parser
 
 from asm.sqr_bracket_expression_parser import SqrBracketExpressionParser
+from asm.map_methods import _hex_value_as_type, _sqr_expr_as_type
 
 
 class SealASMProcessor():
@@ -18,13 +19,6 @@ class SealASMProcessor():
         this method is wip, currently just contains whatever I'm testing
         """
         return self._mov_lit_to_reg(src)
-
-    @staticmethod
-    def _hex_value_as_type(state: parser.State) -> parser.State:
-        "method to be passed to HexParser.map(), to map result accordingly"
-        if not state.is_error:
-            state.result = {"type": "HEX_LITERAL", "value": state.result}
-        return state
 
     def _mov_lit_to_reg(self, src: str) -> parser.State:
         "processes a mov literal to register instruction"
@@ -48,11 +42,12 @@ class SealASMProcessor():
 
         # get hex value or parse expression
         state = self._runner.choice((
-            parser.HexParser(map_method=SealASMProcessor._hex_value_as_type),
-            SqrBracketExpressionParser(self._runner),
+            parser.HexParser(map_method=_hex_value_as_type),
+            SqrBracketExpressionParser(self._runner, map_method=_sqr_expr_as_type),
         ), src, state=state)
         if state.is_error:
             return state
+        instruction_args.append(state.result)
 
         # get comma and optional whitespace
         state = self._runner.run(parser.StringParser(","), src, state=state)

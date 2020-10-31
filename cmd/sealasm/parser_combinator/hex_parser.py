@@ -1,15 +1,15 @@
 import re
-from typing import Callable, Optional
+from typing import Any
 
-from parser.base_parser import BaseParser
-from parser.state import State
+from parser_combinator.base_parser import BaseParser
+from parser_combinator.state import State
 
 
-class RegexParser(BaseParser):
+class HexParser(BaseParser):
     "used to check a given string only contains hex-allowed values"
 
-    def __init__(self, regex: str, map_method: Optional[Callable] = None):
-        self._regex: Pattern[AnyStr] = re.compile(regex)
+    def __init__(self, map_method: Any = None):
+        self._regex: Pattern[AnyStr] = re.compile("^[0-9A-Fa-f]+")
         super().__init__(map_method)
 
     def run(self, state: State) -> State:
@@ -17,7 +17,10 @@ class RegexParser(BaseParser):
             return state
 
         if not len(state.source) or len(state.source) < state.index + 1:
-            return self._set_error_state(state, "RegexParser: got unexpected end of input")
+            return self._set_error_state(state, "HexParser: got unexpected end of input")
+
+        if state.source[state.index] == "$":
+            state.index += 1
 
         source = state.source[state.index:]
         output = self._regex.match(source)
@@ -28,7 +31,7 @@ class RegexParser(BaseParser):
             state.is_error = False
             state.error = ""
         else:
-            state.error = f"RegexParser: couldn't match digits at index '{state.index}'"
+            state.error = f"HexParser: couldn't match digits at index '{state.index}'"
             state.is_error = True
 
         return State(state=state).map(self._map_method)

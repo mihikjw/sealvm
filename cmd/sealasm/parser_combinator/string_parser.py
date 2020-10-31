@@ -1,13 +1,13 @@
-from typing import Callable, Optional
+from typing import Any
 
-from parser.base_parser import BaseParser
-from parser.state import State
+from parser_combinator.base_parser import BaseParser
+from parser_combinator.state import State
 
 
 class StringParser(BaseParser):
     "parser for locating strings"
 
-    def __init__(self, locate: str, map_method: Optional[Callable] = None):
+    def __init__(self, locate: str, map_method: Any = None):
         self.locate: str = locate
         super().__init__(map_method)
 

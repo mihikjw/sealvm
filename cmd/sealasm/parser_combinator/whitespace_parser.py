@@ -1,13 +1,13 @@
-from typing import Callable, Optional
+from typing import Any
 
-from parser.base_parser import BaseParser
-from parser.state import State
+from parser_combinator.base_parser import BaseParser
+from parser_combinator.state import State
 
 
 class WhitespaceParser(BaseParser):
     "used to ensure next character is whitespace, with an optional flag"
 
-    def __init__(self, optional: bool = False, map_method: Optional[Callable] = None):
+    def __init__(self, optional: bool = False, map_method: Any = None):
         self._optional = optional
         super().__init__(map_method)
 

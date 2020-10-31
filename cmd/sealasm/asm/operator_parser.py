@@ -1,6 +1,6 @@
-from typing import Callable, Optional
+from typing import Any
 
-import parser
+import parser_combinator as parser
 
 from asm.types import Operators
 
@@ -8,7 +8,7 @@ from asm.types import Operators
 class OperatorParser(parser.BaseParser):
     "parses operators for the SealASM grammer"
 
-    def __init__(self, runner: parser.Runner, map_method: Optional[Callable] = None):
+    def __init__(self, runner: parser.Runner, map_method: Any = None):
         self._runner: parser.Runner = runner
         self._supported_operators = {
             "+": Operators.OP_ADD,

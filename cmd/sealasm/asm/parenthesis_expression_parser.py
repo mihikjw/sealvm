@@ -1,6 +1,6 @@
-from typing import Tuple, Optional, Callable
+from typing import Tuple, Any
 
-import parser
+import parser_combinator as parser
 
 from asm.variable_parser import VariableParser
 from asm.operator_parser import OperatorParser
@@ -19,7 +19,7 @@ class ParenthesisExpParserState():
 class ParenthesisExpressionParser(parser.BaseParser):
     "parses parenthesis expressions for the SealASM grammer"
 
-    def __init__(self, runner: parser.Runner, map_method: Optional[Callable] = None):
+    def __init__(self, runner: parser.Runner, map_method: Any = None):
         self._runner: parser.Runner = runner
         self._whitespace_opt = parser.WhitespaceParser(optional=True)
         super().__init__(map_method)
@@ -65,7 +65,7 @@ class ParenthesisExpressionParser(parser.BaseParser):
 
         return parser.State(source=state.source, index=state.index, result=expr).map(self._map_method)
 
-    def _open_parenthesis(self, state: parser.State, expr: list, stack: list) -> Tuple[parser.State, ParenthesisExpParserState]:
+    def _open_parenthesis(self, state: parser.State, expr: list, stack: list) -> Tuple[parser.State, int]:
         "sets up a new open parenthesis in the expression and stack, sets to ELEMENT_OR_OPENING state"
         state = self._runner.run(parser.CharParser(locate="("), state.source, state=state)
         if state.is_error:
@@ -75,7 +75,7 @@ class ParenthesisExpressionParser(parser.BaseParser):
         stack.append(expr[len(expr)-1])
         return self._runner.run(self._whitespace_opt, state.source, state=state), ParenthesisExpParserState.ELEMENT_OR_OPENING
 
-    def _close_parenthesis(self, state: parser.State, expr: list, stack: list) -> Tuple[parser.State, ParenthesisExpParserState]:
+    def _close_parenthesis(self, state: parser.State, expr: list, stack: list) -> Tuple[parser.State, int]:
         "closes the current parenthesis expression in the expr and stack, sets to OPERATOR_OR_CLOSING state"
         state = self._runner.run(parser.CharParser(locate=")"), state.source, state=state)
         if state.is_error:
@@ -89,7 +89,7 @@ class ParenthesisExpressionParser(parser.BaseParser):
 
         return self._runner.run(self._whitespace_opt, state.source, state=state), ParenthesisExpParserState.OPERATOR_OR_CLOSING
 
-    def _element_or_opening(self, next_char: str, state: parser.State, expr: list, stack: list) -> Tuple[parser.State, ParenthesisExpParserState]:
+    def _element_or_opening(self, next_char: str, state: parser.State, expr: list, stack: list) -> Tuple[parser.State, int]:
         """
         ensures an invalid parenthesis close is not present, handles opening a new expression or processes the current element 
             and prepares the state for the next step
@@ -114,7 +114,7 @@ class ParenthesisExpressionParser(parser.BaseParser):
             stack[len(stack)-1].append(parser.State(state=state))
             return self._runner.run(self._whitespace_opt, state.source, state=state), ParenthesisExpParserState.OPERATOR_OR_CLOSING
 
-    def _operator_or_closing(self, next_char: str, state: parser.State, expr: list, stack: list) -> Tuple[parser.State, ParenthesisExpParserState]:
+    def _operator_or_closing(self, next_char: str, state: parser.State, expr: list, stack: list) -> Tuple[parser.State, int]:
         """
         checks for closing parenthesis and returns CLOSE state if so, otherwise we should only expect an operator, so parse the operator and set to
             next state ELEMENT_OR_OPENING

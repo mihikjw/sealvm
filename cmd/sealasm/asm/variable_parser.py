@@ -1,6 +1,6 @@
-from typing import Callable, Optional
+from typing import Any
 
-import parser
+import parser_combinator as parser
 
 
 class VariableParser(parser.BaseParser):
@@ -10,7 +10,7 @@ class VariableParser(parser.BaseParser):
         then upper or lowercase letters, digits, or an underscore (i.e. !_Var9) (invalid: !9_Var)
     """
 
-    def __init__(self, runner: parser.Runner, map_method: Optional[Callable] = None):
+    def __init__(self, runner: parser.Runner, map_method: Any = None):
         self._runner: parser.Runner = runner
         super().__init__(map_method)
 

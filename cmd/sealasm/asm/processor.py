@@ -1,6 +1,6 @@
-from typing import Dict
+from typing import Dict, List, Any
 
-import parser
+import parser_combinator as parser
 
 from asm.sqr_bracket_expression_parser import SqrBracketExpressionParser
 from asm.map_methods import _hex_value_as_type, _sqr_expr_as_type, _disambiguate_expression
@@ -22,9 +22,9 @@ class SealASMProcessor():
 
     def _mov_lit_to_reg(self, src: str) -> parser.State:
         "processes a mov literal to register instruction"
-        instruction_args = []
-        instruction = {"instruction": "MOV_LIT_REG"}
-        result = {"type": "INSTRUCTION"}
+        instruction_args: List[Dict[str, Any]] = []
+        instruction: Dict[str, Any] = {"instruction": "MOV_LIT_REG"}
+        result: Dict[str, Any] = {"type": "INSTRUCTION"}
 
         whitespace_force = parser.WhitespaceParser()
         whitespace_opt = parser.WhitespaceParser(optional=True)

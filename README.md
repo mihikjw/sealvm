@@ -7,7 +7,7 @@ SealVM is a 16-bit virtual machine, written in C++. My primary goals at the mome
 
 ### SealASM
 `sealasm` contains multiple components, that when considered together constitute the compiler for the Seal Assembly Language. 
-- `parser` is a Python3 application, responsible for building and outputting an AST for the Assembly. This was previously a Cpp application so at the moment there is some old Cpp code related to this hanging around, which will be cleaned-up when all functionality is transposed to Python3.
+- `parser` is a Python3 application, responsible for parsing source ASM, and outputting an AST as JSON, which is then read by the next step of the compilation process. Python3 is used as the type system suits this application a bit more than C++. This is my current focus and as such is very much WIP.
 - wip ...
 
 ## SealVM Specifications
@@ -29,7 +29,7 @@ Each register is 16-bits in size, currently the only way of interacting with the
 ### Memory `sealvm/memory.hpp`
 Memory size is currently arbitary and is defined on construction as an argument - any instance of base class `MemoryDevice` can be used as memory, which takes an `std::vector<uint8_t>` to be used as the internal memory buffer. The process of memory construction is a continuing development.
 
-### Supported Instructions 
+### Supported Instructions `sealvm/instructions.hpp`
 16-bit instruction enums are defined under `sealvm/instructions.hpp`, with a comment for a corresponding assembly example. They're decoded in the CPU `sealvm/cpu.hpp` which also includes a comment for a corresponding assembly example. I'll improve this documentation once the SealASM library is complete, and the interface is stable.
 
 ## Developing
@@ -37,11 +37,13 @@ I use Visual Studio Code to develop this project, under `.vscode/` are the launc
 
 ### Requirements
 - Visual Studio Code
-    - C/C++ extension
+    - C/C++ support
+    - Python support
     - Native Debug
     - Trigger Task on Save
     - Clang-Tidy
     - CMake
+- Python3
 - CMake
 - Make
 - Git

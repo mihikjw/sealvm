@@ -14,6 +14,11 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 
 # ---------------------------------
+# SealASM parser type checks
+add_custom_target(SEALASM_PARSER_TYPE_CHECK ALL "mypy" "${CMAKE_BINARY_DIR}/cmd/sealasm/parser.py")
+# ---------------------------------
+
+# ---------------------------------
 # LIBS
 # libsealvm
 file(GLOB LIBSEALVM_SRC "${CMAKE_BINARY_DIR}/src/sealvm/*.cpp")

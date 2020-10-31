@@ -1,6 +1,6 @@
-from typing import Callable, Optional, List, Tuple, Dict
+from typing import List, Tuple, Dict, Any
 
-import parser
+import parser_combinator as parser
 
 from asm.variable_parser import VariableParser
 from asm.operator_parser import OperatorParser
@@ -19,7 +19,7 @@ class SqrBracketState():
 class SqrBracketExpressionParser(parser.BaseParser):
     "parses square bracket expressions for the SealASM grammer"
 
-    def __init__(self, runner: parser.Runner, map_method: Optional[Callable] = None):
+    def __init__(self, runner: parser.Runner, map_method: Any = None):
         self._runner: parser.Runner = runner
         self._whitespace_opt = parser.WhitespaceParser(optional=True)
         super().__init__(map_method)

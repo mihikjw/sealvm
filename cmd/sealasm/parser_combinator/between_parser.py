@@ -1,13 +1,13 @@
-from typing import Callable, Optional
+from typing import Any
 
-from parser.base_parser import BaseParser
-from parser.state import State
+from parser_combinator.base_parser import BaseParser
+from parser_combinator.state import State
 
 
 class BetweenParser(BaseParser):
     "used to extract text from between two chars"
 
-    def __init__(self, left_find: str, right_find: str, map_method: Optional[Callable] = None):
+    def __init__(self, left_find: str, right_find: str, map_method: Any = None):
         self.left = left_find
         self.right = right_find
         super().__init__(map_method)

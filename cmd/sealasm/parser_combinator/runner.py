@@ -1,7 +1,7 @@
 from typing import Optional, Tuple
 
-from parser.base_parser import BaseParser
-from parser.state import State
+from parser_combinator.base_parser import BaseParser
+from parser_combinator.state import State
 
 
 class Runner():

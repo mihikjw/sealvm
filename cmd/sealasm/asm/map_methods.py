@@ -1,6 +1,6 @@
 from typing import Any, List
 
-import parser
+import parser_combinator as parser
 from asm.types import Operators
 
 

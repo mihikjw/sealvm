@@ -1,6 +1,7 @@
 from typing import Any
 
 import parser
+from asm.types import Operators
 
 
 def _hex_value_as_type(state: parser.State) -> parser.State:
@@ -55,8 +56,12 @@ def _var_value_as_type(state: parser.State) -> parser.State:
 def _operator_value_as_type(state: parser.State) -> parser.State:
     "method for mapping operators as an AST type"
     if not state.is_error:
-        state.result = {
-            "type": "OPERATOR",
-            "value": state.result,
-        }
+        if state.result in Operators.operator_code_map:
+            state.result = {
+                "type": Operators.operator_code_map[state.result],
+                "value": state.result,
+            }
+        else:
+            state.is_error = True
+            state.error = f"OperatorValueAsType: operator {state.result} not supported at index {state.index}"
     return state

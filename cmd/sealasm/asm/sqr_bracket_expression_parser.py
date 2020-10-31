@@ -5,7 +5,8 @@ import parser
 from asm.variable_parser import VariableParser
 from asm.operator_parser import OperatorParser
 from asm.parenthesis_expression_parser import ParenthesisExpressionParser
-from asm.map_methods import _sqr_expr_as_type, _hex_value_as_type, _operator_value_as_type, _var_value_as_type, _parenthesis_expr_as_type
+from asm.map_methods import _sqr_expr_as_type, _hex_value_as_type, _operator_value_as_type, \
+    _var_value_as_type, _parenthesis_expr_as_type
 
 
 class SqrBracketState():

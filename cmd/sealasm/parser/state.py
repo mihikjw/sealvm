@@ -7,25 +7,29 @@ class State():
 
     def __init__(self, state: Optional["State"] = None, source: str = "", result=None, index: int = 0, error: str = "", is_error: bool = False):
         if state is not None:
-            self.source = state.source
-            self.result = state.result
-            self.index = state.index
-            self.error = state.error
-            self.is_error = state.is_error
+            self.source: str = state.source
+            self.result: Any = state.result
+            self.index: int = state.index
+            self.error: str = state.error
+            self.is_error: bool = state.is_error
         else:
-            self.source: str = source
-            self.result: Any = result
-            self.index: int = index
-            self.error: str = error
-            self.is_error: bool = is_error
+            self.source = source
+            self.result = result
+            self.index = index
+            self.error = error
+            self.is_error = is_error
 
-    def map(self, func: Callable):
+    def map(self, func: Any):
         """
-        run the given method with access to the state fields, allows manipulation of the result before returning
-        ARGS: given method must take a State object as the first argument
+        run the given method or iterable of methods with access to the state fields, allows manipulation of the result before returning
+        ARGS: given method must take a State object as the first and only argument
         """
         if func is not None:
-            func(self)
+            if isinstance(func, list) or isinstance(func, tuple):
+                for method in func:
+                    method(self)
+            else:
+                func(self)
         return self
 
     def __str__(self):

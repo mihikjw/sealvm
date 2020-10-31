@@ -3,7 +3,7 @@ from typing import Dict
 import parser
 
 from asm.sqr_bracket_expression_parser import SqrBracketExpressionParser
-from asm.map_methods import _hex_value_as_type, _sqr_expr_as_type
+from asm.map_methods import _hex_value_as_type, _sqr_expr_as_type, _disambiguate_expression
 
 
 class SealASMProcessor():
@@ -43,7 +43,7 @@ class SealASMProcessor():
         # get hex value or parse expression
         state = self._runner.choice((
             parser.HexParser(map_method=_hex_value_as_type),
-            SqrBracketExpressionParser(self._runner, map_method=_sqr_expr_as_type),
+            SqrBracketExpressionParser(self._runner, map_method=(_sqr_expr_as_type, _disambiguate_expression)),
         ), src, state=state)
         if state.is_error:
             return state
@@ -99,4 +99,11 @@ class SealASMProcessor():
             for i, elem in enumerate(state.result["value"]):
                 output.append(self._state_to_ast(elem))
             state.result["value"] = output
+        elif isinstance(state.result["value"], dict) and state.result["type"] == "BINARY_OPERATION":
+            tmp_val = state.result["value"]
+            tmp_val["a"] = self._state_to_ast(tmp_val["a"])
+            tmp_val["b"] = self._state_to_ast(tmp_val["b"])
+            tmp_val["op"] = self._state_to_ast(tmp_val["op"])
+            state.result["value"] = tmp_val
+
         return state.result

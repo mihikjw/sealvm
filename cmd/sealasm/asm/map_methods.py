@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, List
 
 import parser
 from asm.types import Operators
@@ -64,4 +64,65 @@ def _operator_value_as_type(state: parser.State) -> parser.State:
         else:
             state.is_error = True
             state.error = f"OperatorValueAsType: operator {state.result} not supported at index {state.index}"
+    return state
+
+
+def _disambiguate_expression(state: parser.State) -> parser.State:
+    """
+    method to ensure operator precedence in expressions (see asm.types for priorities)
+    recursive method, translates all expressions to a single BINARY_EXPRESSION type
+    """
+    if state.is_error:
+        return state
+
+    if state.result["type"] not in ("PARENTHESIS_EXPRESSION", "SQUARE_BRACKET_EXPRESSION"):
+        return state
+
+    # complete, translate expression to binary operation
+    value: List[parser.State] = state.result["value"]
+    if len(value) == 1:
+        item = value[0]
+        state.result["type"] = item.result["type"]
+        state.result["value"] = item.result["value"]
+        return state
+
+    candidate_expr = {
+        "priority": -1
+    }
+
+    for i in range(1, len(value)):
+        # operators only at odd index's, so can skip even values
+        if not i % 2:
+            continue
+
+        operator_entry: parser.State = value[i]
+        operator_priority = Operators.priorities[operator_entry.result["type"]]
+
+        # if the operator priority is more than that which we already have,
+        #   process this operator and process the previous on next recursion
+        if operator_priority > candidate_expr["priority"]:
+            candidate_expr = {
+                "priority": operator_priority,
+                "a": i - 1,
+                "b": i + 1,
+                "op": operator_entry,
+            }
+
+    # set new type for expression, recurse on A and B sides to ensure they're disambiguated
+    binary_expression = parser.State(
+        source=operator_entry.source,
+        index=operator_entry.index,
+        result={
+            "type": "BINARY_OPERATION",
+            "value": {
+                "a": value[candidate_expr["a"]].map(_disambiguate_expression),
+                "b": value[candidate_expr["b"]].map(_disambiguate_expression),
+                "op": candidate_expr["op"],
+            }
+        }
+    )
+
+    # rebuild result and recursive disambiguate
+    state.result["value"] = value[:candidate_expr["a"]] + [binary_expression] + value[candidate_expr["b"] + 1:]
+    state.map(_disambiguate_expression)
     return state

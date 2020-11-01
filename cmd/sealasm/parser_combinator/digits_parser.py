@@ -9,7 +9,7 @@ class DigitsParser(BaseParser):
     "digits parser is used to check a given string only contains numerical digits"
 
     def __init__(self, map_method: Any = None):
-        self._regex: Pattern[AnyStr] = re.compile("^[0-9]+")
+        self._regex = re.compile("^[0-9]+")
         super().__init__(map_method)
 
     def run(self, state: State) -> State:

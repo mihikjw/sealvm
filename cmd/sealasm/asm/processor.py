@@ -42,7 +42,7 @@ class SealASMProcessor():
 
         # get hex value or parse expression
         state = self._runner.choice((
-            parser.HexParser(map_method=_hex_value_as_type),
+            parser.HexParser(map_method=_hex_value_as_type),    # type: ignore
             SqrBracketExpressionParser(self._runner, map_method=(_sqr_expr_as_type, _disambiguate_expression)),
         ), src, state=state)
         if state.is_error:
@@ -77,7 +77,7 @@ class SealASMProcessor():
         "locates the given upper or lowercase string in the given src string"
         upper = parser.StringParser(locate.upper())
         lower = parser.StringParser(locate.lower())
-        return self._runner.choice((upper, lower), src)
+        return self._runner.choice((upper, lower), src)  # type: ignore
 
     def _register(self, src: str, state: parser.State) -> parser.State:
         "reads a register from the given src and state"

@@ -97,13 +97,13 @@ class ParenthesisExpressionParser(parser.BaseParser):
         if next_char == ")":
             state.is_error = True
             state.error = f"ParenthesisExpressionParser: unexpected end of expression at index '{state.index}'"
-            return state
+            return state, ParenthesisExpParserState.END
         elif next_char == "(":
             return self._runner.run(self._whitespace_opt, state.source, state=state), ParenthesisExpParserState.OPEN_PARENTHESIS
         else:
             state = self._runner.choice(
                 (
-                    parser.HexParser(map_method=_hex_value_as_type),
+                    parser.HexParser(map_method=_hex_value_as_type),        # type: ignore
                     VariableParser(self._runner, map_method=_var_value_as_type),
                 ),
                 state.source,

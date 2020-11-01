@@ -39,7 +39,7 @@ class SqrBracketExpressionParser(parser.BaseParser):
             return state
 
         # process expression
-        expr: list = []
+        expr: List[parser.State] = []
         sm_state = SqrBracketState.EXPECT_ELEMENT
 
         while sm_state != SqrBracketState.END:
@@ -54,11 +54,11 @@ class SqrBracketExpressionParser(parser.BaseParser):
 
         return parser.State(source=state.source, result=expr, index=state.index).map(self._map_method)
 
-    def _expect_element(self, expr: List[str], state: parser.State) -> Tuple[parser.State, int]:
+    def _expect_element(self, expr: List[parser.State], state: parser.State) -> Tuple[parser.State, int]:
         "processes the next element from a choice of parsers, skips any whitespace"
         state = self._runner.choice(
             (
-                SqrBracketExpressionParser(self._runner, map_method=_sqr_expr_as_type),
+                SqrBracketExpressionParser(self._runner, map_method=_sqr_expr_as_type),     # type: ignore
                 ParenthesisExpressionParser(self._runner, map_method=_parenthesis_expr_as_type),
                 parser.HexParser(map_method=_hex_value_as_type),
                 VariableParser(self._runner, map_method=_var_value_as_type),
@@ -73,7 +73,7 @@ class SqrBracketExpressionParser(parser.BaseParser):
         expr.append(parser.State(state=state))
         return self._runner.run(self._whitespace_opt, state.source, state=state), SqrBracketState.EXPECT_OPERATOR
 
-    def _expect_operator(self, expr: List[str], state: parser.State) -> Tuple[parser.State, int]:
+    def _expect_operator(self, expr: List[parser.State], state: parser.State) -> Tuple[parser.State, int]:
         "checks if the next char is a closing bracket, if not it expects an operator, skips any whitespace"
         state = self._runner.peek(parser.CharParser(), state.source, state=state)
         if state.is_error:

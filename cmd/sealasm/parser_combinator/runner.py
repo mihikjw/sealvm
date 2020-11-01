@@ -1,4 +1,4 @@
-from typing import Optional, Tuple
+from typing import Optional, Tuple, List
 
 from parser_combinator.base_parser import BaseParser
 from parser_combinator.state import State

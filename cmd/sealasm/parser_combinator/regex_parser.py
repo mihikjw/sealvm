@@ -9,7 +9,7 @@ class RegexParser(BaseParser):
     "used to check a given string only contains hex-allowed values"
 
     def __init__(self, regex: str, map_method: Any = None):
-        self._regex: Pattern[AnyStr] = re.compile(regex)
+        self._regex = re.compile(regex)
         super().__init__(map_method)
 
     def run(self, state: State) -> State:

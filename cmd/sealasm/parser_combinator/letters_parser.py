@@ -9,7 +9,7 @@ class LettersParser(BaseParser):
     "used to check a given string only contains letters"
 
     def __init__(self, map_method: Any = None):
-        self._regex: Pattern[AnyStr] = re.compile("^[A-Za-z]+")
+        self._regex = re.compile("^[A-Za-z]+")
         super().__init__(map_method)
 
     def run(self, state: State) -> State:

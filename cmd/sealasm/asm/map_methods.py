@@ -1,4 +1,4 @@
-from typing import Any, List
+from typing import Any, List, Dict
 
 import parser_combinator as parser
 from asm.types import Operators
@@ -86,7 +86,7 @@ def _disambiguate_expression(state: parser.State) -> parser.State:
         state.result["value"] = item.result["value"]
         return state
 
-    candidate_expr = {
+    candidate_expr: Dict[str, Any] = {
         "priority": -1
     }
 

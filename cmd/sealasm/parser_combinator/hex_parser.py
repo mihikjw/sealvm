@@ -9,7 +9,7 @@ class HexParser(BaseParser):
     "used to check a given string only contains hex-allowed values"
 
     def __init__(self, map_method: Any = None):
-        self._regex: Pattern[AnyStr] = re.compile("^[0-9A-Fa-f]+")
+        self._regex = re.compile("^[0-9A-Fa-f]+")
         super().__init__(map_method)
 
     def run(self, state: State) -> State:

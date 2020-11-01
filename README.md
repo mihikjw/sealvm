@@ -7,7 +7,7 @@ SealVM is a 16-bit virtual machine, written in C++. My primary goals at the mome
 
 ### SealASM
 `sealasm` contains multiple components, that when considered together constitute the compiler for the Seal Assembly Language. 
-- `parser` is a Python3 application, responsible for parsing source ASM, and outputting an AST as JSON, which is then read by the next step of the compilation process. Python3 is used as the type system suits this application a bit more than C++. This is my current focus and as such is very much WIP.
+- `parser` is a Python3 application, responsible for parsing source ASM, and outputting an AST as JSON, which is then read by the next step of the compilation process. Python3 is used as I like the type system for the kind of library I wanted to develop. This is my current focus and as such is WIP.
 - wip ...
 
 ## SealVM Specifications

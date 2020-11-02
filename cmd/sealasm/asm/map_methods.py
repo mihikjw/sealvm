@@ -2,6 +2,7 @@ from typing import Any, List, Dict
 
 import parser_combinator as parser
 from asm.types import Operators
+from asm.registers import Registers
 
 
 def _hex_value_as_type(state: parser.State) -> parser.State:
@@ -65,6 +66,19 @@ def _operator_value_as_type(state: parser.State) -> parser.State:
             state.is_error = True
             state.error = f"OperatorValueAsType: operator {state.result} not supported at index {state.index}"
     return state
+
+
+def _register_as_type(state: parser.State) -> parser.State:
+    "method for mapping registers as an AST type"
+    if not state.is_error:
+        if state.result in Registers:
+            state.result = {
+                "type": "REGISTER",
+                "value": state.result,
+            }
+        else:
+            state.is_error = True
+            state.error = f"RegisterAsType: register {state.result} not supported at index {state.index}"
 
 
 def _disambiguate_expression(state: parser.State) -> parser.State:

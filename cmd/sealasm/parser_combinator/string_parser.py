@@ -17,11 +17,9 @@ class StringParser(BaseParser):
             return state
 
         if self._look_ahead > -1:
-            end_index = state.index + self._look_ahead
+            start_index = state.source.find(self._locate, state.index, state.index + self._look_ahead)
         else:
-            end_index = -1
-
-        start_index = state.source.find(self._locate, state.index, end_index)
+            start_index = state.source.find(self._locate, state.index)
 
         if start_index == -1:
             return self._set_error_state(state, f"StringParser: tried to match '{self._locate}', but got {state.source}")
@@ -30,6 +28,12 @@ class StringParser(BaseParser):
             end_index = state.source.find(self._locate[-1], start_index)
         else:
             end_index = state.source.find(self._locate[-1], start_index + 1)
+
+            # this method will not support double+ letters (i.e. ADD becomes AD), so we need to check this edge case
+            # ensures the next final char is not equal to the final char
+            while end_index + 1 < len(state.source) and state.source[end_index] == state.source[end_index + 1] \
+                    and end_index < start_index + (len(self._locate) - 1):
+                end_index += 1
 
         if end_index == -1:
             return self._set_error_state(state, f"StringParser: tried to match '{self._locate}', but got {state.source}")

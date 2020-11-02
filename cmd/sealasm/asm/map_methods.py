@@ -79,6 +79,18 @@ def _register_as_type(state: parser.State) -> parser.State:
         else:
             state.is_error = True
             state.error = f"RegisterAsType: register {state.result} not supported at index {state.index}"
+    return state
+
+
+def _memory_address_as_type(state: parser.State) -> parser.State:
+    "method for mapping a memory address as an AST type"
+    if not state.is_error:
+        if isinstance(state.result, list):
+            state.result = _sqr_expr_as_type(state).result
+            state.result = _disambiguate_expression(state).result
+        else:
+            state.result = _hex_value_as_type(state).result
+    return state
 
 
 def _disambiguate_expression(state: parser.State) -> parser.State:

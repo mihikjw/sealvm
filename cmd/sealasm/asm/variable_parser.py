@@ -27,6 +27,8 @@ class VariableParser(parser.BaseParser):
             state.error = f"VariableParser: no variable found at index '{state.index}'"
             return state
 
+        # TODO: '[' and ']' are being considered as acceptable, this behaviour needs to be changed, for now just add whitespace to src code
+
         # get first character of variable identifier, should only be uppercase/lowercase/underscore
         state = self._runner.run(parser.RegexParser("^[a-zA-z_]"), state.source, state=state)
         if state.is_error:

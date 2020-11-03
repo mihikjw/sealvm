@@ -15,13 +15,9 @@ add_reg_reg_src_test = "ADD r1, r2"
 add_lit_reg_src_test = "ADD [$42 + !loc - ($05 * ($31 + !var) - $07)], r6"
 all_add_instructions = (add_reg_reg_src_test, add_lit_reg_src_test)
 
-misc_1_test = "LSF [ !shiftAmount ], r1"
+misc_1_test = "LSF r1, [ !shiftAmount ]"
 misc_2_test = "RET"
 all_misc_instructions = (misc_1_test, misc_2_test)
-
-# ------------------------------
-# FIX TYPES BEFORE CHECK-IN
-# ------------------------------
 
 
 def main():

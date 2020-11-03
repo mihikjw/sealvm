@@ -7,6 +7,7 @@ from asm.instruction_parsers import *
 
 from asm.lit_reg_parser import LitRegParser
 from asm.reg_reg_parser import RegRegParser
+from asm.reg_lit_parser import RegLitParser
 from asm.reg_mem_parser import RegMemParser
 from asm.mem_reg_parser import MemRegParser
 from asm.lit_mem_parser import LitMemParser

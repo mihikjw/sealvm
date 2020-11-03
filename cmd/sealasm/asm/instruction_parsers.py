@@ -12,6 +12,7 @@ from asm.lit_off_reg_parser import LitOffRegParser
 from asm.no_arg_parser import NoArgParser
 from asm.lit_parser import LitParser
 from asm.reg_parser import RegParser
+from asm.reg_lit_parser import RegLitParser
 
 
 class MovParser(parser.BaseParser):
@@ -50,6 +51,7 @@ class AddParser(parser.BaseParser):
         return self._runner.choice((
             LitRegParser(self._runner, "ADD", "ADD_LIT_REG", map_method=self._map_method),    # type: ignore
             RegRegParser(self._runner, "ADD", "ADD_REG_REG", map_method=self._map_method),
+            RegLitParser(self._runner, "ADD", "ADD_REG_LIT", map_method=self._map_method),
         ), state.source, state=state)
 
 
@@ -99,8 +101,8 @@ class LeftShiftParser(parser.BaseParser):
             return state
 
         return self._runner.choice((
-            LitRegParser(self._runner, "LSF", "LSF_LIT_REG", map_method=self._map_method),    # type: ignore
-            RegRegParser(self._runner, "LSF", "LSF_REG_REG", map_method=self._map_method),
+            RegRegParser(self._runner, "LSF", "LSF_REG_REG", map_method=self._map_method),  # type: ignore
+            RegLitParser(self._runner, "LSF", "LSF_REG_LIT", map_method=self._map_method),
         ), state.source, state=state)
 
 
@@ -116,7 +118,7 @@ class RightShiftParser(parser.BaseParser):
             return state
 
         return self._runner.choice((
-            LitRegParser(self._runner, "RSF", "RSF_LIT_REG", map_method=self._map_method),    # type: ignore
+            LitRegParser(self._runner, "RSF", "RSF_REG_LIT", map_method=self._map_method),    # type: ignore
             RegRegParser(self._runner, "RSF", "RSF_REG_REG", map_method=self._map_method),
         ), state.source, state=state)
 

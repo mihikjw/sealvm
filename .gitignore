@@ -11,5 +11,8 @@ compile_commands.json
 *.pyc
 .mypy_cache
 
+# sealasm
+*.ast
+
 # misc
 notes

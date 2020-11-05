@@ -21,33 +21,36 @@
                 ]
             }
         },
-        // {
-        //     "name": "Parser",
-        //     "type": "cppdbg",
-        //     "request": "launch",
-        //     "program": "${workspaceFolder}/bin/parser",
-        //     "stopAtEntry": false,
-        //     "cwd": "${workspaceFolder}",
-        //     "externalConsole": false,
-        //     "preLaunchTask": "Build",
-        //     "args": [],
-        //     "linux": {
-        //         "MIMode": "gdb",
-        //         "setupCommands": [
-        //             {
-        //                 "description": "Enable pretty-printing for gdb",
-        //                 "text": "-enable-pretty-printing"
-        //             }
-        //         ]
-        //     }
-        // },
         {
-            "name": "Parser",
+            "name": "SealASM Parser",
             "type": "python",
             "request": "launch",
             "program": "${workspaceFolder}/cmd/sealasm/parser.py",
             "console": "integratedTerminal",
-            "args": []
+            "args": [
+                "${workspaceFolder}/example_programs/test1.asm",
+                "${workspaceFolder}/example_programs"
+            ]
+        },
+        {
+            "name": "SealASM Compiler",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/bin/sealasmc",
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "externalConsole": false,
+            "preLaunchTask": "Build",
+            "args": [],
+            "linux": {
+                "MIMode": "gdb",
+                "setupCommands": [
+                    {
+                        "description": "Enable pretty-printing for gdb",
+                        "text": "-enable-pretty-printing"
+                    }
+                ]
+            }
         },
     ]
 }

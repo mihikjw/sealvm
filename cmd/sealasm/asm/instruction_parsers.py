@@ -68,6 +68,7 @@ class SubParser(parser.BaseParser):
 
         return self._runner.choice((
             LitRegParser(self._runner, "SUB", "SUB_LIT_REG", map_method=self._map_method),    # type: ignore
+            RegLitParser(self._runner, "SUB", "SUB_REG_LIT", map_method=self._map_method),
             RegRegParser(self._runner, "SUB", "SUB_REG_REG", map_method=self._map_method),
         ), state.source, state=state)
 

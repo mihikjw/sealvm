@@ -53,7 +53,7 @@
             "type": "shell",
             "command": "mypy",
             "args": [
-                "${workspaceFolder}/cmd/sealasm/parser.py"
+                "${workspaceFolder}/cmd/sealasm/sealasm.py"
             ]
         }
     ]

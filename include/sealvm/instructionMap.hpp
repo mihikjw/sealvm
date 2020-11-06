@@ -19,6 +19,7 @@ std::map<std::string, InstructionDef> Map{
   {"MOV_LIT_MEM", {MOV_LIT_MEM, LitMem, LIT_MEM, MOV}},
   {"MOV_REG_PTR_REG", {MOV_REG_PTR_REG, RegPtrReg, RegPtrReg, MOV}},
   {"MOV_LIT_OFF_REG", {MOV_LIT_OFF_REG, LitOffReg, LIT_OFF_REG, MOV}},
+
   {"ADD_REG_REG", {ADD_REG_REG, RegReg, REG_REG, ADD}},
   {"ADD_LIT_REG", {ADD_LIT_REG, LitReg, LIT_REG, ADD}},
   {"SUB_LIT_REG", {SUB_LIT_REG, LitReg, LIT_REG, SUB}},
@@ -28,6 +29,7 @@ std::map<std::string, InstructionDef> Map{
   {"DEC_REG", {DEC_REG, SingleReg, SINGLE_REG, DEC}},
   {"MUL_LIT_REG", {MUL_LIT_REG, LitReg, LIT_REG, MUL}},
   {"MUL_REG_REG", {MUL_REG_REG, RegReg, REG_REG, MUL}},
+
   {"LSF_REG_LIT", {LSF_REG_LIT, RegLit, REG_LIT, LSF}},
   {"LSF_REG_REG", {LSF_REG_REG, RegReg, REG_REG, LSF}},
   {"RSF_REG_LIT", {RSF_REG_LIT, RegLit, REG_LIT, RSF}},
@@ -39,6 +41,7 @@ std::map<std::string, InstructionDef> Map{
   {"XOR_REG_LIT", {XOR_REG_LIT, RegLit, REG_LIT, XOR}},
   {"XOR_REG_REG", {XOR_REG_REG, RegReg, REG_REG, XOR}},
   {"NOT", {NOT, SingleReg, SINGLE_REG, NOT}},
+
   {"JMP_NOT_EQ", {JMP_NOT_EQ, LitMem, LIT_MEM, JNE}},
   {"JNE_REG", {JNE_REG, RegMem, REG_MEM, JNE}},
   {"JEQ_REG", {JEQ_REG, RegMem, REG_MEM, JEQ}},
@@ -51,6 +54,7 @@ std::map<std::string, InstructionDef> Map{
   {"JLE_LIT", {JLE_LIT, LitMem, LIT_MEM, JLE}},
   {"JGE_REG", {JGE_REG, RegMem, REG_MEM, JGE}},
   {"JGE_LIT", {JGE_LIT, LitMem, LIT_MEM, JGE}},
+
   {"PSH_LIT", {PSH_LIT, SingleLit, SINGLE_LIT, PSH}},
   {"PSH_REG", {PSH_REG, SingleReg, SINGLE_REG, PSH}},
   {"POP", {POP, SingleReg, SINGLE_REG, POP}},

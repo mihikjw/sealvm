@@ -4,7 +4,12 @@ import json
 from typing import Tuple, List, Dict, Any, Optional
 
 import asm
+import sealvm
 import parser_combinator
+
+# ---------------------------
+# currently this program just generates an AST from a given SealASM program and writes to file
+# ---------------------------
 
 
 def _get_args() -> Tuple[Optional[str], Optional[str]]:
@@ -21,7 +26,6 @@ def _get_args() -> Tuple[Optional[str], Optional[str]]:
 
     if arg_1.lower() == "-h":
         # output help
-        # TODO: improve this
         print("USAGE: parser [source_file.asm] {ast_output_dir}\n\n-h: output help")
         return None, None
 
@@ -45,7 +49,7 @@ def _get_args() -> Tuple[Optional[str], Optional[str]]:
 
 
 def main():
-    "program entrypoint, creates an AST file for the compiler"
+    "program entrypoint"
     src_path: str
     ast_out_path: str
 
@@ -61,14 +65,16 @@ def main():
     parser = asm.InstructionParser(runner)
 
     try:
+        # maintain the AST, allow it to optionally be written out
         ast: List[Dict[str, Any]] = []
+        opcodes: list = []
 
         with open(src_path, "r") as fhandle:
             line = fhandle.readline()
             line_number = 1
 
             if not len(line):
-                raise RuntimeError(f"Line {line_number}: EOF Reached At Start Of File")
+                raise RuntimeError("EOF Reached At Start Of File")
 
             for line in fhandle:
                 line = line.rstrip()

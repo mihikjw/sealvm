@@ -15,7 +15,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 
 # ---------------------------------
 # SealASM parser type checks
-add_custom_target(SEALASM_PARSER_TYPE_CHECK ALL "mypy" "${CMAKE_BINARY_DIR}/cmd/sealasm/parser.py")
+add_custom_target(SEALASM_PARSER_TYPE_CHECK ALL "mypy" "${CMAKE_BINARY_DIR}/cmd/sealasm/sealasm.py")
 # ---------------------------------
 
 # ---------------------------------
@@ -33,12 +33,6 @@ file(GLOB SEALVM_SRC "${CMAKE_BINARY_DIR}/cmd/sealvm/sealvm.cpp")
 add_executable(sealvm ${SEALVM_SRC})
 target_link_libraries(sealvm libsealvm)
 set_target_properties(sealvm PROPERTIES LINKER_LANGUAGE CXX)
-
-# sealasm compiler (sealasmc)
-file(GLOB SEALASM_COMPILER_SRC "${CMAKE_BINARY_DIR}/cmd/sealasm/sealasmc.cpp")
-add_executable(sealasmc ${SEALASM_COMPILER_SRC})
-target_link_libraries(sealasmc libsealvm)
-set_target_properties(sealasmc PROPERTIES LINKER_LANGUAGE CXX)
 # ---------------------------------
 
 include_directories(

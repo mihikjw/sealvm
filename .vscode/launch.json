@@ -22,35 +22,15 @@
             }
         },
         {
-            "name": "SealASM Parser",
+            "name": "SealASM Compiler",
             "type": "python",
             "request": "launch",
-            "program": "${workspaceFolder}/cmd/sealasm/parser.py",
+            "program": "${workspaceFolder}/cmd/sealasm/sealasm.py",
             "console": "integratedTerminal",
             "args": [
                 "${workspaceFolder}/example_programs/test1.asm",
                 "${workspaceFolder}/example_programs"
             ]
-        },
-        {
-            "name": "SealASM Compiler",
-            "type": "cppdbg",
-            "request": "launch",
-            "program": "${workspaceFolder}/bin/sealasmc",
-            "stopAtEntry": false,
-            "cwd": "${workspaceFolder}",
-            "externalConsole": false,
-            "preLaunchTask": "Build",
-            "args": [],
-            "linux": {
-                "MIMode": "gdb",
-                "setupCommands": [
-                    {
-                        "description": "Enable pretty-printing for gdb",
-                        "text": "-enable-pretty-printing"
-                    }
-                ]
-            }
-        },
+        }
     ]
 }

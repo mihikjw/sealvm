@@ -30,7 +30,7 @@ class RegParser(ASMParser):
             return state
         instruction_args.append(self._state_to_ast(state))
 
-        state = self._comma_skip_whitespace(state)
+        state = self._optional_whitespace(state)
         if state.is_error:
             return state
 

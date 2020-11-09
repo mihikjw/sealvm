@@ -21,8 +21,8 @@ class ASMParser(parser.BaseParser):
 
     def _upper_or_lower_string(self, locate: str, src: str, state: parser.State, look_ahead: int = -1) -> parser.State:
         "locates the given upper or lowercase string in the given src string"
-        upper = parser.StringParser(locate.upper(), look_ahead=look_ahead)
-        lower = parser.StringParser(locate.lower(), look_ahead=look_ahead)
+        upper = parser.StringParser(locate.upper(), look_ahead=len(locate))
+        lower = parser.StringParser(locate.lower(), look_ahead=len(locate))
         return self._runner.choice((upper, lower), src, state=state)  # type: ignore
 
     def _register(self, src: str, state: parser.State, ptr: bool = False) -> parser.State:

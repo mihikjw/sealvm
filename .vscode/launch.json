@@ -28,7 +28,7 @@
             "program": "${workspaceFolder}/cmd/sealasm/sealasm.py",
             "console": "integratedTerminal",
             "args": [
-                "${workspaceFolder}/example_programs/test1.asm",
+                "${workspaceFolder}/example_programs/test2.asm",
                 "${workspaceFolder}/example_programs"
             ]
         }

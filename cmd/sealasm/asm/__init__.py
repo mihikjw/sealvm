@@ -4,6 +4,7 @@ from asm.types import Operators
 from asm.asm_parser_base import ASMParser
 
 from asm.instruction_parsers import *
+from asm.map_methods import _label_value_as_type
 
 from asm.lit_reg_parser import LitRegParser
 from asm.reg_reg_parser import RegRegParser
@@ -21,3 +22,4 @@ from asm.operator_parser import OperatorParser
 from asm.parenthesis_expression_parser import ParenthesisExpressionParser
 from asm.sqr_bracket_expression_parser import SqrBracketExpressionParser
 from asm.variable_parser import VariableParser
+from asm.label_parser import LabelParser

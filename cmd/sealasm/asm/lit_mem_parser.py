@@ -16,7 +16,7 @@ class LitMemParser(ASMParser):
     def run(self, state: parser.State) -> parser.State:
         instruction_args: List[Dict[str, Any]] = []
 
-        # get mov
+        # get instruction
         state = self._upper_or_lower_string(self._instruction_mnemonic, state.source, state)
         if state.is_error:
             return state

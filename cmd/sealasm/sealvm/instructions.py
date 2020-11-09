@@ -35,7 +35,7 @@ class Instructions():
     NOT: int = 0x32
 
     # branching
-    JMP_NOT_EQ:  int = 0x15
+    JNE_LIT: int = 0x15
     JNE_REG: int = 0x33
     JEQ_REG: int = 0x34
     JEQ_LIT: int = 0x35

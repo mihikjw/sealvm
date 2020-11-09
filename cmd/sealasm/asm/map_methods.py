@@ -54,6 +54,16 @@ def _var_value_as_type(state: parser.State) -> parser.State:
     return state
 
 
+def _label_value_as_type(state: parser.State) -> parser.State:
+    "method for mapping labels as an AST type"
+    if not state.is_error:
+        state.result = {
+            "type": "LABEL",
+            "value": state.result,
+        }
+    return state
+
+
 def _operator_value_as_type(state: parser.State) -> parser.State:
     "method for mapping operators as an AST type"
     if not state.is_error:

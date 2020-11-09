@@ -43,10 +43,3 @@ class VariableParser(parser.BaseParser):
             result += str(state.result)
 
         return parser.State(source=state.source, index=state.index, result=result).map(self._map_method)
-
-    @staticmethod
-    def _map_variable_as_type(state: parser.State) -> parser.State:
-        "maps the loaded result as a variable type"
-        if not state.is_error:
-            state.result = {"type": "VARIABLE", "value": state.result}
-        return state

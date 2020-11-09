@@ -37,7 +37,7 @@ InstructionMap: Dict[str, InstructionDef] = {
     "XOR_REG_REG": InstructionDef(Instructions.XOR_REG_REG, Size.REG_REG, Type.REG_REG, Mnemonic.XOR),
 
     # branching
-    "JMP_NOT_EQ": InstructionDef(Instructions.JMP_NOT_EQ, Size.LIT_MEM, Type.LIT_MEM, Mnemonic.JNE),
+    "JNE_LIT": InstructionDef(Instructions.JNE_LIT, Size.LIT_MEM, Type.LIT_MEM, Mnemonic.JNE),
     "JNE_REG": InstructionDef(Instructions.JNE_REG, Size.REG_MEM, Type.REG_MEM, Mnemonic.JNE),
     "JEQ_REG": InstructionDef(Instructions.JEQ_REG, Size.REG_MEM, Type.REG_MEM, Mnemonic.JEQ),
     "JEQ_LIT": InstructionDef(Instructions.JEQ_LIT, Size.LIT_MEM, Type.LIT_MEM, Mnemonic.JNE),

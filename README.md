@@ -1,12 +1,14 @@
 # SealVM
-SealVM is a 16-bit virtual machine, written in C++. My primary goals at the moment are to develop a CPU, an assembly language, then a higher-level c-style language compiler. This project is a work in-progress.
+SealVM is a 16-bit, big-endian virtual machine, written in C++. My primary goals at the moment are to develop a CPU, an assembly language, then a higher-level c-style language compiler. This project is a work in-progress.
 
 ## Applications `/cmd`
 ### SealVM
 `sealvm` contains the code for the virtual machine, including the CPU and memory devices, implemented in C++.
 
 ### SealASM
-`sealasm` contains a parser and compiler for the SealASM language, implemented in Python.
+`sealasm` contains a parser and compiler for the SealASM language, implemented in Python. I'm currently working on the SealASM Compiler, you can view test ASM programs under `/example_programs`. 
+- `test1.asm`: moves values between registers and memory, then adds them; very simple test program
+- `test2.asm`: stores number 10 in memory, then begins a loop - load number from memory, increment `r2` three times, if loaded number is not 10, jump to the start of the loop. This program is essentially a for loop.
 
 ## SealVM Specifications
 ### Registers `sealvm/registers.hpp`

@@ -42,18 +42,18 @@ enum Instructions {
     NOT = 0x32,         // NOT r1
 
     // branching
-    JMP_NOT_EQ = 0x15, // JNE $ABCD, &1234
-    JNE_REG = 0x33,    // JNE r1, &1234
-    JEQ_REG = 0x34,    // JEQ r1, &1234
-    JEQ_LIT = 0x35,    // JEQ $ABCD &1234
-    JLT_REG = 0x36,    // JLT r1, &1234
-    JLT_LIT = 0x37,    // JLT $0xABCD, &1234
-    JGT_REG = 0x38,    // JGT r1, &1234
-    JGT_LIT = 0x39,    // JGT $ABCD, &1234
-    JLE_REG = 0x3A,    // JLE r1, &1234
-    JLE_LIT = 0x3B,    // JLE $ABCD, &1234
-    JGE_REG = 0x3C,    // JGE r1, &1234
-    JGE_LIT = 0x3D,    // JGE $ABCD, &1234
+    JNE_LIT = 0x15, // JNE $ABCD, &1234
+    JNE_REG = 0x33, // JNE r1, &1234
+    JEQ_REG = 0x34, // JEQ r1, &1234
+    JEQ_LIT = 0x35, // JEQ $ABCD &1234
+    JLT_REG = 0x36, // JLT r1, &1234
+    JLT_LIT = 0x37, // JLT $0xABCD, &1234
+    JGT_REG = 0x38, // JGT r1, &1234
+    JGT_LIT = 0x39, // JGT $ABCD, &1234
+    JLE_REG = 0x3A, // JLE r1, &1234
+    JLE_LIT = 0x3B, // JLE $ABCD, &1234
+    JGE_REG = 0x3C, // JGE r1, &1234
+    JGE_LIT = 0x3D, // JGE $ABCD, &1234
 
     PSH_LIT = 0x16, // PSH $ABCD
     PSH_REG = 0x17, // PSH r1

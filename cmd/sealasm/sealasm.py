@@ -6,10 +6,11 @@ from typing import Tuple, List, Dict, Any, Optional
 import asm
 import sealvm
 import parser_combinator
+import compiler
 
-# ---------------------------
-# currently this program just generates an AST from a given SealASM program and writes to file
-# ---------------------------
+# ---------------------
+# this program is a bit rough and ready at the moment, it will be improved soon.
+# ---------------------
 
 
 def _get_args() -> Tuple[Optional[str], Optional[str]]:
@@ -26,7 +27,7 @@ def _get_args() -> Tuple[Optional[str], Optional[str]]:
 
     if arg_1.lower() == "-h":
         # output help
-        print("USAGE: parser [source_file.asm] {ast_output_dir}\n\n-h: output help")
+        print("USAGE: parser [source_file.asm] {bin_output_dir}\n\n-h: output help")
         return None, None
 
     # process as source file
@@ -39,23 +40,23 @@ def _get_args() -> Tuple[Optional[str], Optional[str]]:
     if len(split_file_name):
         file_name = split_file_name[0]
 
-    # get optional ast path
+    # get optional binary path
     if len(sys.argv) >= 3:
-        ast_out = f"{sys.argv[2]}/{file_name}.ast"
+        bin_out = f"{sys.argv[2]}/{file_name}.seal"
     else:
-        ast_out = f"{os.getcwd()}/{file_name}.ast"
+        bin_out = f"{os.getcwd()}/{file_name}.seal"
 
-    return arg_1, ast_out
+    return arg_1, bin_out
 
 
 def main():
     "program entrypoint"
     src_path: str
-    ast_out_path: str
+    bin_out_path: str
 
     try:
-        src_path, ast_out_path = _get_args()
-        if src_path is None or ast_out_path is None:
+        src_path, bin_out_path = _get_args()
+        if src_path is None or bin_out_path is None:
             sys.exit(0)
     except ValueError as ex:
         print(str(ex))
@@ -63,41 +64,59 @@ def main():
 
     runner = parser_combinator.Runner()
     parser = asm.InstructionParser(runner)
+    compile = compiler.Compiler()
 
     try:
-        # maintain the AST, allow it to optionally be written out
-        ast: List[Dict[str, Any]] = []
-        opcodes: list = []
+        machine_code: list = []
+        line_number = 1
 
         with open(src_path, "r") as fhandle:
-            line = fhandle.readline()
-            line_number = 1
-
-            if not len(line):
-                raise RuntimeError("EOF Reached At Start Of File")
-
             for line in fhandle:
-                line = line.rstrip()
+                line = line.rstrip().lstrip()
                 if not len(line):
                     # skip empty lines
                     continue
 
-                state: parser.State = runner.run(parser, line)
+                state: parser.State = runner.choice(
+                    (
+
+                        asm.InstructionParser(runner),
+                        asm.LabelParser(runner, map_method=asm._label_value_as_type)
+                    ),
+                    line
+                )
+
                 if state.is_error:
                     raise ValueError(f"Line {line_number}: {state.error}")
 
-                ast.append(state.result)
+                if state.result["type"] != "LABEL":
+                    value = state.result["value"]
+                    metadata: sealvm.InstructionDef = sealvm.InstructionMap[value["instruction"]]
+                    compile.current_address += metadata.size
+
+                    compiled_code = compile.line(state.result)
+                    machine_code.extend(compiled_code)
+                else:
+                    compile.labels[state.result["value"]] = compile.current_address
+
                 line_number += 1
 
-        if not len(ast):
-            raise RuntimeError("Parser AST Is Empty")
+        if not len(machine_code):
+            raise RuntimeError("Machine Code Is Empty")
 
-        with open(ast_out_path, "w", encoding="utf-8") as fhandle:
-            json.dump(ast, fhandle, ensure_ascii=False)
+        # write executable
+        with open(bin_out_path, "w") as fhandle:
+            for code in machine_code:
+                fhandle.write(f"{hex(code)} ")
+
     except ValueError as ex:
         # treat ValueError as an error in the source code, exit code 2
         print(str(ex))
         sys.exit(2)
+    except KeyError as ex:
+        # treat KeyError as an invalid AST being produced
+        print(f"Invalid AST: {str(ex)}")
+        sys.exit(1)
     except Exception as ex:
         # all other exceptions are invalid args/non existing file/parser bug etc, exit code 1
         print(f"Exception Parsing File {src_path}: {str(ex)}")

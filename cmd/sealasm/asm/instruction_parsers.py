@@ -252,8 +252,8 @@ class JneParser(parser.BaseParser):
             return state
 
         return self._runner.choice((
-            RegMemParser(self._runner, "JEN", "JEN_REG", map_method=self._map_method),    # type: ignore
-            LitMemParser(self._runner, "JEN", "JEN_LIT", map_method=self._map_method),
+            RegMemParser(self._runner, "JNE", "JNE_REG", map_method=self._map_method),    # type: ignore
+            LitMemParser(self._runner, "JNE", "JNE_LIT", map_method=self._map_method),
         ), state.source, state=state)
 
 
@@ -429,6 +429,7 @@ class InstructionParser(parser.BaseParser):
             OrParser(self._runner, map_method=self._map_method),
             XorParser(self._runner, map_method=self._map_method),
             IncParser(self._runner, map_method=self._map_method),
+            DecParser(self._runner, map_method=self._map_method),
             NotParser(self._runner, map_method=self._map_method),
             JeqParser(self._runner, map_method=self._map_method),
             JneParser(self._runner, map_method=self._map_method),

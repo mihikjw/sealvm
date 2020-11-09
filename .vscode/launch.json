@@ -10,7 +10,9 @@
             "cwd": "${workspaceFolder}",
             "externalConsole": false,
             "preLaunchTask": "Build",
-            "args": [],
+            "args": [
+                "/home/michael/cpp/sealvm/example_programs/test1.seal"
+            ],
             "linux": {
                 "MIMode": "gdb",
                 "setupCommands": [

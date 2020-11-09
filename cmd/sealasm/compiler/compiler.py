@@ -9,7 +9,7 @@ class Compiler():
         self.current_address: int = 0
         self.labels: Dict[str, int] = {}
 
-    def line(self, line: Dict[str, Any]) -> Tuple[str]:
+    def line(self, line: Dict[str, Any]) -> List[int]:
         "compiles a given line of AST to machine code as a list"
         if "value" not in line or "type" not in line:
             raise ValueError("Compiler: invalid line ast given")
@@ -23,7 +23,7 @@ class Compiler():
             raise ValueError(f"Compiler: instruction {instruction} not supported")
 
         metadata = InstructionMap[instruction]
-        result = [metadata.opcode]
+        result: List[int] = [metadata.opcode]
 
         try:
             args = self._get_args(value)
@@ -71,9 +71,9 @@ class Compiler():
         except ValueError as ex:
             raise RuntimeError(f"Compiler: error parsing instruction {instruction}: {str(ex)}")
 
-        return tuple(result)
+        return result
 
-    def _encode_lit_or_mem(self, lit_or_mem: Dict[str, str]) -> Tuple[int]:
+    def _encode_lit_or_mem(self, lit_or_mem: Dict[str, str]) -> Tuple[int, int]:
         "encodes a 16-bit literal as machine code"
         if "value" not in lit_or_mem or "type" not in lit_or_mem:
             raise ValueError(f"invalid formatted _encode_lit_or_mem: {lit_or_mem}")
@@ -101,7 +101,7 @@ class Compiler():
             raise ValueError(f"Compiler: register {reg_value} not supported")
         return Registers[reg_value]
 
-    def _get_args(self, instruction_entry: Dict[str, Any]) -> List[str]:
+    def _get_args(self, instruction_entry: Dict[str, Any]) -> List[Dict[str, str]]:
         "gets the args from a given instruction entry"
         if "args" not in instruction_entry:
             raise ValueError(f"no args supplied")

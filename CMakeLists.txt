@@ -24,6 +24,11 @@ add_custom_target(SEALASM_PARSER_TYPE_CHECK ALL "mypy" "${CMAKE_BINARY_DIR}/cmd/
 file(GLOB LIBSEALVM_SRC "${CMAKE_BINARY_DIR}/src/sealvm/*.cpp")
 add_library(libsealvm SHARED ${LIBSEALVM_SRC})
 set_target_properties(libsealvm PROPERTIES LINKER_LANGUAGE CXX)
+
+# libbinreader
+file(GLOB LIBBINREADER_SRC "${CMAKE_BINARY_DIR}/src/binreader/*.cpp")
+add_library(libbinreader SHARED ${LIBBINREADER_SRC})
+set_target_properties(libbinreader PROPERTIES LINKER_LANGUAGE CXX)
 # ---------------------------------
 
 # ---------------------------------
@@ -31,7 +36,7 @@ set_target_properties(libsealvm PROPERTIES LINKER_LANGUAGE CXX)
 # sealvm
 file(GLOB SEALVM_SRC "${CMAKE_BINARY_DIR}/cmd/sealvm/sealvm.cpp")
 add_executable(sealvm ${SEALVM_SRC})
-target_link_libraries(sealvm libsealvm)
+target_link_libraries(sealvm libsealvm libbinreader)
 set_target_properties(sealvm PROPERTIES LINKER_LANGUAGE CXX)
 # ---------------------------------
 

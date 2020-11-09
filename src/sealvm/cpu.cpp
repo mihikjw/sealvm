@@ -42,7 +42,7 @@ const Registers CPU::fetchRegisterIndex() { return static_cast<Registers>((fetch
 
 bool CPU::execute(const uint16_t instruction) {
     switch (instruction) {
-        // move literal value into register e.g.: MOV 0x1234, r1
+        // move literal value into register e.g.: MOV $1234, r1
         case Instructions::MOV_LIT_REG: {
             auto val = fetch16();
             auto reg = fetchRegisterIndex();
@@ -59,7 +59,7 @@ bool CPU::execute(const uint16_t instruction) {
             break;
         }
 
-        // move register value into memory address e.g.: MOV r1, 0xABCD
+        // move register value into memory address e.g.: MOV r1, &ABCD
         case Instructions::MOV_REG_MEM: {
             auto reg = fetchRegisterIndex();
             auto address = fetch16();
@@ -68,7 +68,7 @@ bool CPU::execute(const uint16_t instruction) {
             break;
         }
 
-        // move value at a memory address into a register e.g.: MOV 0xABCD, r1
+        // move value at a memory address into a register e.g.: MOV &ABCD, r1
         case Instructions::MOV_MEM_REG: {
             auto address = fetch16();
             auto reg = fetchRegisterIndex();
@@ -87,7 +87,7 @@ bool CPU::execute(const uint16_t instruction) {
             break;
         }
 
-        // jump to the given address if the given literal is not equal to Registers::acc, e.g.: JNE {literal} {address} | JNE 0xABCD #0x1234
+        // jump to the given address if the given literal is not equal to Registers::acc, e.g.: JNE {literal} {address} | JNE $ABCD &1234
         case Instructions::JNE_LIT: {
             auto compareValue = fetch16();
             auto jmpAddress = fetch16();
@@ -97,7 +97,7 @@ bool CPU::execute(const uint16_t instruction) {
             break;
         }
 
-        // push a literal value onto the stack e.g.: PSH 0x1234
+        // push a literal value onto the stack e.g.: PSH $1234
         case Instructions::PSH_LIT: {
             auto val = fetch16();
             pushStack(val);
@@ -120,7 +120,7 @@ bool CPU::execute(const uint16_t instruction) {
             break;
         }
 
-        // cal to a literal address e.g.: CAL 0xABCD
+        // cal to a literal address e.g.: CAL $ABCD
         case Instructions::CAL_LIT: {
             auto addr = fetch16();
             pushStateStack();
@@ -148,7 +148,7 @@ bool CPU::execute(const uint16_t instruction) {
             return false;
         }
 
-        // move literal value to memory e.g: MOV 0x1234 #0xABCD
+        // move literal value to memory e.g: MOV $1234 &ABCD
         case Instructions::MOV_LIT_MEM: {
             auto val = fetch16();
             auto addr = fetch16();
@@ -166,7 +166,7 @@ bool CPU::execute(const uint16_t instruction) {
             break;
         }
 
-        // move literal at (literal + register) to register e.g.: MOV #0xABCD, r1, r2
+        // move literal at (literal + register) to register e.g.: MOV $ABCD, r1, r2
         case Instructions::MOV_LIT_OFF_REG: {
             auto baseAddr = fetch16();
             auto r1 = fetchRegisterIndex();
@@ -177,7 +177,7 @@ bool CPU::execute(const uint16_t instruction) {
             break;
         }
 
-        // add literal to register e.g.: ADD 0x1234, r1
+        // add literal to register e.g.: ADD $1234, r1
         case Instructions::ADD_LIT_REG: {
             auto lit = fetch16();
             auto reg = fetchRegisterIndex();
@@ -186,7 +186,7 @@ bool CPU::execute(const uint16_t instruction) {
             break;
         }
 
-        // substract literal from register e.g.: SUB 0x1234, r1
+        // substract literal from register e.g.: SUB $1234, r1
         case Instructions::SUB_LIT_REG: {
             auto lit = fetch16();
             auto reg = fetchRegisterIndex();
@@ -195,7 +195,7 @@ bool CPU::execute(const uint16_t instruction) {
             break;
         }
 
-        // subtract register from literal e.g.: SUB r1, 0x1234
+        // subtract register from literal e.g.: SUB r1, $1234
         case Instructions::SUB_REG_LIT: {
             auto reg = fetchRegisterIndex();
             auto lit = fetch16();
@@ -214,7 +214,7 @@ bool CPU::execute(const uint16_t instruction) {
             break;
         }
 
-        // multiply a literal by a registers e.g.: MUL 0x1234, r1
+        // multiply a literal by a registers e.g.: MUL $1234, r1
         case Instructions::MUL_LIT_REG: {
             auto lit = fetch16();
             auto reg = fetchRegisterIndex();
@@ -249,7 +249,7 @@ bool CPU::execute(const uint16_t instruction) {
             break;
         }
 
-        // left shift register by literal (in place) e.g.: LSF r1, 0x1234
+        // left shift register by literal (in place) e.g.: LSF r1, $1234
         case Instructions::LSF_REG_LIT: {
             auto reg = fetchRegisterIndex();
             auto lit = fetch16();
@@ -268,7 +268,7 @@ bool CPU::execute(const uint16_t instruction) {
             break;
         }
 
-        // right shift register by literal (in place) e.g.: RSF r1, 0x1234
+        // right shift register by literal (in place) e.g.: RSF r1, $1234
         case Instructions::RSF_REG_LIT: {
             auto reg = fetchRegisterIndex();
             auto lit = fetch16();
@@ -287,7 +287,7 @@ bool CPU::execute(const uint16_t instruction) {
             break;
         }
 
-        // and register with literal e.g.: AND r1, 0x1234
+        // and register with literal e.g.: AND r1, $1234
         case Instructions::AND_REG_LIT: {
             auto reg = fetchRegisterIndex();
             auto lit = fetch16();
@@ -306,7 +306,7 @@ bool CPU::execute(const uint16_t instruction) {
             break;
         }
 
-        // or register with literal e.g.: OR r1, 0x1234
+        // or register with literal e.g.: OR r1, $1234
         case Instructions::OR_REG_LIT: {
             auto reg = fetchRegisterIndex();
             auto lit = fetch16();
@@ -325,7 +325,7 @@ bool CPU::execute(const uint16_t instruction) {
             break;
         }
 
-        // xor register with literal e.g.: XOR r1, 0x1234
+        // xor register with literal e.g.: XOR r1, $1234
         case Instructions::XOR_REG_LIT: {
             auto reg = fetchRegisterIndex();
             auto lit = fetch16();
@@ -353,7 +353,7 @@ bool CPU::execute(const uint16_t instruction) {
             break;
         }
 
-        // jmp if register not equal to acc e.g.: JNE r1, #0x1234
+        // jmp if register not equal to acc e.g.: JNE r1, &1234
         case Instructions::JNE_REG: {
             auto reg = fetchRegisterIndex();
             auto val = GetRegister(reg);
@@ -364,7 +364,7 @@ bool CPU::execute(const uint16_t instruction) {
             break;
         }
 
-        // jmp if register equal to acc e.g.: JEQ r1, #0x1234
+        // jmp if register equal to acc e.g.: JEQ r1, &1234
         case Instructions::JEQ_REG: {
             auto reg = fetchRegisterIndex();
             auto val = GetRegister(reg);
@@ -375,7 +375,7 @@ bool CPU::execute(const uint16_t instruction) {
             break;
         }
 
-        // jmp if literal equal to acc e.g.: JEQ 0xABCD, #0x1234
+        // jmp if literal equal to acc e.g.: JEQ $ABCD, &1234
         case Instructions::JEQ_LIT: {
             auto lit = fetch16();
             auto jmpAddr = fetch16();
@@ -385,7 +385,7 @@ bool CPU::execute(const uint16_t instruction) {
             break;
         }
 
-        // jmp if register less than acc e.g.: JLT r1, #0x1234
+        // jmp if register less than acc e.g.: JLT r1, &1234
         case Instructions::JLT_REG: {
             auto reg = fetchRegisterIndex();
             auto val = GetRegister(reg);
@@ -396,7 +396,7 @@ bool CPU::execute(const uint16_t instruction) {
             break;
         }
 
-        // jmp if literal less than acc e.g.: JLT 0xABCD, #0x1234
+        // jmp if literal less than acc e.g.: JLT $ABCD, &1234
         case Instructions::JLT_LIT: {
             auto lit = fetch16();
             auto jmpAddr = fetch16();
@@ -406,7 +406,7 @@ bool CPU::execute(const uint16_t instruction) {
             break;
         }
 
-        // jmp if register greater than acc e.g.: JGT r1, #0x1234
+        // jmp if register greater than acc e.g.: JGT r1, &1234
         case Instructions::JGT_REG: {
             auto reg = fetchRegisterIndex();
             auto val = GetRegister(reg);
@@ -417,7 +417,7 @@ bool CPU::execute(const uint16_t instruction) {
             break;
         }
 
-        // jmp if literal greater than acc e.g.: JGT 0xABCD, #0x1234
+        // jmp if literal greater than acc e.g.: JGT $ABCD, &1234
         case Instructions::JGT_LIT: {
             auto lit = fetch16();
             auto jmpAddr = fetch16();
@@ -427,7 +427,7 @@ bool CPU::execute(const uint16_t instruction) {
             break;
         }
 
-        // jmp if register less than or equal to acc e.g.: JLE r1, #0x1234
+        // jmp if register less than or equal to acc e.g.: JLE r1, &1234
         case Instructions::JLE_REG: {
             auto reg = fetchRegisterIndex();
             auto val = GetRegister(reg);
@@ -438,7 +438,7 @@ bool CPU::execute(const uint16_t instruction) {
             break;
         }
 
-        // jmp if literal less than or equal to acc e.g.: JLE 0xABCD, #0x1234
+        // jmp if literal less than or equal to acc e.g.: JLE $ABCD, &1234
         case Instructions::JLE_LIT: {
             auto lit = fetch16();
             auto jmpAddr = fetch16();
@@ -448,7 +448,7 @@ bool CPU::execute(const uint16_t instruction) {
             break;
         }
 
-        // jmp if register greater than or equal to acc e.g.: JGE r1, #0x1234
+        // jmp if register greater than or equal to acc e.g.: JGE r1, &1234
         case Instructions::JGE_REG: {
             auto reg = fetchRegisterIndex();
             auto val = GetRegister(reg);
@@ -459,7 +459,7 @@ bool CPU::execute(const uint16_t instruction) {
             break;
         }
 
-        // jmp if literal greater than or equal to acc e.g.: JGE 0xABCD, #0x1234
+        // jmp if literal greater than or equal to acc e.g.: JGE $ABCD, &1234
         case Instructions::JGE_LIT: {
             auto lit = fetch16();
             auto jmpAddr = fetch16();

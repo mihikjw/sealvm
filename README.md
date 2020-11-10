@@ -1,18 +1,22 @@
 # SealVM
 SealVM is a 16-bit, big-endian virtual machine, written in C++ with an ASM compiler in Python. You can find 'main' source code under `/cmd`. 
 
-## Usage
-See [Developing](#Developing) in this document for installing requirements and building the source; all commands should be run from the root of the repository.
-
-1. `python3 cmd/sealasm/sealasm.py {path_to_src} {output_dir}`
-2. `./bin/sealvm {output_dir}/{src_filename}.seal`
-
 ## Applications `/cmd`
 ### SealVM
 `sealvm` contains the code for the virtual machine, including the CPU and memory devices, implemented in C++. The VM is capable of executing instructions generated from the `sealasm` compiler, in a `*.seal` hex file format. Currently there's no debugger beyond stepping through the CPU C++ code, this is a goal to work on at some point soon.
 
+#### Usage
+`sealvm [binary_path.seal]`
+
 ### SealASM
 `sealasm` contains a parser and compiler for the SealASM language, implemented in Python. The parser uses a 'parser combinator' paradigm, with a number of 'parser' classes, which can be individually run or combined using a `Runner` class. These are combined and their results manipulated to create an Abstract Syntax Tree (AST), which can then be compiled. Each SealASM line has an AST generated for it, which is then immediatly passed to a `Compiler` class, which is responsible for translating this into machine code. The compiler then saves this in hex form as a 'binary' file (`*.seal`), which can be executed by the `sealvm`.
+
+#### Usage
+`sealasm [source_path.asm]`
+- `-h` or `--help`: output help
+- `-v` or `--version`: output version
+- `-o [path]`: output binary path
+- `-ast [path]` or `--ast`: output AST as JSON at path or alongside the binary output
 
 #### Test Programs `/example_programs`
 - `test1.asm`: moves values between registers and memory, then adds them; very simple test program
@@ -58,4 +62,4 @@ I use Visual Studio Code to develop this project, under `.vscode/` are the launc
 
 ### Code Guidelines
 - Lint with the provided clang-format configuration, clang-tidy is configured for VSCode
-- public functions should start with uppercase, private and protected with lowercase. Should all be camelCase.
+- C++: public functions should start with uppercase, private and protected with lowercase. Should all be camelCase.

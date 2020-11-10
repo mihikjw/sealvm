@@ -14,6 +14,7 @@ int main(int argc, const char* argv[]) {
         return 1;
     }
 
+    std::string sourceFile = argv[1];
     std::vector<uint8_t> mainMemory(MEMORY_SIZE, SealVM::ZERO_MEMORY);
 
     try {
@@ -26,7 +27,7 @@ int main(int argc, const char* argv[]) {
         mapper.Map(&screenDevice, 0x3000, 0x30ff, true);
 
         auto binReader = BinReader::Reader(&mainMemory);
-        binReader.FromFile(argv[1]);
+        binReader.FromFile(sourceFile);
 
         auto cpu = SealVM::CPU(&mapper);
         cpu.Run();

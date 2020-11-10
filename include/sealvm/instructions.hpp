@@ -62,6 +62,8 @@ enum Instructions {
     CAL_REG = 0x1A, // CAL r1
     RET = 0x1B,     // RET
     HLT = 0x1C,     // HLT
+    INT = 0x3E,     // INT &15F6
+    RET_INT = 0x3F  // RET_INT
 };
 
 // Instruction contains more details about each instruction, required by compilers etc
@@ -122,6 +124,8 @@ enum Mnemonic {
     CAL,
     RET,
     HTL,
+    INT,
+    RET_INT,
 };
 
 } // namespace Instruction

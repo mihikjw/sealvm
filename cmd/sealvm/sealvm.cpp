@@ -1,6 +1,6 @@
 #include <cstdint>
 #include <iostream>
-#include <memory>
+#include <string>
 #include <vector>
 
 #include "binreader/reader.hpp"
@@ -22,9 +22,9 @@ int main(int argc, const char* argv[]) {
         auto mapper = SealVM::MemoryMapper(&mainMemory);
         mapper.Map(&memory, SealVM::ZERO_MEMORY, SealVM::FULL_MEMORY);
 
-        // map addresses 0x3000 to 0x30ff as screen output
+        // map addresses 0x4000 to 0x40ff as screen output
         SealVM::ScreenDevice screenDevice(nullptr);
-        mapper.Map(&screenDevice, 0x3000, 0x30ff, true);
+        mapper.Map(&screenDevice, 0x4000, 0x40ff, true);
 
         auto binReader = BinReader::Reader(&mainMemory);
         binReader.FromFile(sourceFile);

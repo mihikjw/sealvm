@@ -26,7 +26,7 @@ def get_args() -> Tuple[Optional[str], Optional[str], Optional[str]]:
     if "-o" in args:
         bin_out = args["-o"]
     else:
-        file_name = _get_file_name_no_ext(bin_out)
+        file_name = _get_file_name_no_ext(args["src"])
         bin_out = f"{os.getcwd()}/{file_name}.seal"
 
     if "--ast" in args:

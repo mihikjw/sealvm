@@ -2,11 +2,11 @@
 #define SEALVM_SEALVM_CPU_HPP
 
 #include <array>
+#include <cstdint>
 #include <cstdio>
 #include <map>
 #include <stdexcept>
 #include <string>
-#include <stdint.h>
 
 #include "sealvm/defines.hpp"
 #include "sealvm/instructions.hpp"
@@ -17,7 +17,7 @@ namespace SealVM {
 
 class CPU {
     public:
-    CPU(MemoryDevice* memory) noexcept;
+    CPU(MemoryDevice* memory, uint16_t interruptVectorAddress = (uint16_t)0x1000) noexcept;
     ~CPU() = default;
 
     // GetRegister returns the value currently held in the register 'name'
@@ -59,6 +59,8 @@ class CPU {
     // popStateStack returns the CPU state to that indicated by the fp register
     void popStateStack();
 
+    void handleInterrupt(const uint16_t value);
+
     // memory is a pointer to the given memory device
     MemoryDevice* memory;
 
@@ -70,7 +72,11 @@ class CPU {
       {Registers::acc, ZERO_MEMORY}, {Registers::pc, ZERO_MEMORY}, {Registers::r1, ZERO_MEMORY},     {Registers::r2, ZERO_MEMORY},
       {Registers::r3, ZERO_MEMORY},  {Registers::r4, ZERO_MEMORY}, {Registers::r5, ZERO_MEMORY},     {Registers::r6, ZERO_MEMORY},
       {Registers::r7, ZERO_MEMORY},  {Registers::r8, ZERO_MEMORY}, {Registers::sp, FULL_MEMORY - 1}, {Registers::fp, FULL_MEMORY - 1},
+      {Registers::im, FULL_MEMORY},
     };
+
+    uint16_t interruptVectorAddress;
+    bool isInInterrupt;
 };
 
 } // namespace SealVM

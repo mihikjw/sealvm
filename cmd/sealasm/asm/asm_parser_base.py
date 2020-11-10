@@ -1,8 +1,8 @@
 from typing import Tuple, Any
 
 import parser_combinator as parser
+import sealvm
 
-from asm.registers import Registers
 from asm.sqr_bracket_expression_parser import SqrBracketExpressionParser
 from asm.map_methods import _hex_value_as_type, _sqr_expr_as_type, _disambiguate_expression
 
@@ -37,7 +37,7 @@ class ASMParser(parser.BaseParser):
                 state.is_error = True
                 state.error = f"ASMParser._register: register pointer not found at index {state.index}"
 
-        for reg in Registers.keys():
+        for reg in sealvm.Registers.keys():
             state = self._upper_or_lower_string(reg, src, state, 2)
             if not state.is_error:
                 break

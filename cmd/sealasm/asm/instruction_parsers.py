@@ -27,8 +27,8 @@ class MovParser(parser.BaseParser):
             return state
 
         return self._runner.choice((
-            LitRegParser(self._runner, "MOV", "MOV_LIT_REG", map_method=self._map_method),    # type: ignore
-            RegRegParser(self._runner, "MOV", "MOV_REG_REG", map_method=self._map_method),
+            RegRegParser(self._runner, "MOV", "MOV_REG_REG", map_method=self._map_method),  # type: ignore
+            LitRegParser(self._runner, "MOV", "MOV_LIT_REG", map_method=self._map_method),    
             RegMemParser(self._runner, "MOV", "MOV_REG_MEM", map_method=self._map_method),
             MemRegParser(self._runner, "MOV", "MOV_MEM_REG", map_method=self._map_method),
             LitMemParser(self._runner, "MOV", "MOV_LIT_MEM", map_method=self._map_method),
@@ -407,6 +407,38 @@ class HltParser(parser.BaseParser):
         ), state.source, state=state)
 
 
+class IntParser(parser.BaseParser):
+    "parses a SealASM INT instruction"
+
+    def __init__(self, runner: parser.Runner, map_method: Any = None):
+        self._runner: parser.Runner = runner
+        super().__init__(map_method)
+
+    def run(self, state: parser.State) -> parser.State:
+        if state.is_error:
+            return state
+
+        return self._runner.choice((
+            LitParser(self._runner, "INT", "INT", map_method=self._map_method),    # type: ignore
+        ), state.source, state=state)
+
+
+class RetIntParser(parser.BaseParser):
+    "parses a SealASM RET_INT instruction"
+
+    def __init__(self, runner: parser.Runner, map_method: Any = None):
+        self._runner: parser.Runner = runner
+        super().__init__(map_method)
+
+    def run(self, state: parser.State) -> parser.State:
+        if state.is_error:
+            return state
+
+        return self._runner.choice((
+            NoArgParser(self._runner, "RET_INT", "RET_INT", map_method=self._map_method),    # type: ignore
+        ), state.source, state=state)
+
+
 class InstructionParser(parser.BaseParser):
     "parses a single SealASM Instruction"
 
@@ -442,4 +474,6 @@ class InstructionParser(parser.BaseParser):
             CalParser(self._runner, map_method=self._map_method),
             RetParser(self._runner, map_method=self._map_method),
             HltParser(self._runner, map_method=self._map_method),
+            IntParser(self._runner, map_method=self._map_method),
+            RetIntParser(self._runner, map_method=self._map_method),
         ), state.source, state=state)

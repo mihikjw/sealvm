@@ -5,6 +5,9 @@ SealVM is a 16-bit, big-endian virtual machine, written in C++ with an ASM compi
 ### SealVM
 `sealvm` contains the code for the virtual machine, including the CPU and memory devices, implemented in C++. The VM is capable of executing instructions generated from the `sealasm` compiler, in a `*.seal` hex file format. Currently there's no debugger beyond stepping through the CPU C++ code, this is a goal to work on at some point soon.
 
+#### Interrupts
+The SealVM does support interrupts, however at the moment there are none enabled. The interrupt vector starts (by default) at address `0x1000`, and the `INT {index}` instruction should reference an index in this vector. For example, `INT $03` references index 3 in the vector, address `0x1006`. Documentation for supported interrupts will be added as handlers are added. There is currently no other way to load interrupts than to either compile a SealASM program ending with a `RET_INT` instruction and (in the C++) add it to memory instruction by instruction, or to implement the interrupt in C++ directly and create a `MemoryDevice` inherited class for it, mapped to an address space. I'm actively working on improving the way interrupt 'modules' can be loaded into the VM on startup.
+
 #### Usage
 `sealvm [binary_path.seal]`
 
@@ -24,7 +27,7 @@ SealVM is a 16-bit, big-endian virtual machine, written in C++ with an ASM compi
 
 ## SealVM Specifications
 ### Registers `sealvm/registers.hpp`
-Each register is 16-bits in size, currently the only way of interacting with them is in 16-bit chunks. Registers defined under `sealvm/registers.hpp`, and instantiated on the `CPU` class itself (`sealvm/CPU.hpp`).
+Each register is 16-bits in size, currently the only way of interacting with them is in 16-bit chunks. Registers defined under `sealvm/registers.hpp`, and instantiated on the `CPU` class itself (`sealvm/CPU.hpp`). Implemented are a Program Counter, Accumulator, Stack Pointer, Frame Pointer, Interrupt Mask and x8 general purpose registers.
 
 ### Memory `sealvm/memory.hpp`
 Memory size is `256 * 256` and is defined on construction as an argument - any instance of base class `MemoryDevice` can be used as memory, which takes an `std::vector<uint8_t>` to be used as the internal memory buffer.

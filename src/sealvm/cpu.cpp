@@ -2,8 +2,10 @@
 
 using namespace SealVM;
 
-CPU::CPU(MemoryDevice* memory) noexcept {
+CPU::CPU(MemoryDevice* memory, uint16_t interruptVectorAddress) noexcept {
     this->memory = memory;
+    this->interruptVectorAddress = interruptVectorAddress;
+    isInInterrupt = false;
     stackFrameSize = 0;
 }
 
@@ -38,7 +40,7 @@ const uint16_t CPU::fetch16() {
     return instruction1 << 8 | instruction2;
 }
 
-const Registers CPU::fetchRegisterIndex() { return static_cast<Registers>((fetch() % registers.size())); }
+const Registers CPU::fetchRegisterIndex() { return static_cast<Registers>(fetch()); }
 
 bool CPU::execute(const uint16_t instruction) {
     switch (instruction) {
@@ -254,7 +256,7 @@ bool CPU::execute(const uint16_t instruction) {
             auto reg = fetchRegisterIndex();
             auto lit = fetch16();
             auto val = GetRegister(reg);
-            SetRegister(r1, val << lit);
+            SetRegister(reg, val << lit);
             break;
         }
 
@@ -468,6 +470,20 @@ bool CPU::execute(const uint16_t instruction) {
             }
             break;
         }
+
+        // interrupt handler
+        case Instructions::INT: {
+            auto interruptVal = fetch16();
+            handleInterrupt(interruptVal);
+            break;
+        }
+
+        // return from interrupt
+        case Instructions::RET_INT: {
+            isInInterrupt = false;
+            popStateStack();
+            break;
+        }
     }
 
     return true;
@@ -561,4 +577,26 @@ void CPU::popStateStack() {
 
     // return frame pointer to the beginning of this frame
     SetRegister(Registers::fp, fp + tmpFrameSize);
+}
+
+void CPU::handleInterrupt(const uint16_t value) {
+    auto interruptVectorIndex = value % 0xf;
+    auto isUnmasked = (1 << interruptVectorIndex) & GetRegister(Registers::im);
+
+    if (!isUnmasked) {
+        // not enabled
+        return;
+    }
+
+    auto addressPtr = this->interruptVectorAddress + (interruptVectorIndex * 2);
+    auto address = this->memory->GetValue16(addressPtr);
+
+    if (!isInInterrupt) {
+        // push 0 for number of arguments
+        pushStack(0);
+        pushStateStack();
+    }
+
+    isInInterrupt = true;
+    SetRegister(Registers::pc, address);
 }

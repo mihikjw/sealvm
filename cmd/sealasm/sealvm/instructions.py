@@ -56,6 +56,8 @@ class Instructions():
     CAL_REG: int = 0x1A
     RET: int = 0x1B
     HLT: int = 0x1C
+    INT: int = 0x3E
+    RET_INT: int = 0x3F
 
 
 class Type():
@@ -115,3 +117,5 @@ class Mnemonic():
     CAL: int = 20
     RET: int = 21
     HLT: int = 22
+    INT: int = 23
+    RET_INT: int = 24

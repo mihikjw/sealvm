@@ -20,10 +20,11 @@ enum Registers {
     acc = 0x09, // accumulator
     sp = 0x10,  // stack pointer
     fp = 0x11,  // frame pointer
+    im = 0x12,  // interrupt mask
 };
 
 // RegisterStrings contains the registers as strings
-std::vector<std::string> RegisterStrings{"pc", "r1", "r2", "r3", "r4", "r5", "r6", "r7", "r8", "acc", "sp", "fp"};
+std::vector<std::string> RegisterStrings{"pc", "r1", "r2", "r3", "r4", "r5", "r6", "r7", "r8", "acc", "sp", "fp", "im"};
 
 } // namespace SealVM
 

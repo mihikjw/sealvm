@@ -1,4 +1,3 @@
-from asm.registers import Registers
 from asm.types import Operators
 
 from asm.asm_parser_base import ASMParser

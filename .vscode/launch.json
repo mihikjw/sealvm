@@ -11,7 +11,7 @@
             "externalConsole": false,
             "preLaunchTask": "Build",
             "args": [
-                "/home/michael/cpp/sealvm/example_programs/test2.seal"
+                "/home/michael/cpp/sealvm/example_programs/test3.seal"
             ],
             "linux": {
                 "MIMode": "gdb",
@@ -30,10 +30,9 @@
             "program": "${workspaceFolder}/cmd/sealasm/sealasm.py",
             "console": "integratedTerminal",
             "args": [
-                "${workspaceFolder}/example_programs/test2.asm",
+                "${workspaceFolder}/example_programs/test3.asm",
                 "-o",
-                "${workspaceFolder}/example_programs/test2.seal",
-                "--ast"
+                "${workspaceFolder}/example_programs/test3.seal"
             ]
         }
     ]

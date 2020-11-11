@@ -38,6 +38,12 @@ file(GLOB SEALVM_SRC "${CMAKE_BINARY_DIR}/cmd/sealvm/sealvm.cpp")
 add_executable(sealvm ${SEALVM_SRC})
 target_link_libraries(sealvm libsealvm libbinreader)
 set_target_properties(sealvm PROPERTIES LINKER_LANGUAGE CXX)
+
+# sealdbg
+file(GLOB SEALDBG_SRC "${CMAKE_BINARY_DIR}/cmd/sealdbg/sealdbg.cpp")
+add_executable(sealdbg ${SEALDBG_SRC})
+target_link_libraries(sealdbg libsealvm libbinreader)
+set_target_properties(sealdbg PROPERTIES LINKER_LANGUAGE CXX)
 # ---------------------------------
 
 include_directories(

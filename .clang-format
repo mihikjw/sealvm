@@ -2,8 +2,6 @@ BasedOnStyle: LLVM
 IndentWidth: 4
 IndentCaseLabels: true
 ContinuationIndentWidth: 2
----
-Language: Cpp
 DerivePointerAlignment: true
 PointerAlignment: Left
 ColumnLimit: 160

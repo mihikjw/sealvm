@@ -1,4 +1,4 @@
-#include "sealvm/memory.hpp"
+#include "sealvm-cpp/memory.hpp"
 
 using namespace SealVM;
 

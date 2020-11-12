@@ -5,8 +5,8 @@
 #include "defines.hpp"
 #include "instructions.hpp"
 #include "memory.hpp"
-#include "memoryMapper.hpp"
 #include "memoryDevice.hpp"
+#include "memoryMapper.hpp"
 #include "screenDevice.hpp"
 
 #endif // SEALVM_SEALVM_HPP

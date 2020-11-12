@@ -1,4 +1,4 @@
-#include "sealvm/memoryRegion.hpp"
+#include "sealvm-cpp/memoryRegion.hpp"
 
 using namespace SealVM;
 

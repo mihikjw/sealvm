@@ -4,7 +4,7 @@
 #include <cmath>
 #include <iostream>
 
-#include "sealvm/memoryDevice.hpp"
+#include "sealvm-cpp/memoryDevice.hpp"
 
 namespace SealVM {
 
@@ -39,6 +39,6 @@ class ScreenDevice : public MemoryDevice {
     void setRegular();
 };
 
-}
+} // namespace SealVM
 
 #endif // SEALVM_SCREENDEVICE_HPP

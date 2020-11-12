@@ -4,7 +4,7 @@
 #include <cstdint>
 #include <string>
 
-#include "sealvm/instructions.hpp"
+#include "sealvm-cpp/instructions.hpp"
 
 namespace SealVM {
 

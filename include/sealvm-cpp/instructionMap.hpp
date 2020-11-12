@@ -4,8 +4,8 @@
 #include <map>
 #include <string>
 
-#include "sealvm/instructionDef.hpp"
-#include "sealvm/instructions.hpp"
+#include "sealvm-cpp/instructionDef.hpp"
+#include "sealvm-cpp/instructions.hpp"
 
 namespace SealVM {
 namespace Instruction {

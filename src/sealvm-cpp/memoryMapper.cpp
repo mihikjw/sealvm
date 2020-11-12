@@ -1,4 +1,4 @@
-#include "sealvm/memoryMapper.hpp"
+#include "sealvm-cpp/memoryMapper.hpp"
 
 using namespace SealVM;
 

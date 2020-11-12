@@ -25,6 +25,11 @@ The SealVM does support interrupts, however at the moment there are none enabled
 - `test1.asm`: moves values between registers and memory, then adds them; very simple test program
 - `test2.asm`: stores number 10 in memory, then begins a loop - load number from memory, increment `r2` three times, if loaded number is not 10, jump to the start of the loop. This program is essentially a for loop.
 
+### SealDbg
+`sealdbg` is a debugger for SealVM-based applications, implemented in C++. This is currently being worked on, however the focus is to have a CLI-based debugger capable of viewing and representing the current register state, state of memory at given addresses, and a disassembly of the loaded program with a visual representation of the current line. The user can then step through the code line by line to view the various states. Perhaps be able to visualize memory usage as a graph.
+
+I'm planning to make use of the [`tabulate`](https://github.com/p-ranav/tabulate) library to help output this data to the CLI: 
+
 ## SealVM Specifications
 ### Registers `sealvm/registers.hpp`
 Each register is 16-bits in size, currently the only way of interacting with them is in 16-bit chunks. Registers defined under `sealvm/registers.hpp`, and instantiated on the `CPU` class itself (`sealvm/CPU.hpp`). Implemented are a Program Counter, Accumulator, Stack Pointer, Frame Pointer, Interrupt Mask and x8 general purpose registers.

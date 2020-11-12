@@ -8,10 +8,10 @@
 #include <stdexcept>
 #include <string>
 
-#include "sealvm/defines.hpp"
-#include "sealvm/instructions.hpp"
-#include "sealvm/memoryDevice.hpp"
-#include "sealvm/registers.hpp"
+#include "sealvm-cpp/defines.hpp"
+#include "sealvm-cpp/instructions.hpp"
+#include "sealvm-cpp/memoryDevice.hpp"
+#include "sealvm-cpp/registers.hpp"
 
 namespace SealVM {
 

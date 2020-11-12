@@ -1,4 +1,4 @@
-#include "sealvm/screenDevice.hpp"
+#include "sealvm-cpp/screenDevice.hpp"
 
 using namespace SealVM;
 

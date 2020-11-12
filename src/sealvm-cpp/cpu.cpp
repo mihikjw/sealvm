@@ -1,4 +1,4 @@
-#include "sealvm/cpu.hpp"
+#include "sealvm-cpp/cpu.hpp"
 
 using namespace SealVM;
 

@@ -3,15 +3,15 @@
 
 #include <cstdio>
 #include <memory>
-#include <vector>
 #include <stdint.h>
+#include <vector>
 
-#include "sealvm/defines.hpp"
-#include "sealvm/memoryDevice.hpp"
+#include "sealvm-cpp/defines.hpp"
+#include "sealvm-cpp/memoryDevice.hpp"
 
 namespace SealVM {
 
-class Memory : public MemoryDevice{
+class Memory : public MemoryDevice {
     public:
     Memory(std::vector<uint8_t>* buffer);
     ~Memory() = default;

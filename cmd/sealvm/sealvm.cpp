@@ -4,7 +4,7 @@
 #include <vector>
 
 #include "binreader/reader.hpp"
-#include "sealvm/sealvm.hpp"
+#include "sealvm-cpp/sealvm.hpp"
 
 constexpr int MEMORY_SIZE = 256 * 256;
 

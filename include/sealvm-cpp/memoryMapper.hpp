@@ -7,8 +7,8 @@
 #include <stdexcept>
 #include <string>
 
-#include "sealvm/memoryRegion.hpp"
-#include "sealvm/memoryDevice.hpp"
+#include "sealvm-cpp/memoryDevice.hpp"
+#include "sealvm-cpp/memoryRegion.hpp"
 
 namespace SealVM {
 

@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include <vector>
 
-#include "sealvm/memoryDevice.hpp"
+#include "sealvm-cpp/memoryDevice.hpp"
 
 namespace SealVM {
 
@@ -31,6 +31,6 @@ class MemoryRegion : public MemoryDevice {
     void SetValue(const uint16_t addr, const uint8_t value);
 };
 
-}
+} // namespace SealVM
 
-#endif  // SEALVM_MEMORYREGION_HPP
+#endif // SEALVM_MEMORYREGION_HPP

@@ -4,7 +4,7 @@
 #include <stdint.h>
 
 // Instructions contains the hex value opcodes for all the instructions the CPU supports
-enum Instructions {
+typedef enum Instructions {
     // mov values
     MOV_LIT_REG = 0x10,     // MOV $1234, r1
     MOV_REG_REG = 0x11,     // MOV r1, r2
@@ -61,10 +61,10 @@ enum Instructions {
     HLT = 0x1C,     // HLT
     INT = 0x3E,     // INT &15F6
     RET_INT = 0x3F  // RET_INT
-};
+} Instructions;
 
 // InstructionType groups instructions by their supported ASM modes (i.e. MOV_LIT_REG and ADD_LIT_REG are the same type)
-enum InstructionType {
+typedef enum InstructionType {
     T_LIT_REG = 0,
     T_REG_LIT,
     T_REG_LIT_8,
@@ -77,7 +77,7 @@ enum InstructionType {
     T_NO_ARGS,
     T_SINGLE_REG,
     T_SINGLE_LIT,
-};
+} InstructionType;
 
 // Sizes of instruction groups defined here
 uint8_t LitReg = 4;
@@ -94,7 +94,7 @@ uint8_t SingleReg = 2;
 uint8_t SingleLit = 3;
 
 // InstructionMnemonic contains values used to group instructions by their Mnemonic (i.e. MOV_LIT_REG and MOV_REG_REG are the same 'MOV' mnemonic)
-enum InstructionMnemonic {
+typedef enum InstructionMnemonic {
     M_MOV = 0,
     M_ADD,
     M_SUB,
@@ -120,6 +120,6 @@ enum InstructionMnemonic {
     M_HTL,
     M_INT,
     M_RET_INT,
-};
+} InstructionMnemonic;
 
 #endif // SEALVM_SEALVM_INSTRUCTIONS_H

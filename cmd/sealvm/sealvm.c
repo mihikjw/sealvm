@@ -15,10 +15,19 @@ int main(int argc, const char* argv[]) {
 
     Memory* memory = NewMemory(mainMemory, MEMORY_SIZE);
     if (!memory) {
-        printf("Failed To Construct Memory\n");
+        fprintf(stderr, "Failed To Construct Memory\n");
         return EXIT_FAILURE;
     }
 
+    MemoryMapper* mMap = NewMemoryMapper(memory);
+    if (!mMap) {
+        fprintf(stderr, "Failed To Construct MemoryMapper\n");
+        return EXIT_FAILURE;
+    }
+
+    // cleanup
+    free(mMap);
     free(memory);
+
     return EXIT_SUCCESS;
 }

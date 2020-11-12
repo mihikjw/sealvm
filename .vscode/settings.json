@@ -4,11 +4,14 @@
         "format": [
             "include/*.hpp",
             "src/*.cpp",
-            "cmd/*.cpp"
+            "cmd/*.cpp",
+            "include/*.h",
+            "src/*.c",
+            "cmd/*.c"
         ]
     },
     "clang-tidy.compilerArgs": [
-        "-std=c++17",
+        "-std=c",
         "-p ."
     ],
     "clang-tidy.checks": [

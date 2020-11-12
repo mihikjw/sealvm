@@ -24,6 +24,28 @@
             }
         },
         {
+            "name": "SealVM-Cpp",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/bin/sealvm-cpp",
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "externalConsole": false,
+            "preLaunchTask": "Build",
+            "args": [
+                "/home/michael/cpp/sealvm/example_programs/test3.seal"
+            ],
+            "linux": {
+                "MIMode": "gdb",
+                "setupCommands": [
+                    {
+                        "description": "Enable pretty-printing for gdb",
+                        "text": "-enable-pretty-printing"
+                    }
+                ]
+            }
+        },
+        {
             "name": "SealVM Debugger",
             "type": "cppdbg",
             "request": "launch",

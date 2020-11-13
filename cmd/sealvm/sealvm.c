@@ -1,3 +1,4 @@
+#include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -24,6 +25,26 @@ int main(int argc, const char* argv[]) {
         fprintf(stderr, "Failed To Construct MemoryMapper\n");
         return EXIT_FAILURE;
     }
+
+    ScreenDevice* output = NewScreenDevice();
+    if (!output) {
+        printf("Failed To Construct ScreenDevice\n");
+        return EXIT_FAILURE;
+    }
+
+    if (mMap->Map(mMap, memory, MainMemory, ZERO_MEMORY, FULL_MEMORY, false) != NO_ERR) {
+        printf("Failed To Map MainMemory\n");
+        return EXIT_FAILURE;
+    }
+
+    if (mMap->Map(mMap, output, Screen, 0x4000, 0x40ff, true) != NO_ERR) {
+        printf("Failed To Map ScreenDevice\n");
+        return EXIT_FAILURE;
+    }
+
+    // read binary from file
+
+    // pass to CPU and execute
 
     mMap->ClearRegions(mMap);
     free(mMap);

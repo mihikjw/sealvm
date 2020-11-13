@@ -4,6 +4,7 @@
 #include <stdint.h>
 
 typedef enum DeviceType {
+    MainMemory,
     Screen,
 } DeviceType;
 

@@ -8,5 +8,6 @@
 #include "memoryMapper.h"
 #include "memoryRegion.h"
 #include "registers.h"
+#include "screenDevice.h"
 
 #endif // SEALVM_SEALVM_H

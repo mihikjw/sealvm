@@ -6,6 +6,7 @@
 #include "instructions.h"
 #include "memory.h"
 #include "memoryMapper.h"
+#include "memoryRegion.h"
 #include "registers.h"
 
 #endif // SEALVM_SEALVM_H

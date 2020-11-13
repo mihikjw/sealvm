@@ -6,7 +6,7 @@
 
 int main(int argc, const char* argv[]) {
     if (argc < 2) {
-        printf("No Binary Provided\n");
+        fprintf(stderr, "No Binary Provided\n");
         return EXIT_FAILURE;
     }
 
@@ -25,7 +25,7 @@ int main(int argc, const char* argv[]) {
         return EXIT_FAILURE;
     }
 
-    // cleanup
+    mMap->ClearRegions(mMap);
     free(mMap);
     free(memory);
 

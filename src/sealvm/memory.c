@@ -4,11 +4,11 @@
 
 #include "sealvm/defines.h"
 
-ErrCode Buffer(struct Memory* this, uint8_t** buffer, int* size);
-ErrCode GetValue(struct Memory* this, uint16_t address, uint8_t* valueOut);
-ErrCode GetValue16(struct Memory* this, uint16_t address, uint16_t* valueOut);
-ErrCode SetValue(struct Memory* this, uint16_t address, uint8_t value);
-ErrCode SetValue16(struct Memory* this, uint16_t address, uint16_t value);
+ErrCode M_Buffer(Memory* this, uint8_t** buffer, int* size);
+ErrCode M_GetValue(Memory* this, uint16_t address, uint8_t* valueOut);
+ErrCode M_GetValue16(Memory* this, uint16_t address, uint16_t* valueOut);
+ErrCode M_SetValue(Memory* this, uint16_t address, uint8_t value);
+ErrCode M_SetValue16(Memory* this, uint16_t address, uint16_t value);
 
 Memory* NewMemory(uint8_t* memory, const int memSize) {
     if (!memory || memSize <= 0) {
@@ -22,15 +22,15 @@ Memory* NewMemory(uint8_t* memory, const int memSize) {
 
     result->_buffer = memory;
     result->_bufferSize = memSize;
-    result->GetValue16 = &GetValue16;
-    result->GetValue = &GetValue;
-    result->SetValue16 = &SetValue16;
-    result->SetValue = &SetValue;
-    result->Buffer = &Buffer;
+    result->GetValue16 = &M_GetValue16;
+    result->GetValue = &M_GetValue;
+    result->SetValue16 = &M_SetValue16;
+    result->SetValue = &M_SetValue;
+    result->Buffer = &M_Buffer;
     return result;
 }
 
-ErrCode Buffer(struct Memory* this, uint8_t** buffer, int* size) {
+ErrCode M_Buffer(Memory* this, uint8_t** buffer, int* size) {
     if (!this) {
         return THIS_IS_NULL;
     }
@@ -39,7 +39,7 @@ ErrCode Buffer(struct Memory* this, uint8_t** buffer, int* size) {
     return NO_ERR;
 }
 
-ErrCode GetValue(struct Memory* this, const uint16_t address, uint8_t* valueOut) {
+ErrCode M_GetValue(Memory* this, const uint16_t address, uint8_t* valueOut) {
     if (!this) {
         return THIS_IS_NULL;
     }
@@ -50,7 +50,7 @@ ErrCode GetValue(struct Memory* this, const uint16_t address, uint8_t* valueOut)
     return NO_ERR;
 }
 
-ErrCode GetValue16(struct Memory* this, const uint16_t address, uint16_t* valueOut) {
+ErrCode M_GetValue16(Memory* this, const uint16_t address, uint16_t* valueOut) {
     if (!this) {
         return THIS_IS_NULL;
     }
@@ -64,7 +64,7 @@ ErrCode GetValue16(struct Memory* this, const uint16_t address, uint16_t* valueO
     return NO_ERR;
 }
 
-ErrCode SetValue(struct Memory* this, uint16_t address, uint8_t value) {
+ErrCode M_SetValue(Memory* this, uint16_t address, uint8_t value) {
     if (!this) {
         return THIS_IS_NULL;
     }
@@ -75,7 +75,7 @@ ErrCode SetValue(struct Memory* this, uint16_t address, uint8_t value) {
     return NO_ERR;
 }
 
-ErrCode SetValue16(struct Memory* this, uint16_t address, uint16_t value) {
+ErrCode M_SetValue16(Memory* this, uint16_t address, uint16_t value) {
     if (!this) {
         return THIS_IS_NULL;
     }

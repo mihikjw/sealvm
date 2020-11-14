@@ -10,6 +10,8 @@ typedef enum ErrCode {
     DEVICE_IS_NULL,
     CANNOT_CONSTRUCT,
     REGION_NOT_FOUND,
+    CANNOT_COMPUTE_HASH,
+    INVALID_REGISTER,
 } ErrCode;
 
 #endif // SEALVM_SEALVM_ERRORS_H

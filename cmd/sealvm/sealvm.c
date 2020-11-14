@@ -44,9 +44,12 @@ int main(int argc, const char* argv[]) {
 
     // read binary from file
 
-    // pass to CPU and execute
+    // execute program
+    CPU* cpu = NewCPU(mMap, 0x1000);
+    cpu->Run(cpu);
 
     mMap->ClearRegions(mMap);
+    cpu->_registers->Clear(cpu->_registers); // this should be hidden away
     free(mMap);
     free(memory);
 

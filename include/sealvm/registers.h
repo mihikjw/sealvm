@@ -4,7 +4,7 @@
 #include "sealvm/defines.h"
 
 // Registers contains the hex values for all the register names in the CPU
-enum Registers {
+typedef enum Registers {
     pc = 0x00, // program counter
     r1 = 0x01,
     r2 = 0x02,
@@ -18,7 +18,7 @@ enum Registers {
     sp = 0x0A,  // stack pointer
     fp = 0x0B,  // frame pointer
     im = 0x0C,  // interrupt mask
-};
+} Registers;
 
 // RegisterStrings contains the registers as strings
 const char* RegisterStrings[REGISTER_COUNT] = {"pc", "r1", "r2", "r3", "r4", "r5", "r6", "r7", "r8", "acc", "sp", "fp", "im"};

@@ -11,6 +11,9 @@ ErrCode CPU_SetRegister(CPU* this, Registers reg, uint16_t value);
 void CPU_Run(CPU* this);
 bool CPU_Cycle(CPU* this);
 
+// GeneralPurposeRegisters holds all the general purpose register names, used during push/pop stack state
+Registers CPU_GeneralPurposeRegisters[8] = {r1, r2, r3, r4, r5, r6, r7, r8};
+
 CPU* NewCPU(MemoryMapper* memory, const uint16_t interruptVectorAddr) {
     if (!memory || interruptVectorAddr > MEMORY_SIZE) {
         return NULL;
@@ -89,10 +92,7 @@ bool CPU_Cycle(CPU* this) {
 }
 
 ErrCode CPU_fetch(CPU* this, uint8_t* output) {
-    if (!this) {
-        return THIS_IS_NULL;
-    }
-
+    // `this` should already be checked before calling this internal function
     uint16_t nextInstructionAddress;
     ErrCode err = this->GetRegister(this, pc, &nextInstructionAddress);
     if (err != NO_ERR) {
@@ -108,10 +108,7 @@ ErrCode CPU_fetch(CPU* this, uint8_t* output) {
 }
 
 ErrCode CPU_fetch16(CPU* this, uint16_t* output) {
-    if (!this) {
-        return THIS_IS_NULL;
-    }
-
+    // `this` should already be checked before calling this internal function
     uint16_t nextInstructionAddress;
     ErrCode err = this->GetRegister(this, pc, &nextInstructionAddress);
     if (err != NO_ERR) {
@@ -127,10 +124,7 @@ ErrCode CPU_fetch16(CPU* this, uint16_t* output) {
 }
 
 ErrCode CPU_fetchRegisterIndex(CPU* this, Registers* output) {
-    if (!this) {
-        return THIS_IS_NULL;
-    }
-
+    // `this` should already be checked before calling this internal function
     uint8_t reg;
     ErrCode err = CPU_fetch(this, &reg);
     if (err != NO_ERR) {
@@ -146,10 +140,7 @@ ErrCode CPU_fetchRegisterIndex(CPU* this, Registers* output) {
 }
 
 bool CPU_execute(CPU* this, uint8_t instruction) {
-    if (!this) {
-        return false;
-    }
-
+    // `this` should already be checked before calling this internal function
     switch (instruction) {
         case MOV_LIT_REG: {
             return CPU_movLitReg(this);
@@ -292,11 +283,153 @@ bool CPU_execute(CPU* this, uint8_t instruction) {
         case RET_INT: {
             return CPU_retInt(this);
         }
-        // exit the CPU e.g.: HLT
-        case HLT: {
-            return false;
+    }
+
+    // HLT is not handled by above `switch`
+    return false;
+}
+
+ErrCode CPU_pushStack(CPU* this, const uint16_t value) {
+    uint16_t stackPtr;
+    ErrCode err = this->GetRegister(this, sp, &stackPtr);
+    if (err != NO_ERR) {
+        return err;
+    }
+
+    err = this->_memory->SetValue16(this->_memory, stackPtr, value);
+    if (err != NO_ERR) {
+        return err;
+    }
+
+    err = this->SetRegister(this, sp, stackPtr - 2);
+    if (err != NO_ERR) {
+        return err;
+    }
+
+    return NO_ERR;
+}
+
+ErrCode CPU_pushRegisterStack(CPU* this, const Registers reg) {
+    uint16_t regVal;
+    ErrCode err = this->GetRegister(this, reg, &regVal);
+    if (err != NO_ERR) {
+        return err;
+    }
+    return CPU_pushStack(this, regVal);
+}
+
+ErrCode CPU_popStack(CPU* this, uint16_t* output) {
+    uint16_t stackPtr;
+    ErrCode err = this->GetRegister(this, sp, &stackPtr);
+    if (err != NO_ERR) {
+        return err;
+    }
+    stackPtr += 2;
+
+    err = this->_memory->GetValue16(this->_memory, stackPtr, output);
+    if (err != NO_ERR) {
+        return err;
+    }
+
+    err = this->SetRegister(this, sp, stackPtr);
+    if (err != NO_ERR) {
+        return err;
+    }
+
+    this->_stackFrameSize -= 2;
+    return NO_ERR;
+}
+
+ErrCode CPU_popRegisterStack(CPU* this, const Registers reg) {
+    uint16_t value;
+    ErrCode err = CPU_popStack(this, &value);
+    if (err != NO_ERR) {
+        return err;
+    }
+
+    return this->SetRegister(this, reg, value);
+}
+
+ErrCode CPU_pushStateStack(CPU* this) {
+    // push general-purpose registers to the stack in ascending order (r1 > r8)
+    ErrCode err;
+    for (register int i = 0; i < 8; i++) {
+        err = CPU_pushRegisterStack(this, CPU_GeneralPurposeRegisters[i]);
+        if (err != NO_ERR) {
+            return err;
         }
     }
 
-    return false;
+    // push return address (program counter register)
+    err = CPU_pushRegisterStack(this, pc);
+    if (err != NO_ERR) {
+        return err;
+    }
+
+    // push stack frame size
+    err = CPU_pushStack(this, this->_stackFrameSize + 2);
+    if (err != NO_ERR) {
+        return err;
+    }
+
+    // set frame-pointer to the current stack-pointer location
+    err = CPU_pushRegisterStack(this, sp);
+    if (err != NO_ERR) {
+        return err;
+    }
+
+    // reset frame size, allows subsiquent state push
+    this->_stackFrameSize = 0;
+    return NO_ERR;
+}
+
+ErrCode CPU_popStateStack(CPU* this) {
+    // restore stack pointer
+    uint16_t framePtrVal;
+    ErrCode err = this->GetRegister(this, fp, &framePtrVal);
+    if (err != NO_ERR) {
+        return err;
+    }
+    err = this->SetRegister(this, sp, framePtrVal);
+    if (err != NO_ERR) {
+        return err;
+    }
+
+    // pop frame size
+    uint16_t frameSize;
+    err = CPU_popStack(this, &frameSize);
+    if (err != NO_ERR) {
+        return err;
+    }
+
+    // pop program counter
+    err = CPU_popRegisterStack(this, pc);
+    if (err != NO_ERR) {
+        return err;
+    }
+
+    // restore general-purpose registers
+    for (register int i = 7; i >= 0; i--) {
+        err = CPU_pushRegisterStack(this, CPU_GeneralPurposeRegisters[i]);
+        if (err != NO_ERR) {
+            return err;
+        }
+    }
+
+    // return stack pointer to just before we pushed anything at all
+    uint16_t nArgs;
+    err = CPU_popStack(this, &nArgs);
+    if (err != NO_ERR) {
+        return err;
+    }
+    uint16_t regVal;
+    for (register int i = 0; i < nArgs; i++) {
+        err = CPU_popStack(this, &regVal);
+        if (err != NO_ERR) {
+            return err;
+        }
+    }
+
+    // return frame pointer to the beginning of this frame
+    return this->SetRegister(this, fp, framePtrVal);
 }

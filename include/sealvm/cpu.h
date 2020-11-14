@@ -51,4 +51,17 @@ ErrCode CPU_fetchRegisterIndex(CPU* this, Registers* output);
 // CPU_execute executes the given instruction - designed for internal use only
 bool CPU_execute(CPU* this, uint8_t instruction);
 
+// CPU_pushStack pushes the given value onto the stack - designed for internal use only
+ErrCode CPU_pushStack(CPU* this, const uint16_t value);
+// CPU_pushRegisterStack pushes the value held in the given register onto the stack - designed for internal use only
+ErrCode CPU_pushRegisterStack(CPU* this, const Registers reg);
+// CPU_popStack pops a value off the stack, puts it in `output` arg ptr - designed for internal use only
+ErrCode CPU_popStack(CPU* this, uint16_t* output);
+// CPU_pushStackStack push's all current CPU state to the head of the stack - designed for internal use only
+ErrCode CPU_pushStateStack(CPU* this);
+// CPU_popStateStack returns the CPU to a state stored on the head of the stack - designed for internal use only
+ErrCode CPU_popStateStack(CPU* this);
+// CPU_popRegisterStack pops the current stack head value into the given register - designed for internal use only
+ErrCode CPU_popRegisterStack(CPU* this, const Registers reg);
+
 #endif // SEALVM_SEALVM_CPU_H

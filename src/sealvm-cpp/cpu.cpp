@@ -168,7 +168,7 @@ bool CPU::execute(const uint16_t instruction) {
             break;
         }
 
-        // move literal at (literal + register) to register e.g.: MOV $ABCD, r1, r2
+        // move literal at (literal + register) address to register e.g.: MOV $ABCD, r1, r2
         case Instructions::MOV_LIT_OFF_REG: {
             auto baseAddr = fetch16();
             auto r1 = fetchRegisterIndex();

@@ -42,4 +42,13 @@ typedef struct CPU {
 // NewCPU is a constructor for a CPU object
 CPU* NewCPU(MemoryMapper* memory, const uint16_t interruptVectorAddr);
 
+// CPU_fetch returns the next 8-bits from memory - designed for internal use only
+ErrCode CPU_fetch(CPU* this, uint8_t* output);
+// CPU_fetch16 returns the next 16-bits from memory - designed for internal use only
+ErrCode CPU_fetch16(CPU* this, uint16_t* output);
+// CPU_fetchRegisterIndex returns the next register literal from memory - designed for internal use only
+ErrCode CPU_fetchRegisterIndex(CPU* this, Registers* output);
+// CPU_execute executes the given instruction - designed for internal use only
+bool CPU_execute(CPU* this, uint8_t instruction);
+
 #endif // SEALVM_SEALVM_CPU_H

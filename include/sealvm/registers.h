@@ -20,7 +20,4 @@ typedef enum Registers {
     im = 0x0C,  // interrupt mask
 } Registers;
 
-// RegisterStrings contains the registers as strings
-const char* RegisterStrings[REGISTER_COUNT] = {"pc", "r1", "r2", "r3", "r4", "r5", "r6", "r7", "r8", "acc", "sp", "fp", "im"};
-
 #endif // SEALVM_SEALVM_REGISTERS_H

@@ -49,7 +49,6 @@ int main(int argc, const char* argv[]) {
     cpu->Run(cpu);
 
     mMap->ClearRegions(mMap);
-    cpu->_registers->Clear(cpu->_registers); // this should be hidden away
     free(mMap);
     free(memory);
 

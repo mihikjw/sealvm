@@ -28,26 +28,11 @@ CPU* NewCPU(MemoryMapper* memory, const uint16_t interruptVectorAddr) {
     result->_stackFrameSize = 0;
     result->_interruptVectorAddr = interruptVectorAddr;
     result->_memory = memory;
+    result->_registers = NewRegisterStore();
     result->SetRegister = &CPU_SetRegister;
     result->GetRegister = &CPU_GetRegister;
     result->Run = &CPU_Run;
     result->Cycle = &CPU_Cycle;
-
-    result->_registers = NewRegisterMap(REGISTER_COUNT);
-    result->_registers->Set(result->_registers, pc, ZERO_MEMORY);
-    result->_registers->Set(result->_registers, r1, ZERO_MEMORY);
-    result->_registers->Set(result->_registers, r2, ZERO_MEMORY);
-    result->_registers->Set(result->_registers, r3, ZERO_MEMORY);
-    result->_registers->Set(result->_registers, r4, ZERO_MEMORY);
-    result->_registers->Set(result->_registers, r5, ZERO_MEMORY);
-    result->_registers->Set(result->_registers, r6, ZERO_MEMORY);
-    result->_registers->Set(result->_registers, r7, ZERO_MEMORY);
-    result->_registers->Set(result->_registers, r8, ZERO_MEMORY);
-    result->_registers->Set(result->_registers, acc, ZERO_MEMORY);
-    result->_registers->Set(result->_registers, sp, FULL_MEMORY - 1);
-    result->_registers->Set(result->_registers, fp, FULL_MEMORY - 1);
-    result->_registers->Set(result->_registers, im, FULL_MEMORY);
-
     return result;
 }
 
@@ -58,11 +43,12 @@ ErrCode CPU_GetRegister(CPU* this, const Registers reg, uint16_t* valueOut) {
     return this->_registers->Get(this->_registers, reg, valueOut);
 }
 
-ErrCode CPU_SetRegister(CPU* this, Registers reg, uint16_t value) {
+ErrCode CPU_SetRegister(CPU* this, const Registers reg, uint16_t value) {
     if (!this) {
         return THIS_IS_NULL;
     }
     this->_registers->Set(this->_registers, reg, value);
+    return NO_ERR;
 }
 
 void CPU_Run(CPU* this) {

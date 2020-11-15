@@ -6,7 +6,7 @@
 
 #include "sealvm/errors.h"
 #include "sealvm/memoryMapper.h"
-#include "sealvm/registerMap.h"
+#include "sealvm/registerStore.h"
 #include "sealvm/registers.h"
 
 // CPU represents the Central Processing Unit of the VM
@@ -35,8 +35,8 @@ typedef struct CPU {
     // _stackFrameSize tracks the size of the stack - could be used in a register but I don't want this to be user accessable
     uint8_t _stackFrameSize;
 
-    // _registers contains a map of {register: value}
-    RegisterMap* _registers;
+    // _registers contains the storage for registers
+    RegisterStore* _registers;
 } CPU;
 
 // NewCPU is a constructor for a CPU object

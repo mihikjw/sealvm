@@ -323,66 +323,784 @@ bool CPU_movLitOffReg(CPU* this) {
     return true;
 }
 
-bool CPU_addLitReg(CPU* this) { return false; }
+bool CPU_addLitReg(CPU* this) {
+    uint16_t lit;
+    if (CPU_fetch16(this, &lit) != NO_ERR) {
+        return false;
+    }
 
-bool CPU_subLitReg(CPU* this) { return false; }
+    Registers reg;
+    if (CPU_fetchRegisterIndex(this, &reg) != NO_ERR) {
+        return false;
+    }
 
-bool CPU_subRegLit(CPU* this) { return false; }
+    uint16_t regVal;
+    if (this->GetRegister(this, reg, &regVal) != NO_ERR) {
+        return false;
+    }
 
-bool CPU_subRegReg(CPU* this) { return false; }
+    if (this->SetRegister(this, acc, lit + regVal) != NO_ERR) {
+        return false;
+    }
 
-bool CPU_mulLitReg(CPU* this) { return false; }
+    return true;
+}
 
-bool CPU_mulRegReg(CPU* this) { return false; }
+bool CPU_subLitReg(CPU* this) {
+    uint16_t lit;
+    if (CPU_fetch16(this, &lit) != NO_ERR) {
+        return false;
+    }
 
-bool CPU_incReg(CPU* this) { return false; }
+    Registers reg;
+    if (CPU_fetchRegisterIndex(this, &reg) != NO_ERR) {
+        return false;
+    }
 
-bool CPU_decReg(CPU* this) { return false; }
+    uint16_t regVal;
+    if (this->GetRegister(this, reg, &regVal) != NO_ERR) {
+        return false;
+    }
 
-bool CPU_lsfRegLit(CPU* this) { return false; }
+    if (this->SetRegister(this, acc, lit - regVal) != NO_ERR) {
+        return false;
+    }
 
-bool CPU_lsfRegReg(CPU* this) { return false; }
+    return true;
+}
 
-bool CPU_rsfRegLit(CPU* this) { return false; }
+bool CPU_subRegLit(CPU* this) {
+    Registers reg;
+    if (CPU_fetchRegisterIndex(this, &reg) != NO_ERR) {
+        return false;
+    }
 
-bool CPU_rsfRegReg(CPU* this) { return false; }
+    uint16_t lit;
+    if (CPU_fetch16(this, &lit) != NO_ERR) {
+        return false;
+    }
 
-bool CPU_andRegLit(CPU* this) { return false; }
+    uint16_t regVal;
+    if (this->GetRegister(this, reg, &regVal) != NO_ERR) {
+        return false;
+    }
 
-bool CPU_andRegReg(CPU* this) { return false; }
+    if (this->SetRegister(this, acc, regVal - lit) != NO_ERR) {
+        return false;
+    }
 
-bool CPU_orRegLit(CPU* this) { return false; }
+    return true;
+}
 
-bool CPU_orRegReg(CPU* this) { return false; }
+bool CPU_subRegReg(CPU* this) {
+    Registers reg1;
+    if (CPU_fetchRegisterIndex(this, &reg1) != NO_ERR) {
+        return false;
+    }
 
-bool CPU_xorRegLit(CPU* this) { return false; }
+    Registers reg2;
+    if (CPU_fetchRegisterIndex(this, &reg2) != NO_ERR) {
+        return false;
+    }
 
-bool CPU_xorRegReg(CPU* this) { return false; }
+    uint16_t reg1Val;
+    if (this->GetRegister(this, reg1, &reg1Val) != NO_ERR) {
+        return false;
+    }
 
-bool CPU_not(CPU* this) { return false; }
+    uint16_t reg2Val;
+    if (this->GetRegister(this, reg2, &reg2Val) != NO_ERR) {
+        return false;
+    }
 
-bool CPU_jneReg(CPU* this) { return false; }
+    if (this->SetRegister(this, acc, reg1Val - reg2Val) != NO_ERR) {
+        return false;
+    }
 
-bool CPU_jeqReg(CPU* this) { return false; }
+    return true;
+}
 
-bool CPU_jeqLit(CPU* this) { return false; }
+bool CPU_mulLitReg(CPU* this) {
+    uint16_t lit;
+    if (CPU_fetch16(this, &lit) != NO_ERR) {
+        return false;
+    }
 
-bool CPU_jltReg(CPU* this) { return false; }
+    Registers reg;
+    if (CPU_fetchRegisterIndex(this, &reg) != NO_ERR) {
+        return false;
+    }
 
-bool CPU_jltLit(CPU* this) { return false; }
+    uint16_t regVal;
+    if (this->GetRegister(this, reg, &regVal) != NO_ERR) {
+        return false;
+    }
 
-bool CPU_jgtReg(CPU* this) { return false; }
+    if (this->SetRegister(this, acc, lit * regVal) != NO_ERR) {
+        return false;
+    }
 
-bool CPU_jgtLit(CPU* this) { return false; }
+    return true;
+}
 
-bool CPU_jleReg(CPU* this) { return false; }
+bool CPU_mulRegReg(CPU* this) {
+    Registers reg1;
+    if (CPU_fetchRegisterIndex(this, &reg1) != NO_ERR) {
+        return false;
+    }
 
-bool CPU_jleLit(CPU* this) { return false; }
+    Registers reg2;
+    if (CPU_fetchRegisterIndex(this, &reg2) != NO_ERR) {
+        return false;
+    }
 
-bool CPU_jgeReg(CPU* this) { return false; }
+    uint16_t reg1Val;
+    if (this->GetRegister(this, reg1, &reg1Val) != NO_ERR) {
+        return false;
+    }
 
-bool CPU_jgeLit(CPU* this) { return false; }
+    uint16_t reg2Val;
+    if (this->GetRegister(this, reg2, &reg2Val) != NO_ERR) {
+        return false;
+    }
 
-bool CPU_int(CPU* this) { return false; }
+    if (this->SetRegister(this, acc, reg1Val * reg2Val) != NO_ERR) {
+        return false;
+    }
 
-bool CPU_retInt(CPU* this) { return false; }
+    return true;
+}
+
+bool CPU_incReg(CPU* this) {
+    Registers reg;
+    if (CPU_fetchRegisterIndex(this, &reg) != NO_ERR) {
+        return false;
+    }
+
+    uint16_t regVal;
+    if (this->GetRegister(this, reg, &regVal) != NO_ERR) {
+        return false;
+    }
+
+    if (this->SetRegister(this, reg, regVal++) != NO_ERR) {
+        return false;
+    }
+
+    return true;
+}
+
+bool CPU_decReg(CPU* this) {
+    Registers reg;
+    if (CPU_fetchRegisterIndex(this, &reg) != NO_ERR) {
+        return false;
+    }
+
+    uint16_t regVal;
+    if (this->GetRegister(this, reg, &regVal) != NO_ERR) {
+        return false;
+    }
+
+    if (this->SetRegister(this, reg, regVal--) != NO_ERR) {
+        return false;
+    }
+
+    return true;
+}
+
+bool CPU_lsfRegLit(CPU* this) {
+    Registers reg;
+    if (CPU_fetchRegisterIndex(this, &reg) != NO_ERR) {
+        return false;
+    }
+
+    uint16_t lit;
+    if (CPU_fetch16(this, &lit) != NO_ERR) {
+        return false;
+    }
+
+    uint16_t regVal;
+    if (this->GetRegister(this, reg, &regVal) != NO_ERR) {
+        return false;
+    }
+
+    if (this->SetRegister(this, reg, regVal << lit) != NO_ERR) {
+        return false;
+    }
+
+    return true;
+}
+
+bool CPU_lsfRegReg(CPU* this) {
+    Registers reg1;
+    if (CPU_fetchRegisterIndex(this, &reg1) != NO_ERR) {
+        return false;
+    }
+
+    Registers reg2;
+    if (CPU_fetchRegisterIndex(this, &reg2) != NO_ERR) {
+        return false;
+    }
+
+    uint16_t reg1Val;
+    if (this->GetRegister(this, reg1, &reg1Val) != NO_ERR) {
+        return false;
+    }
+
+    uint16_t reg2Val;
+    if (this->GetRegister(this, reg2, &reg2Val) != NO_ERR) {
+        return false;
+    }
+
+    if (this->SetRegister(this, reg1, reg1Val << reg2Val) != NO_ERR) {
+        return false;
+    }
+
+    return true;
+}
+
+bool CPU_rsfRegLit(CPU* this) {
+    Registers reg;
+    if (CPU_fetchRegisterIndex(this, &reg) != NO_ERR) {
+        return false;
+    }
+
+    uint16_t lit;
+    if (CPU_fetch16(this, &lit) != NO_ERR) {
+        return false;
+    }
+
+    uint16_t regVal;
+    if (this->GetRegister(this, reg, &regVal) != NO_ERR) {
+        return false;
+    }
+
+    if (this->SetRegister(this, reg, regVal >> lit) != NO_ERR) {
+        return false;
+    }
+
+    return true;
+}
+
+bool CPU_rsfRegReg(CPU* this) {
+    Registers reg1;
+    if (CPU_fetchRegisterIndex(this, &reg1) != NO_ERR) {
+        return false;
+    }
+
+    Registers reg2;
+    if (CPU_fetchRegisterIndex(this, &reg2) != NO_ERR) {
+        return false;
+    }
+
+    uint16_t reg1Val;
+    if (this->GetRegister(this, reg1, &reg1Val) != NO_ERR) {
+        return false;
+    }
+
+    uint16_t reg2Val;
+    if (this->GetRegister(this, reg2, &reg2Val) != NO_ERR) {
+        return false;
+    }
+
+    if (this->SetRegister(this, reg1, reg1Val >> reg2Val) != NO_ERR) {
+        return false;
+    }
+
+    return true;
+}
+
+bool CPU_andRegLit(CPU* this) {
+    Registers reg;
+    if (CPU_fetchRegisterIndex(this, &reg) != NO_ERR) {
+        return false;
+    }
+
+    uint16_t lit;
+    if (CPU_fetch16(this, &lit) != NO_ERR) {
+        return false;
+    }
+
+    uint16_t regVal;
+    if (this->GetRegister(this, reg, &regVal) != NO_ERR) {
+        return false;
+    }
+
+    if (this->SetRegister(this, acc, regVal & lit) != NO_ERR) {
+        return false;
+    }
+
+    return true;
+}
+
+bool CPU_andRegReg(CPU* this) {
+    Registers reg1;
+    if (CPU_fetchRegisterIndex(this, &reg1) != NO_ERR) {
+        return false;
+    }
+
+    Registers reg2;
+    if (CPU_fetchRegisterIndex(this, &reg2) != NO_ERR) {
+        return false;
+    }
+
+    uint16_t reg1Val;
+    if (this->GetRegister(this, reg1, &reg1Val) != NO_ERR) {
+        return false;
+    }
+
+    uint16_t reg2Val;
+    if (this->GetRegister(this, reg2, &reg2Val) != NO_ERR) {
+        return false;
+    }
+
+    if (this->SetRegister(this, acc, reg1Val & reg2Val) != NO_ERR) {
+        return false;
+    }
+
+    return true;
+}
+
+bool CPU_orRegLit(CPU* this) {
+    Registers reg;
+    if (CPU_fetchRegisterIndex(this, &reg) != NO_ERR) {
+        return false;
+    }
+
+    uint16_t lit;
+    if (CPU_fetch16(this, &lit) != NO_ERR) {
+        return false;
+    }
+
+    uint16_t regVal;
+    if (this->GetRegister(this, reg, &regVal) != NO_ERR) {
+        return false;
+    }
+
+    if (this->SetRegister(this, acc, regVal | lit) != NO_ERR) {
+        return false;
+    }
+
+    return true;
+}
+
+bool CPU_orRegReg(CPU* this) {
+    Registers reg1;
+    if (CPU_fetchRegisterIndex(this, &reg1) != NO_ERR) {
+        return false;
+    }
+
+    Registers reg2;
+    if (CPU_fetchRegisterIndex(this, &reg2) != NO_ERR) {
+        return false;
+    }
+
+    uint16_t reg1Val;
+    if (this->GetRegister(this, reg1, &reg1Val) != NO_ERR) {
+        return false;
+    }
+
+    uint16_t reg2Val;
+    if (this->GetRegister(this, reg2, &reg2Val) != NO_ERR) {
+        return false;
+    }
+
+    if (this->SetRegister(this, acc, reg1Val | reg2Val) != NO_ERR) {
+        return false;
+    }
+
+    return true;
+}
+
+bool CPU_xorRegLit(CPU* this) {
+    Registers reg;
+    if (CPU_fetchRegisterIndex(this, &reg) != NO_ERR) {
+        return false;
+    }
+
+    uint16_t lit;
+    if (CPU_fetch16(this, &lit) != NO_ERR) {
+        return false;
+    }
+
+    uint16_t regVal;
+    if (this->GetRegister(this, reg, &regVal) != NO_ERR) {
+        return false;
+    }
+
+    if (this->SetRegister(this, acc, regVal ^ lit) != NO_ERR) {
+        return false;
+    }
+
+    return true;
+}
+
+bool CPU_xorRegReg(CPU* this) {
+    Registers reg1;
+    if (CPU_fetchRegisterIndex(this, &reg1) != NO_ERR) {
+        return false;
+    }
+
+    Registers reg2;
+    if (CPU_fetchRegisterIndex(this, &reg2) != NO_ERR) {
+        return false;
+    }
+
+    uint16_t reg1Val;
+    if (this->GetRegister(this, reg1, &reg1Val) != NO_ERR) {
+        return false;
+    }
+
+    uint16_t reg2Val;
+    if (this->GetRegister(this, reg2, &reg2Val) != NO_ERR) {
+        return false;
+    }
+
+    if (this->SetRegister(this, acc, reg1Val ^ reg2Val) != NO_ERR) {
+        return false;
+    }
+
+    return true;
+}
+
+bool CPU_not(CPU* this) {
+    Registers reg;
+    if (CPU_fetchRegisterIndex(this, &reg) != NO_ERR) {
+        return false;
+    }
+
+    uint16_t val;
+    if (this->GetRegister(this, reg, &val) != NO_ERR) {
+        return false;
+    }
+
+    // only want bottom 16 bits incase anything funky happens
+    if (this->SetRegister(this, acc, (~val) & 0xffff) != NO_ERR) {
+        return false;
+    }
+}
+
+bool CPU_jneReg(CPU* this) {
+    Registers reg;
+    if (CPU_fetchRegisterIndex(this, &reg) != NO_ERR) {
+        return false;
+    }
+
+    uint16_t jmpAddr;
+    if (CPU_fetch16(this, &jmpAddr) != NO_ERR) {
+        return false;
+    }
+
+    uint16_t regVal;
+    if (this->GetRegister(this, reg, &regVal) != NO_ERR) {
+        return false;
+    }
+
+    uint16_t accVal;
+    if (this->GetRegister(this, acc, &accVal) != NO_ERR) {
+        return false;
+    }
+
+    if (regVal != accVal) {
+        if (this->SetRegister(this, pc, jmpAddr) != NO_ERR) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool CPU_jeqReg(CPU* this) {
+    Registers reg;
+    if (CPU_fetchRegisterIndex(this, &reg) != NO_ERR) {
+        return false;
+    }
+
+    uint16_t jmpAddr;
+    if (CPU_fetch16(this, &jmpAddr) != NO_ERR) {
+        return false;
+    }
+
+    uint16_t regVal;
+    if (this->GetRegister(this, reg, &regVal) != NO_ERR) {
+        return false;
+    }
+
+    uint16_t accVal;
+    if (this->GetRegister(this, acc, &accVal) != NO_ERR) {
+        return false;
+    }
+
+    if (regVal == accVal) {
+        if (this->SetRegister(this, pc, jmpAddr) != NO_ERR) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool CPU_jeqLit(CPU* this) {
+    uint16_t literal;
+    if (CPU_fetch16(this, &literal) != NO_ERR) {
+        return false;
+    }
+
+    uint16_t jmpAddr;
+    if (CPU_fetch16(this, &jmpAddr) != NO_ERR) {
+        return false;
+    }
+
+    uint16_t accVal;
+    if (this->GetRegister(this, acc, &accVal) != NO_ERR) {
+        return false;
+    }
+
+    if (literal == accVal) {
+        if (this->SetRegister(this, pc, jmpAddr) != NO_ERR) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool CPU_jltReg(CPU* this) {
+    Registers reg;
+    if (CPU_fetchRegisterIndex(this, &reg) != NO_ERR) {
+        return false;
+    }
+
+    uint16_t jmpAddr;
+    if (CPU_fetch16(this, &jmpAddr) != NO_ERR) {
+        return false;
+    }
+
+    uint16_t regVal;
+    if (this->GetRegister(this, reg, &regVal) != NO_ERR) {
+        return false;
+    }
+
+    uint16_t accVal;
+    if (this->GetRegister(this, acc, &accVal) != NO_ERR) {
+        return false;
+    }
+
+    if (regVal < accVal) {
+        if (this->SetRegister(this, pc, jmpAddr) != NO_ERR) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool CPU_jltLit(CPU* this) {
+    uint16_t literal;
+    if (CPU_fetch16(this, &literal) != NO_ERR) {
+        return false;
+    }
+
+    uint16_t jmpAddr;
+    if (CPU_fetch16(this, &jmpAddr) != NO_ERR) {
+        return false;
+    }
+
+    uint16_t accVal;
+    if (this->GetRegister(this, acc, &accVal) != NO_ERR) {
+        return false;
+    }
+
+    if (literal < accVal) {
+        if (this->SetRegister(this, pc, jmpAddr) != NO_ERR) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool CPU_jgtReg(CPU* this) {
+    Registers reg;
+    if (CPU_fetchRegisterIndex(this, &reg) != NO_ERR) {
+        return false;
+    }
+
+    uint16_t jmpAddr;
+    if (CPU_fetch16(this, &jmpAddr) != NO_ERR) {
+        return false;
+    }
+
+    uint16_t regVal;
+    if (this->GetRegister(this, reg, &regVal) != NO_ERR) {
+        return false;
+    }
+
+    uint16_t accVal;
+    if (this->GetRegister(this, acc, &accVal) != NO_ERR) {
+        return false;
+    }
+
+    if (regVal > accVal) {
+        if (this->SetRegister(this, pc, jmpAddr) != NO_ERR) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool CPU_jgtLit(CPU* this) {
+    uint16_t literal;
+    if (CPU_fetch16(this, &literal) != NO_ERR) {
+        return false;
+    }
+
+    uint16_t jmpAddr;
+    if (CPU_fetch16(this, &jmpAddr) != NO_ERR) {
+        return false;
+    }
+
+    uint16_t accVal;
+    if (this->GetRegister(this, acc, &accVal) != NO_ERR) {
+        return false;
+    }
+
+    if (literal > accVal) {
+        if (this->SetRegister(this, pc, jmpAddr) != NO_ERR) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool CPU_jleReg(CPU* this) {
+    Registers reg;
+    if (CPU_fetchRegisterIndex(this, &reg) != NO_ERR) {
+        return false;
+    }
+
+    uint16_t jmpAddr;
+    if (CPU_fetch16(this, &jmpAddr) != NO_ERR) {
+        return false;
+    }
+
+    uint16_t regVal;
+    if (this->GetRegister(this, reg, &regVal) != NO_ERR) {
+        return false;
+    }
+
+    uint16_t accVal;
+    if (this->GetRegister(this, acc, &accVal) != NO_ERR) {
+        return false;
+    }
+
+    if (regVal <= accVal) {
+        if (this->SetRegister(this, pc, jmpAddr) != NO_ERR) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool CPU_jleLit(CPU* this) {
+    uint16_t literal;
+    if (CPU_fetch16(this, &literal) != NO_ERR) {
+        return false;
+    }
+
+    uint16_t jmpAddr;
+    if (CPU_fetch16(this, &jmpAddr) != NO_ERR) {
+        return false;
+    }
+
+    uint16_t accVal;
+    if (this->GetRegister(this, acc, &accVal) != NO_ERR) {
+        return false;
+    }
+
+    if (literal <= accVal) {
+        if (this->SetRegister(this, pc, jmpAddr) != NO_ERR) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool CPU_jgeReg(CPU* this) {
+    Registers reg;
+    if (CPU_fetchRegisterIndex(this, &reg) != NO_ERR) {
+        return false;
+    }
+
+    uint16_t jmpAddr;
+    if (CPU_fetch16(this, &jmpAddr) != NO_ERR) {
+        return false;
+    }
+
+    uint16_t regVal;
+    if (this->GetRegister(this, reg, &regVal) != NO_ERR) {
+        return false;
+    }
+
+    uint16_t accVal;
+    if (this->GetRegister(this, acc, &accVal) != NO_ERR) {
+        return false;
+    }
+
+    if (regVal >= accVal) {
+        if (this->SetRegister(this, pc, jmpAddr) != NO_ERR) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool CPU_jgeLit(CPU* this) {
+    uint16_t literal;
+    if (CPU_fetch16(this, &literal) != NO_ERR) {
+        return false;
+    }
+
+    uint16_t jmpAddr;
+    if (CPU_fetch16(this, &jmpAddr) != NO_ERR) {
+        return false;
+    }
+
+    uint16_t accVal;
+    if (this->GetRegister(this, acc, &accVal) != NO_ERR) {
+        return false;
+    }
+
+    if (literal >= accVal) {
+        if (this->SetRegister(this, pc, jmpAddr) != NO_ERR) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool CPU_int(CPU* this) {
+    uint16_t vectorIndex;
+    if (CPU_fetch16(this, &vectorIndex) != NO_ERR) {
+        return false;
+    }
+
+    if (CPU_handleInterrupt(this, vectorIndex) != NO_ERR) {
+        return false;
+    }
+
+    return true;
+}
+
+bool CPU_retInt(CPU* this) {
+    this->_isInInterrupt = false;
+    if (CPU_popStateStack(this) != NO_ERR) {
+        return false;
+    }
+    return true;
+}

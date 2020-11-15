@@ -64,4 +64,7 @@ ErrCode CPU_popStateStack(CPU* this);
 // CPU_popRegisterStack pops the current stack head value into the given register - designed for internal use only
 ErrCode CPU_popRegisterStack(CPU* this, const Registers reg);
 
+// CPU_handleInterrupt is a generic interrupt handler function
+ErrCode CPU_handleInterrupt(CPU* this, const uint16_t vectorIndex);
+
 #endif // SEALVM_SEALVM_CPU_H

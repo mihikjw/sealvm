@@ -275,7 +275,7 @@ bool CPU::execute(const uint16_t instruction) {
             auto reg = fetchRegisterIndex();
             auto lit = fetch16();
             auto val = GetRegister(reg);
-            SetRegister(r1, val >> lit);
+            SetRegister(reg, val >> lit);
             break;
         }
 

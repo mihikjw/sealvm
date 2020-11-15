@@ -433,3 +433,39 @@ ErrCode CPU_popStateStack(CPU* this) {
     // return frame pointer to the beginning of this frame
     return this->SetRegister(this, fp, framePtrVal);
 }
+
+ErrCode CPU_handleInterrupt(CPU* this, const uint16_t vectorIndex) {
+    uint16_t index = vectorIndex % 0xf;
+
+    uint16_t interruptMask;
+    ErrCode err = this->GetRegister(this, im, &interruptMask);
+    if (err != NO_ERR) {
+        return err;
+    }
+
+    bool isMasked = (1 << index) & interruptMask;
+
+    if (!isMasked) {
+        // no action, interrupt disabled
+        return NO_ERR;
+    }
+
+    // each address is 16-bits so index requires doubling
+    uint16_t interruptAddr;
+    err = this->_memory->GetValue16(this->_memory, this->_interruptVectorAddr + (index * 2), &interruptAddr);
+
+    if (!this->_isInInterrupt) {
+        // push state onto stack to allow subsiquent interrupts, use 0 for args
+        err = CPU_pushStack(this, 0);
+        if (err != NO_ERR) {
+            return err;
+        }
+        err = CPU_pushStateStack(this);
+        if (err != NO_ERR) {
+            return err;
+        }
+    }
+
+    this->_isInInterrupt = true;
+    return this->SetRegister(this, pc, interruptAddr);
+}

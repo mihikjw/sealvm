@@ -6,35 +6,8 @@
 #include "sealvm/defines.h"
 #include "sealvm/instructions.h"
 
-ErrCode CPU_GetRegister(CPU* this, Registers reg, uint16_t* valueOut);
-ErrCode CPU_SetRegister(CPU* this, Registers reg, uint16_t value);
-void CPU_Run(CPU* this);
-bool CPU_Cycle(CPU* this);
-
 // GeneralPurposeRegisters holds all the general purpose register names, used during push/pop stack state
 Registers CPU_GeneralPurposeRegisters[8] = {r1, r2, r3, r4, r5, r6, r7, r8};
-
-CPU* NewCPU(MemoryMapper* memory, const uint16_t interruptVectorAddr) {
-    if (!memory || interruptVectorAddr > MEMORY_SIZE) {
-        return NULL;
-    }
-
-    CPU* result = malloc(sizeof(CPU));
-    if (!result) {
-        return NULL;
-    }
-
-    result->_isInInterrupt = false;
-    result->_stackFrameSize = 0;
-    result->_interruptVectorAddr = interruptVectorAddr;
-    result->_memory = memory;
-    result->_registers = NewRegisterStore();
-    result->SetRegister = &CPU_SetRegister;
-    result->GetRegister = &CPU_GetRegister;
-    result->Run = &CPU_Run;
-    result->Cycle = &CPU_Cycle;
-    return result;
-}
 
 ErrCode CPU_GetRegister(CPU* this, const Registers reg, uint16_t* valueOut) {
     if (!this) {
@@ -75,6 +48,28 @@ bool CPU_Cycle(CPU* this) {
     }
 
     return CPU_execute(this, instruction);
+}
+
+CPU* NewCPU(MemoryMapper* memory, const uint16_t interruptVectorAddr) {
+    if (!memory || interruptVectorAddr > MEMORY_SIZE) {
+        return NULL;
+    }
+
+    CPU* result = malloc(sizeof(CPU));
+    if (!result) {
+        return NULL;
+    }
+
+    result->_isInInterrupt = false;
+    result->_stackFrameSize = 0;
+    result->_interruptVectorAddr = interruptVectorAddr;
+    result->_memory = memory;
+    result->_registers = NewRegisterStore();
+    result->SetRegister = &CPU_SetRegister;
+    result->GetRegister = &CPU_GetRegister;
+    result->Run = &CPU_Run;
+    result->Cycle = &CPU_Cycle;
+    return result;
 }
 
 ErrCode CPU_fetch(CPU* this, uint8_t* output) {

@@ -6,33 +6,6 @@
 #include "sealvm/memory.h"
 #include "sealvm/screenDevice.h"
 
-ErrCode MR_GetValue(MemoryRegion* this, uint16_t address, uint8_t* valueOut);
-ErrCode MR_GetValue16(MemoryRegion* this, uint16_t address, uint16_t* valueOut);
-ErrCode MR_SetValue(MemoryRegion* this, uint16_t address, uint8_t value);
-ErrCode MR_SetValue16(MemoryRegion* this, uint16_t address, uint16_t value);
-
-MemoryRegion* NewMemoryRegion(void* device, const uint16_t deviceType, const uint16_t startAddr, const uint16_t endAddr, bool remap) {
-    if (!device) {
-        return NULL;
-    }
-
-    MemoryRegion* result = malloc(sizeof(MemoryRegion));
-    if (!result) {
-        return NULL;
-    }
-
-    result->Device = device;
-    result->DeviceType = deviceType;
-    result->StartAddr = startAddr;
-    result->EndAddr = endAddr;
-    result->Remap = remap;
-    result->GetValue16 = &MR_GetValue16;
-    result->GetValue = &MR_GetValue;
-    result->SetValue16 = &MR_SetValue16;
-    result->SetValue = &MR_SetValue;
-    return result;
-}
-
 ErrCode MR_GetValue(MemoryRegion* this, uint16_t address, uint8_t* valueOut) {
     if (!this) {
         return THIS_IS_NULL;
@@ -120,4 +93,26 @@ ErrCode MR_SetValue16(MemoryRegion* this, uint16_t address, uint16_t value) {
             return DEVICE_TYPE_NOT_SUPPORTED;
         }
     }
+}
+
+MemoryRegion* NewMemoryRegion(void* device, const uint16_t deviceType, const uint16_t startAddr, const uint16_t endAddr, bool remap) {
+    if (!device) {
+        return NULL;
+    }
+
+    MemoryRegion* result = malloc(sizeof(MemoryRegion));
+    if (!result) {
+        return NULL;
+    }
+
+    result->Device = device;
+    result->DeviceType = deviceType;
+    result->StartAddr = startAddr;
+    result->EndAddr = endAddr;
+    result->Remap = remap;
+    result->GetValue16 = &MR_GetValue16;
+    result->GetValue = &MR_GetValue;
+    result->SetValue16 = &MR_SetValue16;
+    result->SetValue = &MR_SetValue;
+    return result;
 }

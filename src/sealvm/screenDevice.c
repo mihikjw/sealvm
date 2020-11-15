@@ -6,21 +6,10 @@
 
 #include "sealvm/defines.h"
 
-ErrCode SD_SetValue16(ScreenDevice* this, uint16_t address, uint16_t value);
 void clearScreen();
 void setBold();
 void setRegular();
 void moveTo(uint8_t x, uint8_t y);
-
-ScreenDevice* NewScreenDevice() {
-    ScreenDevice* result = malloc(sizeof(ScreenDevice));
-    if (!result) {
-        return NULL;
-    }
-
-    result->SetValue16 = &SD_SetValue16;
-    return result;
-}
 
 ErrCode SD_SetValue16(ScreenDevice* this, const uint16_t address, const uint16_t value) {
     if (!this) {
@@ -51,6 +40,16 @@ ErrCode SD_SetValue16(ScreenDevice* this, const uint16_t address, const uint16_t
     uint8_t y = floor(address / 16) + 1; // this conversion is fine and intended
     moveTo(x * 2, y);
     printf("%i", charVal);
+}
+
+ScreenDevice* NewScreenDevice() {
+    ScreenDevice* result = malloc(sizeof(ScreenDevice));
+    if (!result) {
+        return NULL;
+    }
+
+    result->SetValue16 = &SD_SetValue16;
+    return result;
 }
 
 void clearScreen() { printf("\x1b[2J"); }

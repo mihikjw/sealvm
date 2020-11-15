@@ -1,4 +1,4 @@
-#include "binreader/reader.hpp"
+#include "binreader-cpp/reader.hpp"
 
 using namespace BinReader;
 

@@ -2,8 +2,20 @@
 
 #include <stdlib.h>
 
-void RS_Set(RegisterStore* this, Registers reg, uint16_t value);
-ErrCode RS_Get(RegisterStore* this, Registers reg, uint16_t* output);
+void RS_Set(RegisterStore* this, const Registers reg, const uint16_t value) {
+    if (!this) {
+        return;
+    }
+    this->_store[reg] = value;
+}
+
+ErrCode RS_Get(RegisterStore* this, const Registers reg, uint16_t* output) {
+    if (!this) {
+        return THIS_IS_NULL;
+    }
+    *output = this->_store[reg];
+    return NO_ERR;
+}
 
 RegisterStore* NewRegisterStore() {
     RegisterStore* result = malloc(sizeof(RegisterStore));
@@ -27,19 +39,4 @@ RegisterStore* NewRegisterStore() {
     result->_store[fp] = FULL_MEMORY - 1;
     result->_store[im] = FULL_MEMORY;
     return result;
-}
-
-void RS_Set(RegisterStore* this, const Registers reg, const uint16_t value) {
-    if (!this) {
-        return;
-    }
-    this->_store[reg] = value;
-}
-
-ErrCode RS_Get(RegisterStore* this, const Registers reg, uint16_t* output) {
-    if (!this) {
-        return THIS_IS_NULL;
-    }
-    *output = this->_store[reg];
-    return NO_ERR;
 }

@@ -31,9 +31,14 @@ add_library(libsealvm-cpp SHARED ${LIBSEALVM_CPP_SRC})
 set_target_properties(libsealvm-cpp PROPERTIES LINKER_LANGUAGE CXX)
 
 # libbinreader
-file(GLOB LIBBINREADER_SRC "${CMAKE_BINARY_DIR}/src/binreader/*.cpp")
+file(GLOB LIBBINREADER_SRC "${CMAKE_BINARY_DIR}/src/binreader/*.c")
 add_library(libbinreader SHARED ${LIBBINREADER_SRC})
-set_target_properties(libbinreader PROPERTIES LINKER_LANGUAGE CXX)
+set_target_properties(libbinreader PROPERTIES LINKER_LANGUAGE C)
+
+# libbinreader-cpp
+file(GLOB LIBBINREADER_CPP_SRC "${CMAKE_BINARY_DIR}/src/binreader-cpp/*.cpp")
+add_library(libbinreader-cpp SHARED ${LIBBINREADER_CPP_SRC})
+set_target_properties(libbinreader-cpp PROPERTIES LINKER_LANGUAGE CXX)
 # ---------------------------------
 
 # ---------------------------------
@@ -41,19 +46,19 @@ set_target_properties(libbinreader PROPERTIES LINKER_LANGUAGE CXX)
 # sealvm
 file(GLOB SEALVM_SRC "${CMAKE_BINARY_DIR}/cmd/sealvm/sealvm.c")
 add_executable(sealvm ${SEALVM_SRC})
-target_link_libraries(sealvm libsealvm)
+target_link_libraries(sealvm libsealvm libbinreader)
 set_target_properties(sealvm PROPERTIES LINKER_LANGUAGE C)
 
 # sealvm-cpp
 file(GLOB SEALVM_CPP_SRC "${CMAKE_BINARY_DIR}/cmd/sealvm/sealvm.cpp")
 add_executable(sealvm-cpp ${SEALVM_CPP_SRC})
-target_link_libraries(sealvm-cpp libsealvm-cpp libbinreader)
+target_link_libraries(sealvm-cpp libsealvm-cpp libbinreader-cpp)
 set_target_properties(sealvm-cpp PROPERTIES LINKER_LANGUAGE CXX)
 
 # sealdbg
 file(GLOB SEALDBG_SRC "${CMAKE_BINARY_DIR}/cmd/sealdbg/sealdbg.cpp")
 add_executable(sealdbg ${SEALDBG_SRC})
-target_link_libraries(sealdbg libsealvm-cpp libbinreader)
+target_link_libraries(sealdbg libsealvm-cpp libbinreader-cpp)
 set_target_properties(sealdbg PROPERTIES LINKER_LANGUAGE CXX)
 # ---------------------------------
 

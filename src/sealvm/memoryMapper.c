@@ -2,37 +2,8 @@
 
 #include <stdlib.h>
 
-ErrCode MM_Map(MemoryMapper* this, void* device, DeviceType type, uint16_t startAddr, uint16_t endAddr, bool remap);
-ErrCode MM_GetValue(MemoryMapper* this, uint16_t address, uint8_t* valueOut);
-ErrCode MM_GetValue16(MemoryMapper* this, uint16_t address, uint16_t* valueOut);
-ErrCode MM_SetValue(MemoryMapper* this, uint16_t address, uint8_t value);
-ErrCode MM_SetValue16(MemoryMapper* this, uint16_t address, uint16_t value);
-void MM_ClearRegions(MemoryMapper* this);
-
 // findRegion locates the MemoryRegion covering the given address
 MemoryRegion* findRegion(MemoryMapper* this, uint16_t addr);
-
-MemoryMapper* NewMemoryMapper(Memory* mem) {
-    if (!mem) {
-        return NULL;
-    }
-
-    MemoryMapper* result = malloc(sizeof(MemoryMapper));
-    if (!result) {
-        return NULL;
-    }
-
-    result->_memory = mem;
-    result->_regions = NULL;
-    result->_regionsSize = 0;
-    result->Map = &MM_Map;
-    result->GetValue = &MM_GetValue;
-    result->GetValue16 = &MM_GetValue16;
-    result->SetValue16 = &MM_SetValue16;
-    result->SetValue = &MM_SetValue;
-    result->ClearRegions = &MM_ClearRegions;
-    return result;
-}
 
 ErrCode MM_Map(MemoryMapper* this, void* device, DeviceType type, const uint16_t startAddr, const uint16_t endAddr, const bool remap) {
     if (!this) {
@@ -127,6 +98,44 @@ ErrCode MM_SetValue16(MemoryMapper* this, uint16_t address, uint16_t value) {
     return region->SetValue16(region, address, value);
 }
 
+void MM_ClearRegions(MemoryMapper* this) {
+    if (!this || !this->_regions) {
+        return;
+    }
+
+    MemoryRegion* tmp;
+    for (register int i = 0; i < this->_regionsSize; i++) {
+        tmp = (*this->_regions)[i];
+        if (tmp) {
+            free(tmp);
+        }
+    }
+
+    this->_regions = NULL;
+}
+
+MemoryMapper* NewMemoryMapper(Memory* mem) {
+    if (!mem) {
+        return NULL;
+    }
+
+    MemoryMapper* result = malloc(sizeof(MemoryMapper));
+    if (!result) {
+        return NULL;
+    }
+
+    result->_memory = mem;
+    result->_regions = NULL;
+    result->_regionsSize = 0;
+    result->Map = &MM_Map;
+    result->GetValue = &MM_GetValue;
+    result->GetValue16 = &MM_GetValue16;
+    result->SetValue16 = &MM_SetValue16;
+    result->SetValue = &MM_SetValue;
+    result->ClearRegions = &MM_ClearRegions;
+    return result;
+}
+
 MemoryRegion* findRegion(MemoryMapper* this, const uint16_t addr) {
     if (this && this->_regions) {
         MemoryRegion* region;
@@ -142,20 +151,4 @@ MemoryRegion* findRegion(MemoryMapper* this, const uint16_t addr) {
     }
 
     return NULL;
-}
-
-void MM_ClearRegions(MemoryMapper* this) {
-    if (!this || !this->_regions) {
-        return;
-    }
-
-    MemoryRegion* tmp;
-    for (register int i = 0; i < this->_regionsSize; i++) {
-        tmp = (*this->_regions)[i];
-        if (tmp) {
-            free(tmp);
-        }
-    }
-
-    this->_regions = NULL;
 }

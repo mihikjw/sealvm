@@ -4,32 +4,6 @@
 
 #include "sealvm/defines.h"
 
-ErrCode M_Buffer(Memory* this, uint8_t** buffer, int* size);
-ErrCode M_GetValue(Memory* this, uint16_t address, uint8_t* valueOut);
-ErrCode M_GetValue16(Memory* this, uint16_t address, uint16_t* valueOut);
-ErrCode M_SetValue(Memory* this, uint16_t address, uint8_t value);
-ErrCode M_SetValue16(Memory* this, uint16_t address, uint16_t value);
-
-Memory* NewMemory(uint8_t* memory, const int memSize) {
-    if (!memory || memSize <= 0) {
-        return NULL;
-    }
-
-    Memory* result = malloc(sizeof(Memory));
-    if (!result) {
-        return NULL;
-    }
-
-    result->_buffer = memory;
-    result->_bufferSize = memSize;
-    result->GetValue16 = &M_GetValue16;
-    result->GetValue = &M_GetValue;
-    result->SetValue16 = &M_SetValue16;
-    result->SetValue = &M_SetValue;
-    result->Buffer = &M_Buffer;
-    return result;
-}
-
 ErrCode M_Buffer(Memory* this, uint8_t** buffer, int* size) {
     if (!this) {
         return THIS_IS_NULL;
@@ -88,4 +62,24 @@ ErrCode M_SetValue16(Memory* this, uint16_t address, uint16_t value) {
     this->_buffer[address] = part1;
     this->_buffer[address + 1] = part2;
     return NO_ERR;
+}
+
+Memory* NewMemory(uint8_t* memory, const int memSize) {
+    if (!memory || memSize <= 0) {
+        return NULL;
+    }
+
+    Memory* result = malloc(sizeof(Memory));
+    if (!result) {
+        return NULL;
+    }
+
+    result->_buffer = memory;
+    result->_bufferSize = memSize;
+    result->GetValue16 = &M_GetValue16;
+    result->GetValue = &M_GetValue;
+    result->SetValue16 = &M_SetValue16;
+    result->SetValue = &M_SetValue;
+    result->Buffer = &M_Buffer;
+    return result;
 }

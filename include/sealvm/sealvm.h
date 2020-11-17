@@ -1,6 +1,7 @@
 #ifndef SEALVM_SEALVM_H
 #define SEALVM_SEALVM_H
 
+#include "binReader.h"
 #include "cpu.h"
 #include "defines.h"
 #include "errors.h"

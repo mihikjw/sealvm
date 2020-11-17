@@ -3,12 +3,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "binreader/reader.h"
 #include "sealvm/sealvm.h"
 
 int main(int argc, const char* argv[]) {
-    // TODO: refactor cmd-line args, this works for now but when others are added this needs putting into it's
-    //       own function
+    // TODO: refactor cmd-line args, this works for now but when others are added this needs putting into it's own function
     if (argc < 2) {
         fprintf(stderr, "No Binary Provided\n");
         return EXIT_FAILURE;
@@ -23,14 +21,15 @@ int main(int argc, const char* argv[]) {
         return EXIT_FAILURE;
     }
 
-    BinReader* binReader = NewBinReader(mainMemory, stderr);
+    BinReader* binReader = NewBinReader(mainMemory);
     if (!binReader) {
         fprintf(stderr, "Failed To Construct BinReader\n");
         return EXIT_FAILURE;
     }
 
     // returns 0 on success, will print own failure to `stderr`
-    if (binReader->FromFile(binReader, binaryPath)) {
+    if (binReader->FromFile(binReader, binaryPath) != NO_ERR) {
+        fprintf(stderr, "Failed To Load Bytecode\n");
         return EXIT_FAILURE;
     }
 

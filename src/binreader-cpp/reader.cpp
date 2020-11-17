@@ -34,7 +34,6 @@ void Reader::FromFile(const std::string& filePath) {
             pos = pos + (nextPos - pos) + 1;
             i++;
         }
-
     } catch (const std::exception& ex) {
         throw std::runtime_error(ex.what());
     }

@@ -287,6 +287,7 @@ ErrCode CPU_pushStack(CPU* this, const uint16_t value) {
         return err;
     }
 
+    this->_stackFrameSize += 2;
     return NO_ERR;
 }
 
@@ -354,7 +355,13 @@ ErrCode CPU_pushStateStack(CPU* this) {
     }
 
     // set frame-pointer to the current stack-pointer location
-    err = CPU_pushRegisterStack(this, sp);
+    uint16_t spVal;
+    err = this->GetRegister(this, sp, &spVal);
+    if (err != NO_ERR) {
+        return err;
+    }
+
+    err = this->SetRegister(this, fp, spVal);
     if (err != NO_ERR) {
         return err;
     }
@@ -366,22 +373,22 @@ ErrCode CPU_pushStateStack(CPU* this) {
 
 ErrCode CPU_popStateStack(CPU* this) {
     // restore stack pointer
-    uint16_t framePtrVal;
-    ErrCode err = this->GetRegister(this, fp, &framePtrVal);
+    uint16_t framePtrAddr;
+    ErrCode err = this->GetRegister(this, fp, &framePtrAddr);
     if (err != NO_ERR) {
         return err;
     }
-    err = this->SetRegister(this, sp, framePtrVal);
+    err = this->SetRegister(this, sp, framePtrAddr);
     if (err != NO_ERR) {
         return err;
     }
 
     // pop frame size
-    uint16_t frameSize;
-    err = CPU_popStack(this, &frameSize);
+    err = CPU_popStack(this, &this->_stackFrameSize);
     if (err != NO_ERR) {
         return err;
     }
+    uint16_t stackFrameSize = this->_stackFrameSize;
 
     // pop program counter
     err = CPU_popRegisterStack(this, pc);
@@ -391,7 +398,7 @@ ErrCode CPU_popStateStack(CPU* this) {
 
     // restore general-purpose registers
     for (register int i = 7; i >= 0; i--) {
-        err = CPU_pushRegisterStack(this, CPU_GeneralPurposeRegisters[i]);
+        err = CPU_popRegisterStack(this, CPU_GeneralPurposeRegisters[i]);
         if (err != NO_ERR) {
             return err;
         }
@@ -412,7 +419,7 @@ ErrCode CPU_popStateStack(CPU* this) {
     }
 
     // return frame pointer to the beginning of this frame
-    return this->SetRegister(this, fp, framePtrVal);
+    return this->SetRegister(this, fp, framePtrAddr + stackFrameSize);
 }
 
 ErrCode CPU_handleInterrupt(CPU* this, const uint16_t vectorIndex) {

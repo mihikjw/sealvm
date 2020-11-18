@@ -30,14 +30,18 @@ ErrCode BR_FromFile(BinReader* this, const char* filePath) {
 
     int startIndex = 0;
     char tmp[4];
+    uint8_t val;
 
     while ((read = getline(&line, &len, f)) != -1) {
         for (register int i = 0; i < read; i++) {
             if (line[i] == ' ' || line[i] == '\n') {
+                // convert value to int, add to memory
                 strncpy(tmp, line + startIndex, i - startIndex);
-                // 'tmp' needs parsing into a hex uint8_t and adding to program memory at index `memAddr`
+                val = (uint8_t)strtol(tmp, NULL, 16);
+                this->_memory[memAddr] = val;
                 memset(tmp, '\0', sizeof(tmp));
                 startIndex = i + 1;
+                memAddr++;
             }
         }
     }

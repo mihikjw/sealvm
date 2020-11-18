@@ -482,7 +482,7 @@ bool CPU_incReg(CPU* this) {
         return false;
     }
 
-    if (this->SetRegister(this, reg, regVal++) != NO_ERR) {
+    if (this->SetRegister(this, reg, regVal + 1) != NO_ERR) {
         return false;
     }
 
@@ -500,7 +500,7 @@ bool CPU_decReg(CPU* this) {
         return false;
     }
 
-    if (this->SetRegister(this, reg, regVal--) != NO_ERR) {
+    if (this->SetRegister(this, reg, regVal - 1) != NO_ERR) {
         return false;
     }
 
@@ -777,6 +777,8 @@ bool CPU_not(CPU* this) {
     if (this->SetRegister(this, acc, (~val) & 0xffff) != NO_ERR) {
         return false;
     }
+
+    return true;
 }
 
 bool CPU_jneReg(CPU* this) {

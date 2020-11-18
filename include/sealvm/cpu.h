@@ -33,7 +33,7 @@ typedef struct CPU {
     bool _isInInterrupt;
 
     // _stackFrameSize tracks the size of the stack - could be used in a register but I don't want this to be user accessable
-    uint8_t _stackFrameSize;
+    uint16_t _stackFrameSize;
 
     // _registers contains the storage for registers
     RegisterStore* _registers;

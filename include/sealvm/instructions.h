@@ -1,14 +1,11 @@
-#ifndef SEALVM_SEALVM_INSTRUCTIONS_HPP
-#define SEALVM_SEALVM_INSTRUCTIONS_HPP
+#ifndef SEALVM_SEALVM_INSTRUCTIONS_H
+#define SEALVM_SEALVM_INSTRUCTIONS_H
 
-#include <cstdint>
-
-namespace SealVM {
+#include <stdint.h>
 
 // Instructions contains the hex value opcodes for all the instructions the CPU supports
-enum Instructions {
-
-    // move values
+typedef enum Instructions {
+    // mov values
     MOV_LIT_REG = 0x10,     // MOV $1234, r1
     MOV_REG_REG = 0x11,     // MOV r1, r2
     MOV_REG_MEM = 0x12,     // MOV r1, &ABCD
@@ -64,26 +61,23 @@ enum Instructions {
     HLT = 0x1C,     // HLT
     INT = 0x3E,     // INT &15F6
     RET_INT = 0x3F  // RET_INT
-};
+} Instructions;
 
-// Instruction contains more details about each instruction, required by compilers etc
-namespace Instruction {
-
-// Type groups instructions by their supported ASM modes (i.e. MOV_LIT_REG and ADD_LIT_REG are the same type)
-enum Type {
-    LIT_REG = 0,
-    REG_LIT,
-    REG_LIT_8,
-    REG_REG,
-    REG_MEM,
-    MEM_REG,
-    LIT_MEM,
-    REG_PTR_REG,
-    LIT_OFF_REG,
-    NO_ARGS,
-    SINGLE_REG,
-    SINGLE_LIT,
-};
+// InstructionType groups instructions by their supported ASM modes (i.e. MOV_LIT_REG and ADD_LIT_REG are the same type)
+typedef enum InstructionType {
+    T_LIT_REG = 0,
+    T_REG_LIT,
+    T_REG_LIT_8,
+    T_REG_REG,
+    T_REG_MEM,
+    T_MEM_REG,
+    T_LIT_MEM,
+    T_REG_PTR_REG,
+    T_LIT_OFF_REG,
+    T_NO_ARGS,
+    T_SINGLE_REG,
+    T_SINGLE_LIT,
+} InstructionType;
 
 // Sizes of instruction groups defined here
 uint8_t LitReg = 4;
@@ -99,37 +93,33 @@ uint8_t NoArgs = 1;
 uint8_t SingleReg = 2;
 uint8_t SingleLit = 3;
 
-// Mnemonic contains values used to group instructions by their Mnemonic (i.e. MOV_LIT_REG and MOV_REG_REG are the same 'MOV' mnemonic)
-enum Mnemonic {
-    MOV = 0,
-    ADD,
-    SUB,
-    INC,
-    DEC,
-    MUL,
-    LSF,
-    RSF,
-    AND,
-    OR,
-    XOR,
-    NOT,
-    JNE,
-    JEQ,
-    JLT,
-    JGT,
-    JLE,
-    JGE,
-    PSH,
-    POP,
-    CAL,
-    RET,
-    HTL,
-    INT,
-    RET_INT,
-};
+// InstructionMnemonic contains values used to group instructions by their Mnemonic (i.e. MOV_LIT_REG and MOV_REG_REG are the same 'MOV' mnemonic)
+typedef enum InstructionMnemonic {
+    M_MOV = 0,
+    M_ADD,
+    M_SUB,
+    M_INC,
+    M_DEC,
+    M_MUL,
+    M_LSF,
+    M_RSF,
+    M_AND,
+    M_OR,
+    M_XOR,
+    M_NOT,
+    M_JNE,
+    M_JEQ,
+    M_JLT,
+    M_JGT,
+    M_JLE,
+    M_JGE,
+    M_PSH,
+    M_POP,
+    M_CAL,
+    M_RET,
+    M_HTL,
+    M_INT,
+    M_RET_INT,
+} InstructionMnemonic;
 
-} // namespace Instruction
-
-} // namespace SealVM
-
-#endif // SEALVM_SEALVM_INSTRUCTIONS_HPP
+#endif // SEALVM_SEALVM_INSTRUCTIONS_H

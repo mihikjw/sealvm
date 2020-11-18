@@ -12,7 +12,7 @@ Registers: Dict[str, int] = {
     "r7": 0x07,
     "r8": 0x08,
     "acc": 0x09,
-    "sp": 0x10,
-    "fp": 0x11,
-    "im": 0x12,
+    "sp": 0x0A,
+    "fp": 0x0B,
+    "im": 0x0C,
 }

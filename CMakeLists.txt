@@ -5,6 +5,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-long-long -pedantic")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=gnu11 -Wall -Wno-long-long -pedantic")
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 set(CMAKE_STATIC_LIBRARY_PREFIX "")
@@ -24,16 +25,6 @@ add_custom_target(SEALASM_PARSER_TYPE_CHECK ALL "mypy" "${CMAKE_BINARY_DIR}/cmd/
 file(GLOB LIBSEALVM_SRC "${CMAKE_BINARY_DIR}/src/sealvm/*.c")
 add_library(libsealvm SHARED ${LIBSEALVM_SRC})
 set_target_properties(libsealvm PROPERTIES LINKER_LANGUAGE C)
-
-# libsealvm-cpp
-file(GLOB LIBSEALVM_CPP_SRC "${CMAKE_BINARY_DIR}/src/sealvm-cpp/*.cpp")
-add_library(libsealvm-cpp SHARED ${LIBSEALVM_CPP_SRC})
-set_target_properties(libsealvm-cpp PROPERTIES LINKER_LANGUAGE CXX)
-
-# libbinreader-cpp
-file(GLOB LIBBINREADER_CPP_SRC "${CMAKE_BINARY_DIR}/src/binreader-cpp/*.cpp")
-add_library(libbinreader-cpp SHARED ${LIBBINREADER_CPP_SRC})
-set_target_properties(libbinreader-cpp PROPERTIES LINKER_LANGUAGE CXX)
 # ---------------------------------
 
 # ---------------------------------
@@ -43,18 +34,6 @@ file(GLOB SEALVM_SRC "${CMAKE_BINARY_DIR}/cmd/sealvm/sealvm.c")
 add_executable(sealvm ${SEALVM_SRC})
 target_link_libraries(sealvm libsealvm)
 set_target_properties(sealvm PROPERTIES LINKER_LANGUAGE C)
-
-# sealvm-cpp
-file(GLOB SEALVM_CPP_SRC "${CMAKE_BINARY_DIR}/cmd/sealvm/sealvm.cpp")
-add_executable(sealvm-cpp ${SEALVM_CPP_SRC})
-target_link_libraries(sealvm-cpp libsealvm-cpp libbinreader-cpp)
-set_target_properties(sealvm-cpp PROPERTIES LINKER_LANGUAGE CXX)
-
-# sealdbg
-file(GLOB SEALDBG_SRC "${CMAKE_BINARY_DIR}/cmd/sealdbg/sealdbg.cpp")
-add_executable(sealdbg ${SEALDBG_SRC})
-target_link_libraries(sealdbg libsealvm-cpp libbinreader-cpp)
-set_target_properties(sealdbg PROPERTIES LINKER_LANGUAGE CXX)
 # ---------------------------------
 
 include_directories(

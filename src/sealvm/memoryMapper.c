@@ -81,7 +81,7 @@ ErrCode MM_SetValue(MemoryMapper* this, uint16_t address, uint8_t value) {
     }
 
     uint16_t finalAddr = region->Remap ? address - region->StartAddr : address;
-    return region->SetValue(region, address, value);
+    return region->SetValue(region, finalAddr, value);
 }
 
 ErrCode MM_SetValue16(MemoryMapper* this, uint16_t address, uint16_t value) {
@@ -95,7 +95,7 @@ ErrCode MM_SetValue16(MemoryMapper* this, uint16_t address, uint16_t value) {
     }
 
     uint16_t finalAddr = region->Remap ? address - region->StartAddr : address;
-    return region->SetValue16(region, address, value);
+    return region->SetValue16(region, finalAddr, value);
 }
 
 void MM_ClearRegions(MemoryMapper* this) {

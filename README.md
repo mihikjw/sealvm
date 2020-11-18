@@ -1,5 +1,5 @@
 # SealVM
-SealVM is a 16-bit, big-endian virtual machine, written in C++ with an ASM compiler in Python. You can find 'main' source code under `/cmd`. 
+SealVM is a 16-bit, big-endian virtual machine, written in C with an ASM compiler in Python. You can find 'main' source code under `/cmd`. 
 
 ## Applications `/cmd`
 ### SealVM
@@ -27,7 +27,7 @@ The SealVM does support interrupts, however at the moment there are none enabled
 - `test3.asm`: test program for handling interrupts, this requires a bit of manually mucking about so don't run this yet, I'm going to work on a dynamic way of easily loading in SealASM & C interrupts which will make this much easier. Currently you need to (in C) load the opcodes into the memory array.
 
 ## SealVM Specifications
-### Registers `sealvm/registers.hpp`
+### Registers `sealvm/registers.h`
 Each register is 16-bits in size, currently the only way of interacting with them is in 16-bit chunks. Registers defined under `sealvm/registers.h`, and instantiated on the `CPU` struct itself (`sealvm/CPU.h`). Implemented are a Program Counter, Accumulator, Stack Pointer, Frame Pointer, Interrupt Mask and x8 general purpose registers.
 
 ### Supported Instructions `sealvm/instructions.h`

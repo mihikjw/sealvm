@@ -11,7 +11,7 @@
             "externalConsole": false,
             "preLaunchTask": "Build",
             "args": [
-                "/home/michael/cpp/sealvm/example_programs/test3.seal"
+                "/home/michael/cpp/sealvm/example_programs/test4.seal"
             ],
             "linux": {
                 "MIMode": "gdb",

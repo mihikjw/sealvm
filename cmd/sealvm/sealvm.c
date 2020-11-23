@@ -56,7 +56,7 @@ int main(int argc, const char* argv[]) {
         return EXIT_FAILURE;
     }
 
-    if (mMap->Map(mMap, output, Screen, 0x4000, 0x40ff, true) != NO_ERR) {
+    if (mMap->Map(mMap, output, Screen, 0x9000, 0x90ff, true) != NO_ERR) {
         printf("Failed To Map ScreenDevice\n");
         return EXIT_FAILURE;
     }

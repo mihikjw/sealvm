@@ -39,7 +39,7 @@ ErrCode SD_SetValue16(ScreenDevice* this, const uint16_t address, const uint16_t
     uint8_t x = (address % 16) + 1;
     uint8_t y = floor(address / 16) + 1; // this conversion is fine and intended
     moveTo(x * 2, y);
-    printf("%i", charVal);
+    fprintf(stdout, "%c\n", charVal);
     return NO_ERR;
 }
 

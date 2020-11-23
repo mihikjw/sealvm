@@ -45,8 +45,7 @@ int main(int argc, const char* argv[]) {
         return EXIT_FAILURE;
     }
 
-    // TODO: finalise interrupt vector address, currently arbitary and too low
-    CPU* cpu = NewCPU(mMap, 0x1000);
+    CPU* cpu = NewCPU(mMap, 0x0000);
     if (!cpu) {
         printf("Failed To Construct CPU\n");
         return EXIT_FAILURE;

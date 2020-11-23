@@ -4,10 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-// BR_EXIT_SUCCESS is the status code returned when we succesfully loaded a program into memory
-#define BR_EXIT_SUCCESS 0
-// BR_EXIT_FAILURE is the status code returned when we fail to load a program into memory (error printed to `stderr`)
-#define BR_EXIT_FAILURE 1
+#include "sealvm/defines.h"
 
 ErrCode BR_FromFile(BinReader* this, const char* filePath) {
 #if _POSIX_C_SOURCE >= 200809L
@@ -23,7 +20,7 @@ ErrCode BR_FromFile(BinReader* this, const char* filePath) {
         return CANNOT_OPEN_FILE;
     }
 
-    uint16_t memAddr = 0x0000;
+    uint16_t memAddr = PROGRAM_START_ADDRESS;
     char* line = NULL;
     size_t len = 0;
     ssize_t read;

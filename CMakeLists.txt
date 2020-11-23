@@ -36,7 +36,6 @@ set_target_properties(libsealvm PROPERTIES LINKER_LANGUAGE C)
 file(GLOB SEALVM_SRC "${CMAKE_BINARY_DIR}/cmd/sealvm/sealvm.c")
 add_executable(sealvm ${SEALVM_SRC})
 target_link_libraries(sealvm libsealvm)
-set_target_properties(sealvm PROPERTIES LINKER_LANGUAGE C)
 # ---------------------------------
 
 include_directories(

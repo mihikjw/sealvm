@@ -1,12 +1,16 @@
 # SealVM
-SealVM is a 16-bit, big-endian virtual machine, written in C with an ASM compiler in Python. You can find 'main' source code under `/cmd`. 
+SealVM is a 16-bit virtual machine designed to be either standalone or embedded into C applications, providing a JIT compiled runtime environment. The project currently consists of `sealvm` - the VM - and `sealasm`, an assembly compiler for the VM. The VM uses interrupts as a way of calling between C code and _seal_ code, the design is for programmers to write and load their own interrupts in C or SealASM, or to bring their own memory devices mapping to C code, with the VM providing a flexible way of adding functionality without recompiling your whole C application.
+
+This project is actively being worked on soley by me at the moment and has much to go, but the initial 'core' components are in a state I'm happy to show publically. If you'd like to contribute or discuss the project, feel free to raise a PR :)
 
 ## Applications `/cmd`
 ### SealVM
-`sealvm` contains the code for the virtual machine, including the CPU and memory devices, implemented in C. The VM is capable of executing instructions generated from the `sealasm` compiler, in a `*.seal` hex file format. Currently there's no debugger beyond stepping through the CPU C code, this is a goal to work on at some point soon.
+`sealvm` contains the code for the virtual machine, including the CPU and memory devices, implemented in C. The VM is capable of executing instructions generated from the `sealasm` compiler, in a `*.seal` file format. Currently there's no debugger beyond stepping through the CPU C code, this is a goal to work on at some point soon.
+
+The `sealvm` will execute programs starting at address `0x1000`, any addresses lower than this are reserved for internal VM code, such as the interrupt vector and standard memory devices.
 
 #### Interrupts
-The SealVM does support interrupts, however at the moment there are none enabled. The interrupt vector starts (by default) at address `0x1000`, and the `INT {index}` instruction should reference an index in this vector. For example, `INT $03` references index 3 in the vector, address `0x1006`. Documentation for supported interrupts will be added as handlers are added. There is currently no other way to load interrupts than to either compile a SealASM program ending with a `RET_INT` instruction and (in the C) add it to memory instruction by instruction, or to implement the interrupt in C directly and create a `MemoryDevice` inherited class for it, mapped to an address space. I'm actively working on improving the way interrupt 'modules' can be loaded into the VM on startup.
+The SealVM does support interrupts, however at the moment there are none enabled. The interrupt vector starts (by default) at address `0x0000`, and the `INT {index}` instruction should reference an index in this vector. For example, `INT $03` references index 3 in the vector, address `0x0006`. Documentation for supported interrupts will be added as handlers are added. There is currently no other way to load interrupts than to either compile a SealASM program ending with a `RET_INT` instruction and (in the C) add it to memory instruction by instruction, or to implement the interrupt in C directly and create a `MemoryDevice` inherited class for it, mapped to an address space. I'm actively working on improving the way interrupt 'modules' can be loaded into the VM on startup.
 
 #### Usage
 `sealvm [binary_path.seal]`

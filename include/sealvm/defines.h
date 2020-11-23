@@ -13,4 +13,7 @@
 // FULL_MEMORY defines a totally-full memory address
 #define FULL_MEMORY 0xFFFF
 
+// PROGRAM_START_ADDRESS defines the start address for any programs
+#define PROGRAM_START_ADDRESS 0x1000
+
 #endif // SEALVM_SEALVM_DEFINES_H

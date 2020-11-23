@@ -14,7 +14,7 @@ typedef struct BinReader {
     ErrCode (*FromFile)(struct BinReader*, const char* filePath);
 } BinReader;
 
-// NewBinReader is a constructor for the `BinReader` object
+// NewBinReader is a constructor for the `BinReader` object, requires pointer to program memory buffer
 BinReader* NewBinReader(uint8_t* memory);
 
 #endif // SEALVM_SEALVM_BINREADER_H

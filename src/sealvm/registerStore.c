@@ -25,7 +25,7 @@ RegisterStore* NewRegisterStore() {
 
     result->Set = &RS_Set;
     result->Get = &RS_Get;
-    result->_store[pc] = ZERO_MEMORY;
+    result->_store[pc] = PROGRAM_START_ADDRESS;
     result->_store[r1] = ZERO_MEMORY;
     result->_store[r2] = ZERO_MEMORY;
     result->_store[r3] = ZERO_MEMORY;

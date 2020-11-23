@@ -12,7 +12,7 @@
 // CPU represents the Central Processing Unit of the VM
 typedef struct CPU {
 
-    // Run executes the program loaded at address ZERO_MEMORY, exits on HLT instruction
+    // Run executes the program loaded at address PROGRAM_START_ADDRESS, exits on HLT instruction
     void (*Run)(struct CPU*);
 
     // Cycle gets the next instruction & executes it, returns whether its the last instruction or not

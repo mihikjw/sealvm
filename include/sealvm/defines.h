@@ -2,7 +2,7 @@
 #define SEALVM_SEALVM_DEFINES_H
 
 // MEMORY_SIZE defines the size of memory for the VM
-#define MEMORY_SIZE 256 * 256
+#define MEMORY_SIZE 65535
 
 // REGISTER_COUNT defines the number of registers
 #define REGISTER_COUNT 13

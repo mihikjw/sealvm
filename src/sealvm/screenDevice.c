@@ -15,7 +15,7 @@ ErrCode SD_SetValue16(ScreenDevice* this, const uint16_t address, const uint16_t
     if (!this) {
         return THIS_IS_NULL;
     }
-    if (address > MEMORY_SIZE) {
+    if (address == MEMORY_SIZE) {
         return ADDRESS_OUT_OF_BOUNDS;
     }
 

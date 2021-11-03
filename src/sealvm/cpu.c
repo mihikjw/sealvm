@@ -51,7 +51,7 @@ bool CPU_Cycle(CPU* this) {
 }
 
 CPU* NewCPU(MemoryMapper* memory, const uint16_t interruptVectorAddr) {
-    if (!memory || interruptVectorAddr > MEMORY_SIZE) {
+    if (!memory) {
         return NULL;
     }
 

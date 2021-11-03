@@ -17,9 +17,6 @@ ErrCode M_GetValue(Memory* this, const uint16_t address, uint8_t* valueOut) {
     if (!this) {
         return THIS_IS_NULL;
     }
-    if (address > MEMORY_SIZE) {
-        return ADDRESS_OUT_OF_BOUNDS;
-    }
     *valueOut = this->_buffer[address];
     return NO_ERR;
 }
@@ -28,7 +25,7 @@ ErrCode M_GetValue16(Memory* this, const uint16_t address, uint16_t* valueOut) {
     if (!this) {
         return THIS_IS_NULL;
     }
-    if (address > MEMORY_SIZE || address + 1 > MEMORY_SIZE) {
+    if (address == MEMORY_SIZE) {
         return ADDRESS_OUT_OF_BOUNDS;
     }
 
@@ -42,9 +39,6 @@ ErrCode M_SetValue(Memory* this, uint16_t address, uint8_t value) {
     if (!this) {
         return THIS_IS_NULL;
     }
-    if (address > MEMORY_SIZE) {
-        return ADDRESS_OUT_OF_BOUNDS;
-    }
     this->_buffer[address] = value;
     return NO_ERR;
 }
@@ -53,7 +47,7 @@ ErrCode M_SetValue16(Memory* this, uint16_t address, uint16_t value) {
     if (!this) {
         return THIS_IS_NULL;
     }
-    if (address > MEMORY_SIZE || address + 1 > MEMORY_SIZE) {
+    if (address == MEMORY_SIZE) {
         return ADDRESS_OUT_OF_BOUNDS;
     }
 

@@ -10,6 +10,7 @@ compile_commands.json
 # python
 *.pyc
 .mypy_cache
+__pycache__/
 
 # sealasm
 *.ast
@@ -17,3 +18,4 @@ compile_commands.json
 
 # misc
 notes
+.vscode
